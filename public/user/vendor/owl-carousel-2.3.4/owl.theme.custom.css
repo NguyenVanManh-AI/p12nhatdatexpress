@@ -1,0 +1,135 @@
+/*
+  custom owl carousel theme
+  can change style
+*/
+.owl-carousel .owl-stage-outer {
+  /* margin-right: -1px; */
+}
+
+.owl-custom-theme .owl-dots,
+.owl-custom-theme .owl-nav {
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.owl-custom-theme.owl-center-stage .owl-stage {
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .owl-carousel.owl-hover-nav .owl-nav {
+    display: none;
+  }
+}
+
+.owl-carousel.owl-hover-nav:hover .owl-nav:not(.disabled) {
+  display: unset;
+}
+
+.owl-custom-theme .owl-nav {
+  margin-top: 10px;
+}
+.owl-custom-theme .owl-nav [class*="owl-"] {
+  color: #fff !important;
+  font-size: 14px;
+  margin: 5px;
+  padding: 4px 7px;
+  background: #d6d6d6;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.owl-custom-theme .owl-nav [class*="owl-"]:hover {
+  background: #ccc !important;
+  color: #fff;
+  text-decoration: none;
+}
+
+.owl-custom-theme .owl-nav button.owl-prev,
+.owl-custom-theme .owl-nav button.owl-next {
+  transition: all ease .4s;
+  position: absolute;
+  left: 0;
+  padding: 0.25rem !important;
+  font-size: 30px !important;
+  width: unset;
+  height: unset;
+  border-radius: 3px;
+  color: var(--light-cyan) !important;
+  background-color: unset !important;
+  top: calc(50% - 20px);
+}
+
+.owl-custom-theme .owl-nav button.owl-next {
+  left: unset;
+  right: 0;
+}
+
+.owl-custom-theme.owl-nav-rounded .owl-nav button.owl-prev,
+.owl-custom-theme.owl-nav-rounded .owl-nav button.owl-next {
+  background: rgb(159 158 155 / 60%) !important;
+  color: #fff !important;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.owl-custom-theme.owl-nav-rounded .owl-nav button.owl-prev:hover,
+.owl-custom-theme.owl-nav-rounded .owl-nav button.owl-next:hover {
+  background: var(--light-cyan) !important;
+}
+
+.owl-custom-theme.owl-nav-small .owl-nav button.owl-prev,
+.owl-custom-theme.owl-nav-small .owl-nav button.owl-next {
+  font-size: 22px !important;
+  top: calc(50% - 20px);
+}
+
+.owl-custom-theme .owl-nav .disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.owl-custom-theme .owl-dots {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0.5rem;
+}
+.owl-custom-theme .owl-nav.disabled + .owl-dots {
+  margin-top: 10px;
+}
+.owl-custom-theme .owl-dots .owl-dot {
+  display: inline-block;
+  zoom: 1;
+}
+.owl-custom-theme .owl-dots .owl-dot span {
+  width: 12px;
+  height: 12px;
+  margin: 0.25rem .4rem;
+  background: #d6d6d6;
+  display: block;
+  -webkit-backface-visibility: visible;
+  transition: opacity 0.2s ease;
+  border-radius: 30px;
+}
+.owl-custom-theme .owl-dots .owl-dot.active span,
+.owl-custom-theme .owl-dots .owl-dot:hover span {
+  background: var(--light-cyan);
+}
+
+.owl-custom-theme.owl-dot-orange .owl-dots .owl-dot.active span,
+.owl-custom-theme.owl-dot-orange .owl-dots .owl-dot:hover span {
+  background: var(--light-orange);
+  transform: scale(1.3);
+  transition: all ease .3s;
+}
+
+.owl-custom-theme.owl-dot-orange .owl-dots .owl-dot span {
+  background: #fff;
+  border: 1px solid #d6d6d6;
+}
+

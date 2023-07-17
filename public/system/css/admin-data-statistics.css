@@ -1,0 +1,46 @@
+
+.slick {
+    overflow: hidden;
+}
+
+.slick-slider .slick-slide {
+    margin-right: 7.5px;
+    margin-left: 7.5px;
+}
+
+.slick-slider .slick-list {
+    margin-right: -7.5px;
+    margin-left: -7.5px;
+}
+
+.slick-slider .slick-arrow {
+    position: absolute;
+    top: 0;
+    color: #fff;
+    background-color: #000;
+    opacity: 0.13;
+    height: calc(100% - 20px);
+    padding: 0 5px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.slick-slider .slick-arrow.nav-left {
+    left: 0;
+}
+
+.slick-slider .slick-arrow.nav-right {
+    right: 0;
+}
+
+.small-box {
+    border-radius: 0;
+    box-shadow: unset;
+}
+
+.member-rank .small-box .dropdown .nav-link {
+    color: #fff;
+}

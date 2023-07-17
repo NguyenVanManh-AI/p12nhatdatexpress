@@ -1,0 +1,190 @@
+.header-bottom {
+    background: url('/frontend/images/footer/bg_footer.gif') !important;
+}
+
+.header-bottom .menu-bottom-box .small-logo-box {
+    width: 40px;
+    border-right: 1px solid #fff;
+}
+
+.header-bottom .menu-bottom-box .small-logo-box .logo-inner .logo-image {
+    width: 100%;
+    display: inline-block;
+}
+
+@media screen and (min-width: 768px) {
+    .header-bottom .menu-bottom-box .small-logo-box {
+        width: 45px;
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    .header-bottom .menu-bottom-box .small-logo-box {
+        width: 65px;
+    }
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu {
+    display: flex;
+    position: relative;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item {
+    position: relative;
+    border-right: 1px solid #fff;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child {
+    padding: 0 13px;
+    font-size: 13px;
+    color: #fff;
+    text-transform: uppercase;
+    height: 45px;
+    display: block;
+    line-height: 45px;
+    font-weight: 700;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child+.sub-menu {
+    border-top: none;
+    border-radius: 0 4px 4px;
+}
+
+@media screen and (min-width: 992px) {
+    .header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child {
+        font-size: 13px;
+    }
+}
+
+@media screen and (min-width: 1101px) {
+    .header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child {
+        padding: 0 15px;
+        font-size: 14px;	
+    }
+}
+
+@media screen and (min-width: 1201px) {
+    .header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child {
+        padding: 0 15px;
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    .header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child {
+        padding: 0 13px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width: 1651px) {
+    .header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item>a:first-child {
+        padding: 0 20px;
+        font-size: 16px;
+    }
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu {
+    transform: scale(0);
+    position: absolute;
+    top: 45px;
+    left: -2px;
+    min-width: 180px;
+    height: auto;
+    max-width: 90vw;
+    padding: 0.5rem 0;
+    color: #212529;
+    background-color: #fff;
+    transform-origin: top left;
+    transition: all ease 0.4s;
+    z-index: 100;
+    border: 1px solid #0a67df;
+    border-radius: 4px;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li.has-sub-menu {
+    position: relative;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li.has-sub-menu .sub-menu {
+    opacity: 0;
+    left: 100%;
+    top: 0;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li.has-sub-menu:hover .sub-menu {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li.has-sub-menu>a::after {
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li a {
+    display: block;
+    width: 100%;
+    padding: 5px 30px 5px 20px;
+    font-weight: 400;
+    color: #074391;
+    white-space: nowrap;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li:not(:first-child) {
+    border-top: 1px dashed #b5b5b5;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item .sub-menu li:hover > a {
+    color: #fff;
+    background-color: #158be6;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item:hover > a:first-child {
+    background-color: #fff;
+    color: #0056b3;
+}
+
+.header-bottom .menu-bottom-box .nav-menu-box .nav-menu .nav-item:hover > a:first-child + .sub-menu {
+    transform: scale(1);
+}
+
+.header-bottom .menu-bottom-box .bottom-action .lg-icon {
+    width: 30px;
+}
+
+@media screen and (max-width: 991px) {
+    .header-bottom .menu-bottom-box .bottom-action .action-menu {
+        position: absolute;
+        width: 250px;
+        height: auto;
+        padding: 10px 0;
+        border-radius: 4px;
+        top: calc(100% + 5px);
+        right: 10px;
+        transform: scale(0);
+        transform-origin: top right;
+        transition: all ease 0.4s;
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        box-shadow: 0 0 3px #ccc;
+        z-index: 9;
+    }
+
+    .header-bottom .menu-bottom-box .bottom-action .action-menu.active {
+        transform: scale(1);
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #footer-cntr .footer .quick-link .log {
+        grid-gap: 10px;
+    }
+    #footer-cntr .footer .quick-link .log li {
+        line-height: 1.5;
+    }
+}

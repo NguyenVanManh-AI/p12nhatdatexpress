@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="body_1" width="41" height="31">
+
+<g transform="matrix(0.1678125 0 0 0.1678125 4.2037287 -0)">
+	<g transform="matrix(1 0 0 1 -262.89 -462.86)">
+		<g transform="matrix(1 0 0 1 10.175 71.896)">
+            <path transform="matrix(2.2115 0.038861 -0.038861 2.2115 -385.88 -623.3)"  d="M369.21 535.67L341.832 521.878L314.949 536.613L319.6056 506.313L297.2846 485.29898L327.54062 480.36438L340.62863 452.6424L354.67163 479.8934L385.08063 483.774L363.50363 505.55L369.21 535.67z" stroke="none" fill="#FFCC00" fill-rule="nonzero" />
+            <path d="M380.03 451.38C 349.64 492.749 349.31 493.199 349.31 493.199L349.31 493.199L446.721 461.30002L380.03 451.38z" stroke="none" fill="#FFE680" fill-rule="nonzero" />
+            <path d="M349.81 492.31L349.81 544.252L289.18 575.369L349.81 492.31z" stroke="none" fill="#FFDD55" fill-rule="nonzero" />
+            <path d="M349.81 492.31L409.423 573.786L398.234 507.802L349.81 492.31z" stroke="none" fill="#FFDD55" fill-rule="nonzero" />
+            <path d="M253.1 461.37L349.815 492.31198L319.933 451.46997L253.1 461.37z" stroke="none" fill="#FFE680" fill-rule="nonzero" />
+            <path d="M349.81 492.31L349.81 391.09L379.63998 451.447L349.81 492.31z" stroke="none" fill="#FFDD55" fill-rule="nonzero" />
+            <path d="M289.8 574.53L301.06097 507.989L349.81796 492.31003L289.8 574.53z" stroke="none" fill="#FFD42A" fill-rule="nonzero" />
+		</g>
+	</g>
+</g>
+</svg>

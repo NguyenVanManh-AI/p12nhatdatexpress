@@ -1,0 +1,33 @@
+.personal-profile-page #home-header-cntr .banner {
+    display: none;
+}
+
+.personal-profile-page #home-header-cntr .site-header-container {
+    padding: 0;
+}
+
+.personal-profile-page #home-header-cntr {
+    position: relative;
+    width: 100%;
+    max-width: 100vw;
+    height: var(--fixed-header-mobile-height);
+    z-index: 1039;
+}
+
+.personal-profile-page #home-header-cntr.in {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* .personal-profile-page .main {
+    padding-top: var(--fixed-header-mobile-height);
+} */
+@media screen and (min-width: 768px) {
+    /* .personal-profile-page .main {
+        padding-top: var(--fixed-header-height);
+    } */
+    .personal-profile-page #home-header-cntr {
+        height: var(--fixed-header-height);
+    }
+}

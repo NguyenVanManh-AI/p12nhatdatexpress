@@ -1,0 +1,354 @@
+@media only screen and (max-width: 1650px) {
+	header .main-menu .nav-menu > li > a {
+	    font-size: 10px;
+	    padding: 0px 5px;
+	}
+	header .group-btn span {
+    	font-size: 12px;
+	}
+	header .group-btn img {
+	    width: 20px;
+	    height: 20px;
+	}
+	.widget .item .content .title a {
+    	font-size: 14px;
+	}
+	.widget .item .content .location {
+    	font-size: 14px;
+	}
+	
+
+}
+@media only screen and (max-width: 1366px) {
+	.call a {
+    	font-size: 14px;
+	}
+	.call span, .call .phone {
+    	font-size: 12px;
+	}
+	footer .footer .widget-title {
+    	font-size: 16px;
+    }
+    footer .footer .content-footer {
+    	font-size: 14px;
+	}
+	footer span {
+    	font-size: 14px;
+	}
+	.focus .title a {
+    	font-size: 16px;
+    }
+    .focus .title h4 {
+    	line-height: 20px;
+	}
+	.list-house .name-country ul {
+    	grid-template-columns: 1fr 1fr 1fr 1fr;
+	}
+}
+@media only screen and (max-width: 1280px) {
+	.offer-list-code .question-update {
+	    flex: 0 0 100%;
+	    max-width: 100%;
+	}
+}
+@media only screen and (max-width: 1024px) {}
+@media only screen and (max-width: 768px) {
+	/* .offer-list-code .left, .offer-list-code .right {
+	    flex: 0 0 100%;
+	    max-width: 100%;
+	    margin-bottom: 30px;
+	} */
+	.offer-list-code .info-account-action .col-update {
+		flex: 0 0 100%;
+    	max-width: 100%;
+	}
+	.offer-list-code .info-account-action .col-update .select-group {
+    	flex: 0 0 100%;
+    	max-width: 100%;
+			margin-bottom: 30px;
+	}
+    .home-page .choose-price h3 {
+    	font-size: 22px;
+    }
+	.list-more {
+    	margin-bottom: 20px;
+	}
+	.hot-area .post-count h4 {
+    	font-size: 14px;
+	}
+	.hot-area .post-count h4 {
+    	font-size: 14px;
+	}
+	.hot-area .address span {
+    	font-size: 12px;
+	}
+	.date-time {
+    	margin-bottom: 10px;
+	}
+	.hot-area .list-hot-area {
+	    display: flex;
+	    align-items: center;
+	    flex-direction: row-reverse;
+	}
+	.hot-area .list-hot-area .left-image {
+    	grid-template-columns: 1fr;
+	}
+	.hot-area .list-hot-area img {
+    	width: 100%;
+	}
+	.estate-news .list-estate .content .top {
+		display: block;
+	}
+	.home-page .left, .home-page .right {
+	    flex: 0 0 100%;
+	    max-width: 100%;
+	}
+	.estate-news .list-estate > .item .content {
+    	width: 100%;
+	}
+	.hot-area .left-image .item:last-child {
+    	display: none;
+	}
+	.hot-area .list-hot-area .left-image {
+	    width: 33%;
+	    flex: 0 0 30%;
+	    max-width: 30%;
+	    grid-gap: 15px;
+	    padding: 0;
+	}
+	.hot-area .list-hot-area .right-image {
+		flex: 0 0 70%;
+    	max-width: 70%;
+	}
+	.left-image.col-md-6 img {
+    	max-height: 126px;
+	}
+	.hot-area .owl-nav button.owl-next {
+    	right: 20px;
+	}
+	.hot-area .owl-nav button.owl-prev {
+    	left: 20px;
+	}
+	.hot-area .list-hot-area .owl-nav button {
+	    background-color: rgba(255, 255, 255, 0.35);
+	    box-shadow: none;
+	    color: #fff;
+	    font-size: 22px;
+	}
+	.home-page .block {
+    	display: none;
+	}
+	.widget.widget-real-estate, .widget.widget-contact:not(.mobile-not-hide), .widget-currency, .widget-website {
+    	display: none;
+	}
+	.widget .view-more {
+    	border: none;
+	}
+	.widget .view-more a {
+	    display: inline-block;
+	    background-color: #d1d1d1;
+	    padding: 10px 25px;
+	    border-radius: 50px;
+	    position: relative;
+	    color: #1f5496;
+	}
+	.home-search .group-btn .btn-find {
+	    display: inline-block;
+	    background-color: #3AA1E3;
+	    color: #fff;
+	    padding: 5px 10px;
+	    font-size: 14px;
+	    border-radius: 4px;
+	    border: 1px solid #D7D7D7;
+	    text-transform: uppercase;
+	}
+	.home-search .group-btn .btn-find span {
+    	margin-left: 10px;
+	}
+	.home-search .group-btn {
+    	text-align: center;
+	}
+	.widget .view-more a:before {
+	    content: "";
+	    position: absolute;
+	    background: url(../images/btn-more.png);
+	    background-repeat: no-repeat;
+	    background-size: cover;
+	    width: 15px;
+	    background-position: center right;
+	    height: 10px;
+	    right: 12px;
+	    top: 50%;
+	    transform: translateY(-50%);
+	}
+}
+@media only screen and (max-width: 736px) {
+	.left-image.col-md-6 img {
+    	max-height: 120px;
+	}
+}
+@media only screen and (max-width: 668px) {
+    .left-image.col-md-6 img {
+    	max-height: 106px;
+	}
+}
+@media only screen and (max-width: 601px) {
+	.list-estate .content .top ul {
+    	display: block; 
+	}
+	.list-estate .center {
+		display: none;
+	}
+	.hot-area .list-hot-area .left-image {
+	    grid-gap: 10px;
+	}
+	.left-image.col-md-6 img {
+    	max-height: 96px;
+	}
+}
+@media only screen and (max-width: 568px) {
+	.left-image.col-md-6 img {
+    	max-height: 90px;
+	}
+}
+@media only screen and (max-width: 480px) {
+	
+	.list-house .name-country ul {
+    	grid-template-columns: 1fr 1fr 1fr;
+	}
+	.estate-news .list-estate > .item .image {
+    	flex: 0 0 140px;
+	}
+	.estate-news .list-estate > .item .image img {
+	    height: calc(100% - 35px);
+	    width: 100%;
+	    object-fit: cover;
+	}
+	.estate-news .list-estate > .item .content {
+    	flex: 1;
+	}
+	.estate-news .list-estate .content .top {
+    	display: flex;
+	}
+	.list-estate .bottom .call {
+	    margin-left: -150px;
+	    position: relative;
+	    z-index: 3;
+	}
+	.list-estate .content .top ul li {
+    	margin-bottom: 10px;
+    }
+    .left-image.col-md-6 img {
+    	max-height: 72px;
+	}
+	.hot-area .post-count h4 {
+	    font-size: 12px;
+	    margin-bottom: 0;
+	}
+	.hot-area .list-hot-area .owl-nav button {
+		font-size: 12px;
+		width: 25px;
+		height: 25px;
+	}
+}
+@media only screen and (max-width: 415px) {
+	.list-item-history-update p {
+	    margin-bottom: 0;
+	    font-size: 12px;
+	}
+	.hot-area .post-count h4 {
+    	font-size: 10px;
+	}
+	.hot-area .address span {
+    	font-size: 10px;
+	}
+	.estate-news .widget-title a {
+    	display: none;
+	}
+	.widget-title {
+	    text-align: center;
+	    display: block;
+	    background-color: #e1e1e1;
+	}
+	.widget-title h3 {
+		color: #1f5496;
+	}
+	.hot-area {
+    	padding: 0;
+	}
+	.focus {
+		padding: 20px 0;
+	}
+	.widget-event .widget-content {
+	    border: none;
+	    padding: 12px 0;
+	}
+}
+@media only screen and (max-width: 384px) {
+	.content-item-history-update {
+	    /* display: block !important; */
+	    padding: 5px 0 !important;
+	}
+	.icon-left-history {
+    	margin-bottom: 5px;
+	}
+	.item-history-update {
+    	margin-bottom: 10px;
+	}
+	.list-house .name-country ul {
+    	grid-template-columns: 1fr 1fr;
+	}
+	.estate-news .list-estate .title h4 {
+    	font-size: 12px;
+	}
+	.title h2 {
+		font-size: 20px;
+	}
+	.list-estate .content .top ul {
+    	display: block;
+	}
+	.left-image.col-md-6 img {
+    	max-height: 65px;
+	}
+}
+@media only screen and (max-width: 375px) {
+	.left-image.col-md-6 img {
+    	max-height: 64px;
+	}
+}
+@media only screen and (max-width: 320px) {
+	.list-more {
+		display: block;
+	}
+	.list-estate .content .top ul li {
+		margin-right: 0;
+	}
+	.hot-area .post-count h4 {
+    	font-size: 8px;
+	}
+	.hot-area .address span {
+    	font-size: 8px;
+	}
+	.list-more span {
+	    font-size: 10px;
+	    line-height: 10px;
+    }
+    .list-estate .content .top ul li {
+    	margin-bottom: 5px;	
+	}
+	.list-estate .content .top ul li span {
+		font-size: 12px;
+	}
+}
+@media only screen and (max-width: 1024px) {
+	.main .tutorial.manager-content {
+		margin-left: 0px !important;
+		width: 100vw;
+	}
+}
+@media only screen and (max-width: 811px) {
+	.boxtbox .modal .fade .in {
+		width: unset !important;
+		margin-left: unset !important;
+	}
+}

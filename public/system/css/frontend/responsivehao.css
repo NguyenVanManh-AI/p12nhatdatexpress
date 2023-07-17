@@ -1,0 +1,330 @@
+                            @media only screen and (max-width: 1366px) {}
+                            
+                            @media only screen and (max-width: 1280px) {
+                                .form .form-group label {
+                                    font-size: 13px;
+                                }
+                                .small-box>.inner p {
+                                    font-size: 15px;
+                                }
+                                #admin-home .fake-textarea {
+                                    font-size: 11px;
+                                    min-height: 39px;
+                                }
+                                .custom-select,
+                                .form-control {
+                                    font-size: 11px;
+                                    border-radius: unset;
+                                }
+                                button.btn.bg-blue-light {
+                                    margin-right: 0;
+                                    font-size: 15px;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 1024px) {
+                                table.table.table-striped {
+                                    width: auto;
+                                }
+                                .form .form-group label {
+                                    font-size: 11px;
+                                }
+                                #add-project .nav-tabs .nav-item span {
+                                    font-size: 12px;
+                                }
+                                button.btn.bg-blue-light.w-100 {
+                                    font-size: 16px !important;
+                                }
+                                .small-box>.small-box-footer {
+                                    font-size: 13px !important;
+                                }
+                                button.btn.bg-blue-light.w-100 {
+                                    font-size: 9px;
+                                }
+                                .custom-select,
+                                .form-control {
+                                    min-height: 27px !important;
+                                }
+                                .block-dashed .title {
+                                    font-size: 15px;
+                                }
+                                .custom-select,
+                                .form-control {
+                                    min-height: 47px;
+                                }
+                                .main-header .navbar-nav .nav-link {
+                                    color: var(--white);
+                                    font-size: 12px;
+                                }
+                                span#current-time {
+                                    font-size: 14px;
+                                    line-height: 35px;
+                                }
+                                .small-box>.small-box-footer {
+                                    font-size: 14px;
+                                }
+                                .small-box>.inner p {
+                                    font-size: 11px;
+                                }
+                                .small-box>.inner a.view {
+                                    line-height: 0.5;
+                                    font-size: 11px;
+                                }
+                                .form-filter .custom-select {
+                                    font-size: 12px;
+                                }
+                                .btn:not(:disabled):not(.disabled) {
+                                    font-size: 14px;
+                                }
+                                .custom-select {
+                                    height: calc(2.25rem + 0px);
+                                }
+                                .table-contents {
+                                    overflow-x: scroll;
+                                }
+                                .table:not(.table-dark) {
+                                    width: 1200px;
+                                }
+                                .manipulation .custom-select {
+                                    font-size: 12px;
+                                }
+                                .manipulation.d-flex.mr-4 {
+                                    margin-right: 4px !important;
+                                }
+                                .table-bottom .view-trash a {
+                                    font-size: 12px;
+                                }
+                                .display.d-flex.align-items-center.mr-4 {
+                                    margin-right: 6px !important;
+                                }
+                                .table-bottom .count-trash {
+                                    width: 13px;
+                                    height: 13px;
+                                    font-size: 11px;
+                                    line-height: 16px;
+                                    margin-left: 0px;
+                                }
+                                .table-bottom .view-trash a i {
+                                    margin-right: 3px;
+                                }
+                                .table-bottom .count-item {
+                                    font-size: 12px;
+                                    padding: 6px 9px;
+                                }
+                                .page-link {
+                                    line-height: 1;
+                                    color: #007bff;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 767px) {
+                                button.btn.bg-blue-light.w-100 {
+                                    font-size: 16px !important;
+                                }
+                                #admin-category .fake-textarea {
+                                    font-size: 14px;
+                                }
+                                .table-title {
+                                    font-size: 15px;
+                                    text-align: center;
+                                }
+                                #manage-content .table td .title {
+                                    font-size: 13px;
+                                }
+                                #list-event .table td .title a,
+                                #report-event .table td .title a {
+                                    color: #006683;
+                                    font-size: 14px;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 736px) {
+                                .form-config .block-dashed {
+                                    padding-left: 30px;
+                                    padding-right: 30px;
+                                }
+                                .form-group.col-md-6.text {
+                                    text-align: right;
+                                }
+                                .optimize-display .col-md-6.mt-4 {
+                                    text-align: right;
+                                }
+                                .custom-select,
+                                .form-control {
+                                    min-height: 0px;
+                                }
+                                .main-header .navbar-nav .nav-link {
+                                    font-size: 11px;
+                                }
+                                .content-wrapper>.content .filter .form-row>.col,
+                                .content-wrapper>.content .filter .form-row>[class*=col-] {
+                                    margin-bottom: 10px;
+                                }
+                                .content-wrapper>.content .filter .form-row {
+                                    margin-bottom: 0px;
+                                }
+                                .content-wrapper>.content .filter .form-row>.col,
+                                .content-wrapper>.content .filter .form-row>[class*=col-] {
+                                    text-align: center;
+                                }
+                                .table-bottom.d-flex.align-items-center.justify-content-between.mb-4 {
+                                    display: block !important;
+                                }
+                                .text-left.d-flex.align-items-center {
+                                    margin-bottom: 20px;
+                                    margin-top: 10px;
+                                }
+                                .text-right {
+                                    justify-content: right;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 667px) {
+                                #manage-update .list-update .item {
+                                    text-align: center;
+                                    padding: 0 20px;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 640px) {
+                                .modal-content {
+                                    left: 50% !important;
+                                    transform: translateX(-50%) !important;
+                                    width: 75%;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 568px) {
+                                .modal-content {
+                                    left: 47% !important;
+                                    transform: translateX(-58%) !important;
+                                    width: 66%;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 480px) {
+                                .chart-title.text-center p {
+                                    font-size: 15px;
+                                }
+                                h5.mb-1 {
+                                    font-size: 17px;
+                                }
+                                .modal-content {
+                                    left: 40% !important;
+                                    transform: translateX(-60%) !important;
+                                    width: 60%;
+                                }
+                                #manage-update .list-update .item .image img {
+                                    width: 100px;
+                                    height: 100px;
+                                }
+                                .block-dashed .title {
+                                    top: -8px !important;
+                                }
+                                .block-dashed .title {
+                                    font-size: 14px;
+                                }
+                                .small-box {
+                                    text-align: inherit;
+                                }
+                                .block-dashed .title {
+                                    top: -15px;
+                                }
+                                .main-header .navbar-nav .nav-link {
+                                    font-size: 13px;
+                                }
+                                .form-filter button {
+                                    margin-right: 12px;
+                                }
+                                .main-header .navbar-nav .nav-link {
+                                    font-size: 15px;
+                                }
+                                .navbar-expand .navbar-nav {
+                                    flex-direction: column;
+                                }
+                                ul.navbar-nav.ml-auto {
+                                    margin: 0 auto;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 414px) {
+                                .member-rank .member-item .view {
+                                    font-size: 13px;
+                                }
+                                .member-rank .member-item .member-info {
+                                    font-size: 13px;
+                                }
+                                .modal-content {
+                                    left: 30% !important;
+                                    transform: translateX(-50%) !important;
+                                    width: 50%;
+                                }
+                                #manage-update .list-update .item {
+                                    text-align: center;
+                                    padding: 0 15px;
+                                }
+                                .block-dashed .title {
+                                    font-size: 14px !important;
+                                    text-align: center;
+                                }
+                                .btn:not(:disabled):not(.disabled) {
+                                    margin-bottom: 10px;
+                                }
+                                .form-filter button {
+                                    margin-right: 0px;
+                                }
+                                .block-dashed .title {
+                                    font-size: 12px;
+                                    text-align: center;
+                                }
+                            }
+                            
+                            @media only screen and (max-width: 375px) {
+                                .member-rank .small-box .inner {
+                                    height: 305px;
+                                }
+                                .member-rank .member-item .member-info .info span:first-child {
+                                    margin-right: 0px;
+                                }
+                                .small-box>.small-box-footer {
+                                    font-size: 10px !important;
+                                }
+                                .modal-content {
+                                    left: 23% !important;
+                                    transform: translateX(-50%) !important;
+                                    width: 45%;
+                                }
+                                #manage-update .list-update .item {
+                                    text-align: center;
+                                    padding: 0 5px;
+                                }
+                                #manage-update .list-update .item .image img {
+                                    width: 80px;
+                                    height: 80px;
+                                }
+                                .block-dashed .title {
+                                    font-size: 12px !important;
+                                }
+                                .btn:not(:disabled):not(.disabled) {
+                                    font-size: 11px;
+                                }
+                                .text-left.d-flex.align-items-center {
+                                    display: block !important;
+                                }
+                                .manipulation .custom-select {
+                                    font-size: 12px;
+                                    width: 50%;
+                                }
+                                .table-bottom .display {
+                                    width: 57%;
+                                    margin-bottom: 10px;
+                                    margin-top: 10px;
+                                }
+                                .page-link {
+                                    padding: 0.3rem 0.4rem;
+                                }
+                                .table-bottom .count-item {
+                                    font-size: 12px;
+                                    padding: 4px 9px;
+                                }
+                            }

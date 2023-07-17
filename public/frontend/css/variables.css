@@ -1,0 +1,44 @@
+:root {
+  --aside-banner-width: 10vw;
+  --main-text: #1a1a1a;
+  --main-dark-color: #21337f;
+  --main-color: #1f5496;
+  --main-sub-color: #1b7fbe;
+  --dark-color: #36393f;
+  --gray-color: #b3b5b8;
+  --gray: #808080;
+  --dark-gray: #A9A9A9;
+  --readonly-gray: #e9ecef;
+  --darken-gray: #919191;
+  --orange: #ff7e00;
+  --light-orange: #fba301;
+  --purple: #9c31df;
+  --success: #25a400;
+  --danger: #dc3545;
+  --danger-darken: #9b1f2b;
+  --blue: #1f5496;
+  --blue-darken: #103b70;
+  --yellow: #ffc107;
+  --warning: #ffc107;
+  --light-cyan: #00c1ef;
+  --cyan: #17a2b8;
+  --dark-cyan: #428CBD;
+  --hover-gray: #f1f1f1;
+  --classified-slider-image-ratio: 66.666666%;
+  --home-banner-ratio: 33.333%;
+  --home-banner-min-height: 340px;
+  --image-ratio: 66.666666%;
+  --dashboard-aside-width: 280px; /* user dashboard aside menu width */
+  /* socials */
+  --facebook-bg: #0079ed;
+  --linkedin-bg: #0A66C2;
+
+  /* header */
+  --header-height: 70px;
+  --footer-height: 60px;
+  --header-mobile-height: 65px;
+  --footer-mobile-height: 60px;
+  --fixed-header-height: 45px;
+  --fixed-header-mobile-height: 60px;
+  --header-mobile-padding: 10px;
+}

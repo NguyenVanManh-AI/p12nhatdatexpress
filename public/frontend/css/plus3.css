@@ -1,0 +1,509 @@
+    .back-to-top.show a {
+        color: #fff;
+    }
+    
+    .image-advisor:hover img {
+        filter: brightness(0.7);
+    }
+    
+    .image-advisor img {
+        transition: .3s all ease-in-out;
+    }
+    
+    .image-advisor {
+        box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+    }
+    
+    .mailbox .nav-pills .nav-link {
+        color: #7c7c7c !important;
+        text-align: center;
+        background: #ffffff;
+        margin: 1px;
+    }
+    
+    .mailbox .nav-pills .nav-link.active {
+        color: #be2020 !important;
+        background-color: #f0ecec;
+    }
+    
+    .page-company .sidebar-company h3 {
+        display: block;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 14px;
+        color: #fff;
+        background-color: #39b54a;
+        text-align: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-bottom: 0;
+    }
+    
+    .page-company .sidebar-company form {
+        padding: 13px;
+        margin-bottom: 20px;
+        border: 1px solid #d7d7d7;
+    }
+    
+    form.search-near input,
+    form.search-near select {
+        display: block;
+        width: 100%;
+        padding-left: 10px;
+        height: 40px;
+        line-height: 40px;
+        margin-bottom: 17px;
+        color: #c1c1c1;
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        outline: none;
+    }
+    
+    form.search-near button {
+        display: block;
+        width: 100%;
+        padding-left: 10px;
+        height: 40px;
+        line-height: 40px;
+        margin-bottom: 17px;
+        color: #fff;
+        border: 1px solid #3aa1e3;
+        background-color: #3aa1e3;
+        border-radius: 3px;
+        outline: none;
+        margin-bottom: 0;
+    }
+    
+    .page-company .sidebar-company .desc {
+        font-size: 16px;
+        color: #575757;
+        line-height: 22px;
+        padding: 10px 8px;
+        background-color: #e1eef4;
+    }
+    
+    .page-company .list-company .item {
+        display: flex;
+        flex-wrap: wrap;
+        box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .cs-list-item .item .image {
+        position: relative;
+    }
+    
+    .page-company .list-company .item .image {
+        flex: 0 0 270px;
+        max-width: 270px;
+        align-items: center;
+        padding-left: 40px;
+        padding-right: 40px;
+        display: flex;
+    }
+    
+    .cs-list-item .item .image .rating {
+        text-align: center;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .cs-list-item .item .image .rating span {
+        color: #fea700;
+    }
+    
+    .page-company .list-company .item .info {
+        flex: 0 0 calc(100% - 270px);
+        max-width: calc(100% - 270px);
+        padding-left: 25px;
+        padding-right: 15px;
+        padding-top: 15px;
+        padding-bottom: 25px;
+    }
+    
+    .cs-list-item .item .info .name a {
+        font-size: 18px;
+        font-weight: bold;
+        color: #d80000;
+    }
+    
+    .cs-list-item .item .info p {
+        color: #33669d;
+    }
+    
+    .cs-list-item .item .info p:last-child {
+        margin-bottom: 0;
+    }
+    
+    .cs-list-item .item .info p i {
+        color: #fea700;
+        min-width: 20px;
+        padding-right: 15px;
+    }
+    
+    .list-location {
+        margin-top: 40px;
+        background-color: #f1f1f1;
+        border: 2px solid #d6d2c7;
+    }
+    
+    .list-location li {
+        -webkit-flex: 0 0 12.5%;
+        -ms-flex: 0 0 12.5%;
+        flex: 0 0 12.5%;
+        max-width: 12.5%;
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .list-location li a {
+        color: #000;
+    }
+    
+    .list-location li a span {
+        font-weight: bold;
+    }
+    
+    .list-danhba .item {
+        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 30px;
+        box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+        padding: 0;
+    }
+    
+    .list-danhba .item img {
+        width: 100%;
+    }
+    
+    .list-danhba .item .info {
+        padding: 10px 7px;
+    }
+    
+    .list-danhba .item .info .name {
+        text-align: center;
+    }
+    
+    .list-danhba .item .info p {
+        color: #828892;
+    }
+    
+    .list-danhba .item .info p i {
+        color: #3a4145;
+        width: 20px;
+        height: 20px;
+        background-color: #eff3f9;
+        text-align: center;
+        line-height: 20px;
+        font-size: 11px;
+        border-radius: 50%;
+        margin-right: 15px;
+        min-width: unset;
+        padding-right: 0;
+    }
+
+    .list-danhba .item .info .phone i {
+        color: #3A4145;
+        width: 20px;
+        height: 20px;
+        background-color: #EFF3F9;
+        text-align: center;
+        line-height: 20px;
+        font-size: 11px !important;
+        border-radius: 50%;
+        margin-right: 15px !important;
+        min-width: unset;
+        padding-right: 0;
+    }
+
+    .list-danhba .item .info .contact {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .list-danhba .item .info .contact .phone {
+        margin-bottom: 0;
+    }
+    
+    .list-danhba .item .info .contact .list-social {
+        display: flex;
+        align-items: center;
+    }
+    
+    .list-social li {
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        text-align: center;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    
+    .list-social li a {
+        color: #fff;
+        font-size: 12px;
+    }
+    
+    .list-social li.fb {
+        background-color: #245a9b;
+    }
+    
+    .list-social li.twitter {
+        background-color: #00ccff;
+    }
+    
+    .list-social li.google {
+        background-color: #d92a2c;
+    }
+    
+    .contact.number-phone p.phone {
+        display: flex;
+    }
+    
+    @media only screen and (max-width: 1440px) {
+        /* .profile-content .posts-item .posts-content .info-desc .excerpt {
+            height: 52px !important;
+        } */
+    }
+    
+    @media only screen and (max-width: 1366px) {
+        .list-danhba .item .info p {
+            font-size: 12px;
+        }
+        .show-number {
+            font-size: 12px;
+            padding: 3px 4px;
+            position: absolute;
+            margin-left: 66px;
+        }
+        form.search-near input,
+        form.search-near select {
+            margin-bottom: 0px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 1024px) {
+        #create-event {
+            width: 900px !important;
+            top: 220px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 767px) {
+        .wrapper .detail {
+            overflow-x: scroll;
+        }
+        .table-information.table.table-4 {
+            width: 800px;
+        }
+        .content-left .info-user {
+            padding-bottom: 170px;
+        }
+        .profile-admin .list-feature {
+            right: 0 !important;
+            bottom: -365px !important;
+        }
+        /*.expert-list .expert-item {
+            display: block !important;
+        }*/
+        .meta-item .color-blue {
+            font-size: 12px !important;
+        }
+        #create-event {
+            width: 660px !important;
+            top: 3171px !important;
+        }
+        .html5-elem-wrap {
+            width: 100% !important;
+        }
+        .global-tags {
+            height: 170px;
+        }
+        .name-country {
+            height: 140px;
+            overflow: hidden;
+        }
+        .glbtags .show-more {
+            display: block;
+        }
+        .sidebar-company .search-company input,
+        .search-company select {
+            width: 100%;
+        }
+    }
+    
+    @media only screen and (max-width: 736px) {
+        .col-md-4.over {
+            margin-bottom: 30px;
+        }
+        .expert-list .expert-item {
+            display: flex !important;
+        }
+        #create-event {
+            width: 500px !important;
+        }
+        .upload {
+            display: block !important;
+        }
+        .upload-item h4 {
+            font-size: 18px;
+        }
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .html5-elem-box {
+            height: 385px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 480px) {
+        .page-profile .list-feature>.item {
+            flex: 0 0 44%;
+        }
+        .sec-follow .side-content .item .name a {
+            font-size: 15px;
+        }
+        .sec-follow .side-title h3 {
+            font-size: 17px !important;
+        }
+        .profile-admin .list-feature {
+            bottom: -340px !important;
+        }
+        #create-event input[type="submit"] {
+            padding: 10px 30px !important;
+        }
+        #create-event {
+            width: 280px !important;
+        }
+        .page-company .list-company .item .image {
+            margin: 0 auto;
+        }
+        .page-company .list-company .item {
+            display: block;
+        }
+        .list-danhba .item .info p {
+            font-size: 11px;
+        }
+        .show-phone {
+            max-width: 65px;
+        }
+        .show-number {
+            margin-left: 77px;
+        }
+        .page-company .list-company .item .info {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+    
+    @media only screen and (max-width: 414px) {
+        .project-notfound-wrapper h5 {
+            font-size: 15px !important;
+        }
+        .project-notfound-wrapper h4 {
+            font-size: 22px !important;
+        }
+        .global-tags {
+            height: 345px;
+        }
+        .pm-content .tutorial ul li {
+            margin-bottom: 10px;
+        }
+        .pm-content .tutorial {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding-left: 20px;
+            margin-top: 20px;
+        }
+        .pm-content .qr-code {
+            flex: 0 0 100%;
+            max-width: 100%;
+            text-align: center;
+        }
+        #momo .pm-content,
+        #zalo-pay .pm-content {
+            display: block;
+        }
+        .pay_title p.choose-package-number {
+            font-size: 20px;
+        }
+        .pay_title h3 {
+            display: block;
+        }
+        .profile-content .posts-item .posts-content .info-desc .excerpt {
+            height: 64px;
+            overflow: hidden;
+        }
+        .row.list-danhba {
+            display: block;
+        }
+        .row.list-danhba .col-lg-4.col-md-6.col-6.col-sm-6 {
+            max-width: 100%;
+            margin-bottom: 35px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .list-danhba .item .info p {
+            font-size: 13px;
+        }
+        .show-number {
+            margin-left: 65px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 375px) {
+        .create-campaign ol.breadcrumb {
+            padding: 18px 50px;
+            font-size: 11px;
+        }
+        .name-country {
+            height: 230px;
+            overflow: hidden;
+        }
+    }
+    
+    @media only screen and (max-width: 348px) {
+        .item .item-foot .phone {
+            margin-left: 0px !important;
+        }
+    }
+    
+    @media only screen and (max-width: 320px) {
+        .posts-comment .form-comment .form-right>.d-flex>span {
+            font-size: 11px;
+        }
+        .posts-content .posts-act .item {
+            font-size: 12px;
+        }
+        .posts-statistic .item .info {
+            font-size: 11px;
+        }
+        .technical-assistance .list-staff {
+            grid-template-columns: 1fr !important;
+        }
+        .create-campaign ol.breadcrumb {
+            padding: 18px 15px;
+        }
+        .quick-link ul {
+            grid-gap: 0px !important;
+            padding-left: 0px !important;
+        }
+        .profile-admin .list-feature {
+            bottom: -430px !important;
+        }
+        .right-history {
+            width: 100%;
+        }
+        .history-update-content p {
+            font-size: 10px !important;
+        }
+        .right-history .time-update-right {
+            font-size: 9px !important;
+        }
+    }

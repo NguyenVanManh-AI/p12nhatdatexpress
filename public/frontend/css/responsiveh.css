@@ -1,0 +1,88 @@
+@media screen and (min-width: 320px) and (max-width: 374px) {
+    .property-banner-slide .slick-dots li,
+    .property-banner-slide .slick-dots li.slick-active {
+        width: 30px;
+        height: 30px;
+    }
+    .single-title {
+        font-size: 18px;
+    }
+    .single-meta .left,
+    .single-meta .right {
+        flex-wrap: wrap;
+    }
+    .single-meta .right>span {
+        margin-bottom: 10px;
+        display: block;
+    }
+    .single-contact-buttons a {
+        padding: 5px 10px;
+    }
+    .single-contact-buttons a i {
+        margin-right: 5px;
+    }
+    .single-tabs .switcher {
+        padding: 5px 12px;
+    }
+    .project-comment>.head {
+        font-size: 16px;
+    }
+    .comment-section .comment-item>.avatar,
+    .comment-section .comment-item .reply-section>.avatar,
+    .comment-section .comment-item .reply-form>.avatar {
+        flex: 0 0 45px;
+        height: 45px;
+    }
+    .comment-section .comment-item>.comment .reaction>div.like {
+        margin-left: 0;
+    }
+    .comment-section .comment-item>.comment .reaction>div {
+        font-size: 14px;
+    }
+    .single-relate-list .content,
+    .property-list .content,
+    .buy-rent-list .content,
+    .rent-list .content {
+        /*flex-direction: column;*/
+    }
+    .item .thumbnail {
+        flex: unset;
+    }
+    .single-relate-list .info,
+    /*.property-list .info,*/
+    .buy-rent-list .info,
+    .rent-list .info {
+        padding-left: 0;
+        padding-top: 10px;
+    }
+    .content,
+    .expert-item {
+        flex-direction: column;
+    }
+    .banner-mobile .legend {
+        width: 270px;
+        margin-top: 20px;
+        padding: 10px;
+    }
+    .banner-mobile .banner {
+        padding-top: 30px;
+    }
+    .item-foot .time {
+        margin-top: 0;
+    }
+    .global-tag {
+        font-size: 13px;
+    }
+    .head-divide .left h3 {
+        font-size: 12px;
+    }
+    #map-fixed {
+        width: 90% !important;
+    }
+    #report input[type="text"] {
+        max-width: 100px;
+    }
+    .expert-list .expert-item {
+        flex-direction: row;
+    }
+}

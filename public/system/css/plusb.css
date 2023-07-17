@@ -1,0 +1,80 @@
+#config label {
+    font-weight: 700;
+}
+
+.form-config textarea.dip {
+    background-color: #EBEBEB;
+}
+
+.custom-select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    position: relative;
+    /* background-image: url(../images/caret-down.png);
+    background-position: top 50% right 12px;
+    background-repeat: no-repeat;
+    background-size: 12px; */
+    background: #fff url(../images/caret-down.png) right 0.75rem center/8px 7px no-repeat;
+}
+
+#add-project .block-dashed select.bg-gray {
+    background-color: #EBEBEB !important;
+    color: #000 !important;
+}
+
+#add-project .block-dashed .note {
+    margin: 0;
+    font-size: 13px;
+}
+
+#recycle-bin a {
+    margin-right: 5px;
+    display: inline-block;
+}
+
+#recycle-bin .list {
+    height: 473px;
+    overflow-y: scroll;
+}
+
+#recycle-bin .list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#recycle-bin .list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#recycle-bin .list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+#recycle-bin .list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#recycle-bin .list .item:not(:last-child) {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+#recycle-bin i {
+    color: #4b4d4f;
+    margin-right: 5px;
+}
+
+table.table thead th {
+    padding: 8px;
+}
+
+table.table thead th .nav-link {
+    padding: 0;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: url(../images/calendar-icon.png) no-repeat;
+}
