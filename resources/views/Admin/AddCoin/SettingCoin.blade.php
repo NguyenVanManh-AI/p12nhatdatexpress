@@ -1,4 +1,7 @@
 @extends('Admin.Layouts.Master')
+
+@section('Title', 'Thiết lập | Nạp Express coin')
+
 @section('Style')
     <style>
         .input-line{

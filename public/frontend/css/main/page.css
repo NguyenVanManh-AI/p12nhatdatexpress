@@ -3,14 +3,6 @@
     min-height: 58px;
 }
 
-
-/* login */
-/* other login styles should put here */
-#login .upload-license-wrap {
-    
-}
-/* end login */
-
 /* project page */
 .project-page .project-page__description-title {
     font-size: 18px;
@@ -95,7 +87,7 @@
 .map-utilities__list .map-utilities__item {
     min-width: max-content;
     color: #000;
-    width: 115px;
+    width: 120px;
 }
 .map-utilities__list .map-utilities__item:hover,
 .map-utilities__list .map-utilities__item.active {
@@ -125,12 +117,24 @@
 .page-manager-account .sticky.top-3 {
     top: calc(1rem + var(--header-mobile-height)) !important;
 }
+#home-header-cntr.in ~ #main-content .sticky.top-2 {
+    top: calc(.5rem + var(--fixed-header-mobile-height)) !important;
+}
+.page-manager-account .sticky.top-2 {
+    top: calc(.5rem + var(--header-mobile-height)) !important;
+}
 @media screen and (min-width: 768px) {
     #home-header-cntr.in ~ #main-content .sticky.top-3 {
         top: calc(1rem + var(--fixed-header-height)) !important;
     }
     .page-manager-account .sticky.top-3 {
         top: calc(1rem + var(--header-height)) !important;
+    }
+    #home-header-cntr.in ~ #main-content .sticky.top-2 {
+        top: calc(.5rem + var(--fixed-header-height)) !important;
+    }
+    .page-manager-account .sticky.top-2 {
+        top: calc(.5rem + var(--header-height)) !important;
     }
 }
 /* end sticky */
@@ -403,6 +407,9 @@
     background-color: var(--main-color);
 }
 .home-banner-top-section .banner-top-inner .home-search-form-box .home-search-inner .category-box .radio-with-button input[type=radio]:checked + .button-with-radio {
+    background-color: var(--success); 
+}
+.home-banner-top-section .banner-top-inner .home-search-form-box .home-search-inner .category-box.is-flicking .radio-with-button .button-with-radio {
     background-color: var(--success); 
 }
 .home-banner-top-section .banner-top-inner .home-search-form-box .home-search-inner .category-box .radio-with-button:hover .button-with-radio, .home-banner-top-section .banner-top-inner .home-search-form-box .home-search-inner .category-box .radio-with-button.active .button-with-radio {
@@ -796,31 +803,70 @@
     }
 }
 
-.express-new-item{
-    box-shadow: unset;
-}
-
-.express-new-item .card-body {
-    height: 50px;
-    padding: 0.5rem 0rem
-}
-
-.express-new-item .express-new-item__image-box::before{
-    width: 100%;
-    content: "";
-    display: block;
-    padding-bottom: var(--classified-slider-image-ratio);
-}
-
-/* review result */
-.review-result-section .review-receiver {
-    min-width: 250px;
-}
-.express-new-item .express-new-item__play-button{
+/* express-new-item */
+.express-new-item__btn-play {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.express-new-item__btn-play i {
+    margin-top: 2px;
+    margin-left: 4px;
+    color: var(--gray-color);
+}
+.express-new-item__btn-play:hover {
+    background-color: var(--light-cyan) !important;
+}
+.express-new-item__btn-play:hover i {
+    color: #fff;
+}
+
+/* focus group page */
+.focus-group__page .focus-group__widget-search .widget-title {
+    height: 30px;
+}
+
+.focus-group__page .focus-group__widget-search .widget-title h3 {
+    padding: 5px 0;
+}
+
+/* focus highlight */
+@media screen and (min-width: 768px) {
+    .focus-highlight-box .highlight-box__main.with-list .highlight-box__main-image::before{
+        padding-bottom: 390px;
+    }
+}
+.focus-highlight-box .highlight-box__list {
+    height: 390px;
+}
+.focus-highlight-box .highlight-box__list .highlight-box__list-item-detail .title {
+    position: relative;
+}
+.focus-highlight-box .highlight-box__list .highlight-box__list-item-detail .title::before {
+    content: '\f0da';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+/* end focus highlight */
+/* fengshui */
+@media screen and (min-width: 768px) {
+    .focus-fengshui-box .fengshui-box__main .fengshui-box__main-image::before{
+        padding-bottom: 369px;
+    }
+}
+.focus-fengshui-box .fengshui-box__list {
+    height: 369px;
+}
+/* end fengshui */
+
+/* review result */
+.review-result-section .review-receiver {
+    min-width: 250px;
 }
 .review-result-section .result-compact {
     border-right: unset;
@@ -911,3 +957,52 @@
     padding-bottom: 465px;
 }
 /* end should improve */
+
+/* accept location */
+.accept-location-instruct {
+    z-index: 1060;
+    position: fixed;
+    top: 10px;
+    left: 55px;
+    background: #fff;
+    width: 350px;
+    max-width: 100%;
+    box-shadow: 0px 1px 3px #888;
+    transform: scaleY(0);
+    transition: all 0.4s ease;
+    transform-origin: center top;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.accept-location-instruct.in {
+    transform: scale(1) !important;
+}
+.accept-location-instruct .accept-location__title {
+    color: var(--main-color);
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.accept-location-instruct::before {
+    content: "";
+    display: inline-block;
+    border-bottom: 10px solid #fff;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    position: absolute;
+    top: -10px;
+    left: 60px;
+    width: 0;
+    height: 0;
+    z-index: 1;
+    filter: drop-shadow(0px -1px 1px rgba(0, 0, 0, .5));
+}
+
+@media screen and (max-width: 767px) {
+    .accept-location-instruct {
+        max-width: calc(100vw - 20px);
+        left: 10px;
+        top: 10px;
+    }
+}
+/* end accept location */

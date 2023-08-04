@@ -197,10 +197,19 @@ use Carbon\Carbon;
      * @param mixed $current_value
      * @param int $level
      * @param boolean $withChildren
+     * @param string $subText = ''
      * @return void
      */
-    function show_select_option($collect, $option_value, $option_text, $select_name, $current_value = null, $level = 0, $withChildren = true)
-    {
+    function show_select_option(
+        $collect,
+        $option_value,
+        $option_text,
+        $select_name,
+        $current_value = null,
+        $level = 0,
+        $withChildren = true,
+        $subText = ''
+    ) {
         if (!old($select_name) && $current_value == null && $level++ == 0) {
             echo "<option value='' selected></option>";
 
@@ -213,7 +222,8 @@ use Carbon\Carbon;
                 $text = data_get($item, $option_text);
                 if (!$text) {
                     $text = is_string($item) || is_int($item) ? $item . ' ' : '';
-                    $text .= $option_text;
+                    if ($subText)
+                        $text .= $subText;
                 }
 
                 $allChildren = [];
@@ -225,12 +235,21 @@ use Carbon\Carbon;
 
                 $disabled = isset($allChildren->items) ? 'disabled' : null;
                 $oldValue = $select_name != null ? old($select_name, $current_value) : $current_value;
+                $selected = $value == $oldValue ? 'selected' : '';
 
-                if ($value == $oldValue) {
-                    echo "<option value='$value' selected class='text-black' $disabled>$text</option>";
-                } else {
-                    echo "<option value='$value' class='text-black' $disabled>$text</option>";
+                switch ($level) {
+                    case 2:
+                        $text = '-- ' . $text;
+                        break;
+                    case 3:
+                        $text = '---- ' . $text;
+                        break;
+                    default:
+                        break;
                 }
+
+                echo "<option value='$value' $selected class='text-black' $disabled>$text</option>";
+
                 if (isset($allChildren) && $withChildren) {
                     show_select_option($allChildren, $option_value, $option_text, $select_name, $current_value ?? null, $level);
                 }
@@ -470,14 +489,14 @@ use Carbon\Carbon;
 
     /**
      * check already accept location
-     * 
+     *
      * @return bool
      */
     function isAcceptLocation(): bool
     {
         return Session::has('accept_location');
     }
-    
+
     /**
      * get session location
      * @param string $locationName
@@ -631,15 +650,4 @@ use Carbon\Carbon;
         });
 
         return data_get($emailConfig, 'config_value') ? true : false;
-    }
-
-    /** get table joined
-     * @param $query
-     * @param $table
-     * @return bool
-     */
-    function tableJoined($query, $table) {
-        $joins = collect($query->getQuery()->joins);
-
-        return $joins->pluck('table')->contains($table);
     }

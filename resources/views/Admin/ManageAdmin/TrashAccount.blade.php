@@ -1,5 +1,18 @@
-    @extends('Admin.Layouts.Master')
+@extends('Admin.Layouts.Master')
+
+@section('Title', 'Thùng rác danh sách tài khoản | Tài khoản quản trị')
+
 @section('Content')
+    <div class="row m-0 px-3 pt-3">
+        <ol class="breadcrumb mt-1">
+            <li class="recye px-2 pt-1  check">
+                <a href="{{ route('admin.manage.accounts') }}">
+                    <i class="fa fa-th-list mr-1"></i>Danh sách
+                </a>
+            </li>
+        </ol>
+    </div>
+    <h4 class="text-center font-weight-bold mb-3 mt-2">QUẢN LÝ THÙNG RÁC TÀI KHOẢN</h4>
     <section class="content">
         <div class="container-fluid">
             <table class="table  table-custom" id="table">
@@ -37,88 +50,30 @@
                             <td>{{$item->role_name == null ? ($item->admin_type == 1 ? 'Tài khoản quản trị cao cấp' : '') : $item->role_name}}</td>
                             <td>{{date("d/m/Y",$item->created_at)}}</td>
                             <td>
-                                {{-- <a href="#" class="setting-item edit mb-2"><i class="fas fa-cog"></i> Chỉnh sửa</a> --}}
-                                 @if($check_role == 1  ||key_exists(6, $check_role))
-                                <a class="setting-item text-primary delete mb-2" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}"><i
-                                        class="fas fa-undo-alt text-black mr-1" style="color: #0d0d0d!important"></i> Khôi phục</a>
-                                 @endif
-
-                                <x-admin.force-delete-button
+                                <div class="flex-column">
+                                  <x-admin.restore-button
                                     :check-role="$check_role"
-                                    id="{{ $item->id }}"
-                                    url="{{ route('admin.manage.force-delete-multiple') }}"
-                                />
+                                    url="{{ route('admin.manage.accounts.restore-multiple', ['ids' => $item->id]) }}"
+                                  />
+                
+                                  <x-admin.force-delete-button
+                                    :check-role="$check_role"
+                                    url="{{ route('admin.manage.accounts.force-delete-multiple', ['ids' => $item->id]) }}"
+                                  />
+                                </div>
                             </td>
                         </tr>
                         @endif
                     @endforeach
                 </tbody>
             </table>
-
-            <form action="" class="force-delete-item-form d-none" method="POST">
-                @csrf
-                <input type="hidden" name="ids">
-            </form>
-
-            <div class="table-bottom d-flex align-items-center justify-content-between mb-4">
-                <div class="text-left d-flex align-items-center">
-                    <div class="manipulation d-flex mr-4">
-                        <img src="image/manipulation.png" alt="" id="btnTop">
-                        <div class="btn-group ml-1">
-                            <button type="button" class="btn dropdown-toggle dropdown-custom" data-toggle="dropdown"
-                                    aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                Thao tác
-                            </button>
-                            <div class="dropdown-menu">
-                                @if($check_role == 1 ||key_exists(6, $check_role))
-                                <a class="dropdown-item unToTrash" type="button" href="javascript:{}">
-                                    <i class="fas fa-undo-alt bg-primary p-1 mr-2 rounded"
-                                       style="color: white !important;font-size: 15px"></i>Khôi phục
-                                       <input type="hidden" name="action" value="restore">
-                                </a>
-                            
-                                @else
-                                <p class="dropdown-item m-0 disabled">
-                                    Bạn không có quyền
-                                </p>
-                                @endif
-                            </div>
-                        </div>
-                        </form>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mx-4">
-                        <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                        <form method="get" action="{{route('admin.manage.trashaccount')}}">
-                            <select name="items" class="custom-select" onchange="this.form.submit()">
-                                <option {{(isset($_GET['items'])&& $_GET['items']==10)?"selected":""}}  class=""
-                                        value="10">10
-                                </option>
-                                <option {{(isset($_GET['items'])&& $_GET['items']==20)?"selected":""}} value="20">20
-                                </option>
-                                <option {{(isset($_GET['items'])&& $_GET['items']==30)?"selected":""}} value="30">30
-                                </option>
-                            </select>
-                        </form>
-                    </div>
-                    
-                    <div>
-                        @if($check_role == 1  ||key_exists(4, $check_role))
-                        <a href="{{route('admin.manage.accounts')}}" class="btn btn-primary">
-                            Quay lại
-                        </a>
-                        @endif
-                    </div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="count-item">Tổng cộng: @empty($trash_account) {{0}} @else {{$trash_account->total()}} @endempty items</div>
-                    @if($trash_account)
-                        {{ $trash_account->render('Admin.Layouts.Pagination') }}
-                    @endif
-                </div>
-
-            </div>
         </div>
+        <x-admin.table-footer
+            :check-role="$check_role"
+            :lists="$trash_account"
+            force-delete-url="{{ route('admin.manage.accounts.force-delete-multiple') }}"
+            restore-url="{{ route('admin.manage.accounts.restore-multiple') }}"
+        />
         <!-- /Main row -->
     </section>
 @endsection
@@ -334,45 +289,4 @@
 @endsection
 @section('Script')
     <script src="js/table.js"></script>
-    <script>
-        $('.delete').click(function () {
-
-            var id = $(this).data('id');
-            var created_by = $(this).data('created_by');
-            Swal.fire({
-                title: 'Xác nhận khôi phục',
-                text: "Nhấn đồng ý thì sẽ tiến hành khôi phục!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/admin/manage-admin/undelete/" + id+"/"+created_by;
-
-                }
-            });
-        });
-        $('.unToTrash').click(function () {
-            var id = $(this).data('id');
-            Swal.fire({
-                title: 'Xác nhận khôi phục',
-                text: "Nhấn đồng ý thì sẽ tiến hành khôi phục !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('#formtrash').submit();
-
-                }
-            });
-        });
-    </script>
 @endsection

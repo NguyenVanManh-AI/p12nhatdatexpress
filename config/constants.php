@@ -2,7 +2,6 @@
 return [
     'home' => [
       'num_paginate' => 20,
-      'num_paginate_focus' => 18,
     ],
     'validate_message' => [
         'required' => ':attribute không được bỏ trống',
@@ -227,5 +226,16 @@ return [
         // chat
         'chat_type' => 'mục hỗ trợ',
         'message' => 'tin nhắn',
+
+        // mail template
+        'template_title' => 'tiêu đề ',
+        'template_mail_title' => 'tiêu đề mail',
+        'template_action' => 'tên action',
+
+        'num_use' => 'số lần dùng tối đa',
+        'value' => 'phần trăm áp dụng',
+        'news_description' => 'mô tả ngắn',
+        'news_title' => 'tiêu đề',
+        'news_content' => 'nội dung',
     ]
 ];

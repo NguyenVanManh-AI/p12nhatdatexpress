@@ -1,4 +1,5 @@
 @extends('Admin.Layouts.Master')
+
 @section('Title', 'Hỗ trợ kỹ thuật')
 
 @section('Content')
@@ -149,10 +150,10 @@
                   <div class="form-group">
                     <x-common.text-input
                       name="date"
-                      input-class="js-date-placeholder"
                       :type="old('date') ? 'date' : 'text'"
                       value="{{ request()->date }}"
                       placeholder="Thời gian"
+                      hover-date
                     />
                   </div>
                 </div>
@@ -183,6 +184,7 @@
                       name="rating"
                       placeholder="Đánh giá"
                       :items="$ratings"
+                      sub-text="sao"
                       items-current-value="{{ request()->rating }}"
                     />
                   </div>
@@ -213,8 +215,6 @@
             </tr>
           </thead>
           <tbody>
-            {{-- <form action="{{ route('admin.support.index') }}" id="trash_list" method="post"> --}}
-              @csrf
               <input type="hidden" name="action" id="action_list" value="">
               @foreach ($conversations as $conversation)
                 <tr>
@@ -251,7 +251,7 @@
                     </div>
                     @if($conversation->getFirstMessage())
                       <div class="flex-between">
-                        <span class="text-light-cyan">
+                        <span class="{{ $conversation->getChatTextClass() }}">
                           {{ $conversation->getChatActionLabel() }}
                         </span>
                         <span class="text-muted">
@@ -328,11 +328,9 @@
                   </td>
                 </tr>
               @endforeach
-            {{-- </form> --}}
           </tbody>
         </table>
       </div>
-      <!-- /Main row -->
     </div>
     <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
       <div class="text-left d-flex align-items-center">
@@ -373,14 +371,6 @@
             </select>
           </form>
         </div>
-        {{-- @if ($check_role == 1 || key_exists(8, $check_role))
-          <div class="view-trash">
-            <a href="{{ route('admin.support.listtrash') }}" class=" text-primary"><i
-                class="text-primary far fa-trash-alt"></i>
-              Xem thùng rác</a>
-            <span class="count-trash">{{ $trash_count }}</span>
-          </div>
-        @endif --}}
       </div>
       <div class="d-flex align-items-center">
         <div class="count-item">Tổng cộng: {{ $conversations->total() }} items</div>
@@ -389,14 +379,5 @@
         @endif
       </div>
     </div>
-
-
   </section>
-@endsection
-
-@section('Style')
-@endsection
-
-@section('Script')
-  <script type="text/javascript"></script>
 @endsection

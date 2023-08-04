@@ -206,6 +206,14 @@ class Conversation extends Model
         return 'Tin nhắn riêng'; // user chat with user
     }
 
+    public function getChatTextClass()
+    {
+        if (!$this->receiver_id) return 'text-danger';
+        if ($this->isSupport()) return 'text-light-cyan';
+        
+        return 'text-light-cyan';
+    }
+
     public function remainingSpammedTime()
     {
         if (!$this->isSpammed()) return '0';

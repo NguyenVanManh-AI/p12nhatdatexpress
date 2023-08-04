@@ -9,6 +9,7 @@ use App\Models\AdminMailConfig;
 use App\Models\SystemConfig;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class ConfigController extends Controller
@@ -18,12 +19,21 @@ class ConfigController extends Controller
 
     public function systemConfig()
     {
+        $admin = Auth::guard('admin')->user();
+
+        if ($admin->admin_type != 1) {
+            $listPermissions = unserialize(data_get(session()->get('role'), 'role_content')) ?? null;
+            $canAddMailConfig = data_get($listPermissions, '37.1.check');
+        } else {
+            $canAddMailConfig = true;
+        }
+
         $system = SystemConfig::first();
         $is_email_campaign = AdminConfig::where('config_code', $this->email_code)->first();
         $percent_affiliate = AdminConfig::where('config_code', $this->percent_affiliate_code)->first();
         $mail = AdminMailConfig::where('is_config', 1)->get();
 
-        return view('Admin.SystemConfig.General',compact('system','mail', 'is_email_campaign', 'percent_affiliate'));
+        return view('Admin.SystemConfig.General',compact('system','mail', 'is_email_campaign', 'percent_affiliate', 'canAddMailConfig'));
     }
 
     public function updateSystemConfig(Request $request)

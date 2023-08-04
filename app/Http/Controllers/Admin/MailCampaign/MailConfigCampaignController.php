@@ -69,72 +69,35 @@ class MailConfigCampaignController extends Controller
 	public function add_mail_config(){
 		return view('Admin.MailCampaign.AddMailConfig');
 	}
-	//hàm xóa 1 mẫu mail
-	public function delete_mail_config($id){
-		//tìm mẫu mail cần xóa theo id
-		$config = AdminMailConfig::findOrFail($id);
-		$config::delete();
 
-		// AdminMailConfig::where('id', $id)->update(['is_deleted' => 1]);
-		// Helper::create_admin_log(183,[
-		// 	'id'=>$id,
-		// 	'is_deleted' => 1
-		// ]);
+	public function deleteMultiple(Request $request)
+    {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-		Toastr::success('Chuyển vào thùng rác thành công');
-		return back();
-	}
+        AdminMailConfig::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-	//khôi phục 1 mẫu mail
-	public function un_delete_mail_config($id){
-		//tìm mẫu mail cần khôi phục id
-		$config = AdminMailConfig::onlyIsDeleted()->findOrFail($id);
-		$config::restore();
+        Toastr::success('Xóa thành công');
+        return back();
+    }
 
-		Toastr::success('Khôi phục thành công');
-		return back();
-	}
+    public function restoreMultiple(Request $request)
+    {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-	//xóa nhiều bình mẫu mail
-    public function delete_mail_config_list(Request $request){
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
+        AdminMailConfig::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
 
-        //lặp các id mẫu mail được truyền vào
-        foreach ($request->select_item as $id) {
-			$config = AdminMailConfig::find($id);
-			if (!$config) continue;
-			$config::restore();
-       	}
+        Toastr::success('Khôi phục thành công');
+        return back();
+    }
 
-       Toastr::success('Chuyển vào thùng rác thành công');
-       return back();
-   	}
-	
-   	//khôi phục nhiều bình mẫu mail
-    public function un_delete_mail_config_list(Request $request){
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        //lặp các id mẫu mail được truyền vào
-        foreach ($request->select_item as $id) {
-			$config = AdminMailConfig::onlyIsDeleted()->find($id);
-			if (!$config) continue;
-			$config::restore();
-
-            // Helper::create_admin_log(184,[
-            //     'id'=>$item,
-            //     'is_deleted' => 0
-            // ]);
-    	}
-
-       Toastr::success('Khôi phục thành công');
-       return back();
-   	}
 
 	public function forceDeleteMultiple(Request $request)
 	{
@@ -219,7 +182,7 @@ class MailConfigCampaignController extends Controller
         return view('Admin.MailCampaign.ListMailConfig', ['list'=>$list, 'trash_num'=>$trash_num,'getCountSend'=>$getCountSend]);
     }
     //thùng rác danh sách mail cấu hình
-    public function trash_list_mail_config(Request $request){
+    public function trash(Request $request){
 		//lấy ra 10 dòng
 		$items = 10;
 		//nếu có request từ url và items là số

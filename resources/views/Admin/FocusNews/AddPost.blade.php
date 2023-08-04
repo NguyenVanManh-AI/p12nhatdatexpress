@@ -79,16 +79,28 @@
                     @endif
                 </div>
 
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 p-2">
+                <div class="col-md-6 p-2">
+                    <x-common.select2-input
+                        label="Danh mục"
+                        name="group_id"
+                        :items="$groups"
+                        item-text="group_name"
+                        placeholder="Chọn danh mục"
+                        required
+                    />
+                </div>
+
+                {{-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 p-2">
                     <label>Danh mục <span class="required"></span></label>
                     <div class="search-reponsive">
                         <select name="group_id" class="form-control select2"
                                 style="width: 100%;height: 34px !important;">
                             <option disabled selected>Chọn danh mục</option>
-                            @foreach($group as $item)
+                            @foreach($groups as $group)
                                 <option
-                                    {{(old('group_id')==$item->id)?"selected":""}}
-                                    value="{{$item->id}}">{{(isset($item->child))?"---- ".$item->group_name:$item->group_name}}
+                                    {{ old('group_id') == $group->id ? 'selected' : '' }}
+                                    value="{{$group->id}}"
+                                >{{(isset($group->child))?"---- ".$group->group_name:$group->group_name}}
                                 </option>
                             @endforeach
                         </select>
@@ -98,9 +110,9 @@
                             {{$errors->first('group_id')}}
                         </small>
                     @endif
-                </div>
+                </div> --}}
 
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 p-2">
+                <div class="col-md-6 p-2">
                     <label>Thẻ tag</label>
                     <input type="text" id="input-tags" value="{{old('news_tag')}}" name="news_tag">
                     @if($errors->has('news_tag'))
@@ -195,15 +207,6 @@
                             <input {{old('checked_express')?"checked":""}} type="checkbox" name="checked_express">
                         </label>
                         <p>Đặt làm bài viết quảng cáo</p>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 p-2">
-                    <div class="support-vay2">
-                        <label class="form-control-409 mr-2">
-                            <input {{old('checked_tutorial')?"checked":""}} type="checkbox" name="checked_tutorial">
-                        </label>
-                        <p>Đặt làm bài viết hướng dẫn</p>
                     </div>
                 </div>
 

@@ -42,10 +42,6 @@ class Banner extends Component
     {
         $currentPath = request()->path();
 
-       
-
-        // dd($parentPath);
-
         $groups = Group::select('id', 'group_url', 'parent_id')
             ->with('parent.parent')
             ->get();
@@ -74,7 +70,7 @@ class Banner extends Component
         if (!$group) return;
 
         // Lấy banner theo chuyên mục
-        $banner = BannerModel::select('banner.*')
+        $banner = BannerModel::select('banner.*', 'banner_group.banner_position as oiii')
             ->selectRaw("CASE WHEN banner.user_id IS NULL THEN 1 ELSE 0 END as added_by_admin")
             ->leftJoin('banner_group', 'banner_group.id', '=', 'banner.banner_group_id')
             ->whereIn('banner_group.banner_group', ['C', 'H']) // trang chủ và chuyên mục
@@ -86,10 +82,8 @@ class Banner extends Component
         $bannerLeft = clone $banner;
         $bannerRight = clone $banner;
 
-        $this->banner_left = $bannerRight->where('banner_group.banner_position', 'L')
-            ->first();
-        $this->banner_right = $bannerLeft->where('banner_group.banner_position', 'R')
-            ->first();
+        $this->banner_left = $bannerLeft->firstWhere('banner_group.banner_position', 'L');
+        $this->banner_right = $bannerRight->firstWhere('banner_group.banner_position', 'R');
     }
 
     // /**

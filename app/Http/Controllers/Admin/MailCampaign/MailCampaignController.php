@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin\MailCampaign;
 
-use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Exception;
@@ -218,96 +217,31 @@ class MailCampaignController extends Controller
             : back();
     }
 
-    //--------------------------------------------------------DELETE--------------------------------------------------//
-	# Xóa chiến dịch email
-    public function delete_mail_campaign($id): RedirectResponse
+    public function deleteMultiple(Request $request)
     {
-		//tìm mẫu mail cần xóa theo id
-        $campaign = AdminMailCampaign::findOrFail($id);
-        $campaign->delete();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        // $data =  [
-        //     'is_deleted' => 1,
-        //     'updated_at' => time(),
-        //     'updated_by'=>Auth::guard('admin')->id()
-        // ];
-        // Helper::create_admin_log(189, array_merge([
-        //     'id'=>$id,
-        // ], $data));
+        AdminMailCampaign::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-        Toastr::success('Chuyển vào thùng rác thành công');
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    //--------------------------------------------------------CREATE--------------------------------------------------//
-	# Khôi phục chiến dịch email
-    public function un_delete_mail_campaign($id): RedirectResponse
+    public function restoreMultiple(Request $request)
     {
-        $campaign = AdminMailCampaign::onlyIsDeleted()->findOrFail($id);
-        $campaign->restore();
-        // $data =  [
-        //     'is_deleted' => 0,
-        //     'updated_at' => time(),
-        //     'updated_by'=>Auth::guard('admin')->id()
-        // ];
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        // Helper::create_admin_log(190, array_merge([
-        //     'id'=>$id,
-        // ], $data));
+        AdminMailCampaign::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
 
         Toastr::success('Khôi phục thành công');
-        return back();
-    }
-
-	//xóa nhiều mẫu mail
-    public function delete_mail_campaign_list(Request $request){
-    	//nếu danh dách item truyền vào là null
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        //lặp các id mẫu mail được truyền vào
-        foreach ($request->select_item as $id) {
-            $campaign = AdminMailCampaign::find($id);
-            if (!$campaign) continue;
-
-            $campaign->delete();
-            // $data = [
-            //     'id'=>$item,
-            //     'is_deleted' => 1,
-            //     'updated_at' => time(),
-            //     'updated_by'=>Auth::guard('admin')->id()
-            // ];
-            // Helper::create_admin_log(189,$data);
-        }
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-   	//khôi phục nhiều bình mẫu mail
-    public function un_delete_mail_campaign_list(Request $request){
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $campaign = AdminMailCampaign::onlyIsDeleted()->find($id);
-            if (!$campaign) continue;
-
-            $campaign->restore();
-            // $data = [
-            //     'id'=>$item,
-            //     'is_deleted' => 0,
-            //     'updated_at' => time(),
-            //     'updated_by'=>Auth::guard('admin')->id()
-            // ];
-            // Helper::create_admin_log(190,$data);
-        }
-
-        Toastr::success('Khôi phục thành công');
         return back();
     }
 
@@ -319,7 +253,6 @@ class MailCampaignController extends Controller
             ->find($ids)
             ->each(function($item) {
                 $item->forceDelete();
-
                 // should create log force delete
             });
 
@@ -377,7 +310,7 @@ class MailCampaignController extends Controller
     }
 
     //danh sách chiến dịch email
-    public function trash_list_campaign(Request $request){
+    public function trash(Request $request){
 		//lấy ra 10 dòng
         $items = 10;
 		//nếu có request từ url và items là số

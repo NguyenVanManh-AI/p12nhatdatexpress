@@ -564,7 +564,7 @@ class PageSeeder extends Seeder
             ],[
                 'page_name' => 'Bài viết khuyến mãi',
                 'page_icon' => '',
-                'page_url' => '/admin/promotion/list-news-promotion',
+                'page_url' => '/admin/promotion-news',
                 'is_duplicate' => 0,
                 'show_order' => 2,
                 'is_page_file' => 0,

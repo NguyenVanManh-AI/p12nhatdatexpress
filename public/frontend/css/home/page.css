@@ -28,11 +28,6 @@
     display: none;
 }
 
-.focus-list__item .item-body .title h3 {
-    height: 35px;
-    min-height: 35px;
-}
-
 .focus-list__item .item-body .title .focus-list__item-title {
     font-size: 16px;
 }
@@ -65,6 +60,13 @@
     width: 110px;
     background: red;
 }
+/* end fengshui */
+
+/* focus know ledge */
+.focus-knowledge__box .focus-knowledge__title {
+    font-size: 1.125rem;
+}
+/* end focus know ledge */
 
 /* user detail */
 .user-detail-box {
@@ -122,12 +124,8 @@
 }
 
 @media screen and (min-width: 768px) {
-    .focus-list__item .item-body .title h3 {
-        height: 50px;
-        min-height: 50px;
-    }
     .focus-list__item .item-body .title .focus-list__item-title {
-        word-spacing: .5em;
+        /* word-spacing: .5em; */
         font-size: 18px;
     }
     .focus-list__item .item-body .focus-list__item-description {

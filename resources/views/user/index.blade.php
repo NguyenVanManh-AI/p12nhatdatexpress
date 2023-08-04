@@ -126,8 +126,9 @@
                                             <span class="text-ellipsis ellipsis-2 flex-1 word-break-all mw-mc">
                                                 {{ $item->classified_name }}
                                             </span>
+
                                             @if($item->isShow())
-                                                <a href="{{ route('home.classified.detail', [$item->group->getLastParentGroup(), $item->classified_url]) }}" target="_blank">
+                                                <a href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}" target="_blank">
                                                     (Xem tin)
                                                 </a>
                                             @endif
@@ -172,7 +173,7 @@
                                                     {{ $item->classified_name }}
                                                 </span>
                                                 @if($item->isShow())
-                                                    <a href="{{ route('home.classified.detail', [$item->group->getLastParentGroup(), $item->classified_url]) }}" target="_blank">
+                                                    <a href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}" target="_blank">
                                                         (Xem tin)
                                                     </a>
                                                 @endif
@@ -220,13 +221,13 @@
                                             @if($item->classified && $item->classified->isShow())
                                                 <div class="item-bottom-detail-manage-post">
                                                     <i class="fas fa-eye"></i>
-                                                    <a href="{{ route('home.classified.detail', [$item->classified->group->getLastParentGroup(), $item->classified->classified_url]) }}" target="_blank">
+                                                    <a href="{{ $item->classified->getShowUrl() ?: 'javascript:void(0);' }}" target="_blank">
                                                         Xem chi tiết
                                                     </a>
                                                 </div>
                                                 <div class="item-bottom-detail-manage-post">
                                                     <i class="fas fa-comment"></i>
-                                                    <a href="{{ route('home.classified.detail', [$item->classified->group->getLastParentGroup(), $item->classified->classified_url]) }}" target="_blank">
+                                                    <a href="{{ $item->classified->getShowUrl() ?: 'javascript:void(0);' }}" target="_blank">
                                                         Trả lời
                                                     </a>
                                                 </div>

@@ -20,7 +20,7 @@
     </div>
     @endif
 
-    <div class="info-contact info-section rounded">
+    <div class="info-section rounded">
         <div class="info-title">
             <h4>Thông tin liên hệ</h4>
         </div>

@@ -2,14 +2,15 @@
 
 namespace App\View\Components\Admin;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class ForceDeleteButton extends Component
 {
-    public $checkRole;
-    public $id;
     public $isButton;
     public $url;
+    public $item;
+    public $haveAccess;
 
     /**
      * Create a new component instance.
@@ -18,12 +19,28 @@ class ForceDeleteButton extends Component
      */
     public function __construct(
         $checkRole,
-        $id,
         $isButton = false,
-        $url
+        $url,
+        $item = null
     ) {
-        $this->checkRole = $checkRole;
-        $this->id = $id;
+        $roleId = Auth::guard('admin')->user()->rol_id;
+        $adminId = Auth::guard('admin')->user()->id;
+
+        $actionKey = 7; // force delete
+        // check permission
+        $this->haveAccess = $checkRole === 1 ? true : false;
+        if (!$this->haveAccess && key_exists($actionKey, $checkRole)) {
+            if (key_exists('all', $checkRole[$actionKey])) {
+                $this->haveAccess = true;
+            } else if (key_exists('group', $checkRole[$actionKey])) {
+                $this->haveAccess = $item && $roleId == data_get($item->createdBy, 'rol_id');
+            } else if (key_exists('self', $checkRole[$actionKey])) {
+                $this->haveAccess = $item && $item->created_by == $adminId;
+            } else if (key_exists('check', $checkRole[$actionKey])) {
+                $this->haveAccess = true;
+            }
+        }
+
         $this->isButton = $isButton;
         $this->url = $url;
     }

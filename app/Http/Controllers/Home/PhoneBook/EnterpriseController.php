@@ -45,7 +45,7 @@ class EnterpriseController extends Controller
         }
 
         return response()->json([
-            'num' => $companies->perpage(),
+            'num' => $companies->perPage(),
             'html' => $html
         ]);
     }

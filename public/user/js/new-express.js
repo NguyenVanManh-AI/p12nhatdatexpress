@@ -1,14 +1,15 @@
 $(document).ready(function () {
     let $parents = $('.user-create-express-page .user-express-form'),
         bannerData = null,
-        oldParadigm = $parents.find('select[name="category"]').data('old-paradigm');
+        oldCategory= $parents.find('select[name="category"]').attr('data-selected'),
+        oldParadigm = $parents.find('select[name="paradigm"]').attr('data-selected');
 
     getParadigm = (paradigmId = null) => {
         let $paradigm = $parents.find('select[name="paradigm"]'),
             categoryId = $parents.find('select[name="category"]').val();
 
         $paradigm.empty();
-        $paradigm.append("<option selected value=''>-- Chọn mô hình --</option>");
+        $paradigm.append("<option selected value=''>Chọn mô hình</option>");
         $.ajax({
             url: '/params/ajax-get-child-group',
             type: "GET",
@@ -22,6 +23,7 @@ $(document).ready(function () {
                         paradigmValue = "<option value='" + value.id + "' " + selected + " >" + value.group_name + "</option>";
 
                     $paradigm.append(paradigmValue);
+
                 });
 
                 if (data['child_group'] && paradigmId)
@@ -59,7 +61,7 @@ $(document).ready(function () {
                     // add note
                     bannerData = res.data.bannerData
 
-                    let _html = `<p class="fs-18">Vị trí quảng cáo
+                    let _html = `<p class="fs-15">Vị trí quảng cáo
                             <strong class="text-danger">${bannerData.banner_name || ''}</strong>
                             có kích thước ${bannerData.banner_width || ''}x${bannerData.banner_height || ''},
                             phí hiển thị mỗi ngày <strong class="text-success">${bannerData.banner_coin_price || ''} Express Coins</strong>
@@ -128,7 +130,7 @@ $(document).ready(function () {
         processPositionBanner()
     });
 
-    if (oldParadigm) {
+    if (oldCategory) {
         getParadigm(oldParadigm)
     }
 

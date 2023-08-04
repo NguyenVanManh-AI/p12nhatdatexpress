@@ -2,7 +2,7 @@
 <section class="focus-section mb-4">
     <div class="text-center">
         <h3 class="title-sec">Tiêu điểm</h3>
-        <p class="text-info font-italic fs-18">Thông tin thị trường bất động sản, cập nhật chính xác liên tục 24/7</p>
+        <p class="text-info font-italic fs-16">Thông tin thị trường bất động sản, cập nhật chính xác liên tục 24/7</p>
     </div>
     <section class="owl-carousel owl-hover-nav owl-drag classified-slide__carousel w-100">
         @foreach ($focus as $item )
@@ -21,7 +21,7 @@
             <div class="p-3">
                 <div class="focus-section__item-title">
                     <h4 class="mb-0">
-                        <a href="{{route('home.focus.detail', [$item->group_url, $item->news_url])}}" class="link-dark text-ellipsis ellipsis-2 fs-18">{{$item->news_title}}</a>
+                        <a href="{{route('home.focus.detail', [$item->group_url, $item->news_url])}}" class="link-dark text-ellipsis ellipsis-2 fs-16 lh-12">{{$item->news_title}}</a>
                     </h4>
                 </div>
                 <div class="flex-start mb-2">

@@ -7,7 +7,7 @@ use App\Models\AdminMailTemplate;
 use App\Models\Province;
 use App\Models\User\Customer;
 use App\Models\User\CustomerParam;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller

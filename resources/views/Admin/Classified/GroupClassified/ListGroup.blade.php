@@ -41,8 +41,6 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <form action="{{route('admin.groupclassified.trashlist')}}" id="formtrash" method="post">
-                            @csrf
                             <input type="hidden" name="action" id="action_list" value="">
                             <table class="table table-bordered text-center table-custom" id="table">
                                 <thead>
@@ -91,15 +89,10 @@
                                                     </div>
                                                 @endif
                                                 <br>
-                                                @if($check_role == 1  ||key_exists(5, $check_role))
-                                                    <div class="float-left ml10">
-                                                        <i class="fas fa-times mr12"></i>
-                                                        <a href="javascript:{}" data-id="{{$item->id}}"
-                                                           data-created_by="{{Crypt::encryptString($item->created_by)}}"
-                                                           class="text-danger trash">Xóa</a>
-                                                    </div>
-                                                @endif
-                                                <div class="clear-both"></div>
+                                                <x-admin.delete-button
+                                                    :check-role="$check_role"
+                                                    url="{{ route('admin.groupclassified.delete-multiple', ['ids' => $item->id]) }}"
+                                                />
                                             </div>
                                         </td>
                                     </tr>
@@ -111,68 +104,15 @@
                                 @endif
                                 </tbody>
                             </table>
-                        </form>
                     </div>
-                    <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                        <div class="text-left d-flex align-items-center">
-                            <div class="manipulation d-flex mr-4 ">
-                                <img src="image/manipulation.png" alt="" id="btnTop">
-                                <div class="btn-group ml-1">
-                                    <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                            data-toggle="dropdown"
-                                            aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                        Thao tác
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        @if($check_role == 1  ||key_exists(5, $check_role))
-                                        <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                            <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                               style="color: white !important;font-size: 15px"></i>Thùng rác
-                                            <input type="hidden" name="action" value="trash">
-                                        </a>
-                                            @else
-                                        <p>Không đủ quyền</p>
-                                            @endif
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="display d-flex align-items-center mr-4">
-                                <span>Hiển thị:</span>
-                                <form method="get" id="paginateform" action="{{route('admin.groupclassified.list')}}">
-                                    <select class="custom-select" id="paginateNumber" name="items">
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                            10
-                                        </option>
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                            20
-                                        </option>
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                            30
-                                        </option>
-                                    </select>
-                                </form>
-                            </div>
-
-                            @if($check_role == 1  ||key_exists(8, $check_role))
-
-                            <div class="view-trash">
-                                <a href="{{route('admin.groupclassified.listtrash')}}"><i class="far fa-trash-alt"></i>
-                                    Xem thùng rác</a>
-                                <span class="count-trash">{{$trash_count}}</span>
-                            </div>
-                                @endif
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="count-item">Tổng cộng: {{$group->total()}} items</div>
-                            @if($group)
-                                {{ $group->render('Admin.Layouts.Pagination') }}
-                            @endif
-                        </div>
-                    </div>
+                    <x-admin.table-footer
+                        :check-role="$check_role"
+                        :lists="$group"
+                        :count-trash="$trash_count"
+                        view-trash-url="{{ route('admin.groupclassified.listtrash') }}"
+                        delete-url="{{ route('admin.groupclassified.delete-multiple') }}"
+                    />
                 </div>
             </div>
         </div>
@@ -181,55 +121,5 @@
 @endsection
 
 @section('Script')
-    <script type="text/javascript">
-        $('#tieudiem').addClass('active');
-        $('#quanlydanhmuc').addClass('active');
-        $('#nav-tieudiem').addClass('menu-is-opening menu-open');
-    </script>
-    <script>
-        $('#paginateNumber').change(function (e) {
-            $('#paginateform').submit();
-        });
-        $('.trash').click(function () {
-            created_by = $(this).data('created_by');
-            id = $(this).data('id');
-            Swal.fire({
-                title: 'Chuyển danh mục vào thùng rác',
-                text: "Nhấn đồng ý để chuyển danh mục vào thùng rác !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/admin/classified-group/trash-item/" + id + "/" + created_by;
-                }
-            })
-        });
-        $('.moveToTrash').click(function () {
-            var id = $(this).data('id');
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#action_list').val("trash");
-                    $('#formtrash').submit();
-
-                }
-            });
-        });
-
-    </script>
-
     <script src="js/table.js"></script>
-
 @endsection

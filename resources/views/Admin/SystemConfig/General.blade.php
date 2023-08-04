@@ -572,6 +572,8 @@
                                                 </div>
                                                 <div class="text-center" id="result-status" style="font-size: 95%">
                                                 </div>
+
+                                                @if($canAddMailConfig)
                                                 <div class="row m-0 pb-3">
                                                     <div id="button-order-by1" class="col-6 mt-2">
                                                         <div id="loading-button-submit"  class="btn bg-primary float-right" style="border-radius: 0;cursor: context-menu;opacity: 0.8;display: none">
@@ -595,6 +597,7 @@
                                                     </div>
 
                                                 </div>
+                                                @endif
                                             </form>
                                         </div>
                                     </div>
@@ -639,6 +642,7 @@
                                 </td>
 
                                 <td>
+                                    {{-- wrong should check by mail campaign permission --}}
                                     <div class="d-flex flex-row justify-content-around align-content-center table_action">
                                         @if( $check_role == 1 || key_exists(2, $check_role ))
                                         <div><i class="fas fa-cog mr-2"></i><a href="{{route('admin.system.mail.edit',[$item->id,\Crypt::encryptString($item->created_by)])}}" class="text-primary stretched-link">Chỉnh sửa</a></div>
@@ -666,6 +670,9 @@
 @endsection
 @section('Style')
 <style>
+label:not(.form-check-label):not(.custom-file-label){
+    font-weight: 700;
+}
 .info-company .list-info {
     list-style: none;
     margin-bottom: 0;
@@ -937,7 +944,8 @@
                         disbleButton();
                     }
                 },
-                error: function(data){
+                error: err => {
+                    showError(err)
                     $('#result-status').html(`<p class='text-danger mb-0'>Gửi thử thất bại! Vui lòng kiểm tra lại thông tin cấu hình</p>`);
                     $('#send-try-button').show();
                     $('#loading-button').hide();

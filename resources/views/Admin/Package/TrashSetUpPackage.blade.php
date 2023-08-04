@@ -163,22 +163,17 @@
                         </td>
 
                         <td>
-
-                            {{-- <a href="#" class="setting-item edit mb-2" data-toggle="modal" data-target="#modalUpdateSettingPackage"><i class="fas fa-cog"></i> Chỉnh sửa</a> --}}
-                            @if($check_role == 1  ||key_exists(6, $check_role))
-
-                            <div class="text-left mb-2">
-                                <i class="fas fa-undo-alt text-black"></i>
-                                <a class="setting-item delete text-primary" style="cursor: pointer" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">
-                                    Khôi phục</a>
+                            <div class="flex-column">
+                                <x-admin.restore-button
+                                  :check-role="$check_role"
+                                  url="{{ route('admin.setup.restore-multiple', ['ids' => $item->id]) }}"
+                                />
+              
+                                <x-admin.force-delete-button
+                                  :check-role="$check_role"
+                                  url="{{ route('admin.setup.force-delete-multiple', ['ids' => $item->id]) }}"
+                                />
                             </div>
-                            @endif
-
-                            <x-admin.force-delete-button
-                                :check-role="$check_role"
-                                id="{{ $item->id }}"
-                                url="{{ route('admin.setup.force-delete-multiple') }}"
-                            />
                         </td>
 
                     </tr>
@@ -186,138 +181,15 @@
                 </tbody>
             </table>
             </div>
-
-            <form action="" class="force-delete-item-form d-none" method="POST">
-                @csrf
-                <input type="hidden" name="ids">
-            </form>
-
-            <div class="d-flex align-items-center justify-content-between my-4">
-                <div class="d-flex align-items-center">
-                    <div class="d-flex">
-                        <img src="image/manipulation.png" alt="" id="btnTop">
-                        <div class="btn-group ml-1">
-                            <!-- data-flip="false" -->
-                            <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                    data-toggle="dropdown" aria-expanded="true" data-flip="false"
-                                    aria-haspopup="true">
-                                Thao tác
-                            </button>
-                            <div class="dropdown-menu">
-
-                                @if($check_role == 1  ||key_exists(6, $check_role))
-                                <a class="dropdown-item unToTrash" type="button" href="javascript:{}">
-                                    <i class="fas fa-undo-alt bg-primary p-1 mr-2 rounded"
-                                       style="color: white !important;font-size: 15px"></i>Khôi phục
-                                       <input type="hidden" name="action" value="restore">
-                                </a>
-                                @else
-                                <p class="dropdown-item m-0 disabled">
-                                    Bạn không có quyền
-                                </p>
-                                @endif
-                            </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mx-4">
-                        <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                        <form action="{{route('admin.setup.trash')}}" method="GET">
-                            <label class="select-custom2">
-                                <select id="paginateNumber" name="items" onchange="this.form.submit()">
-                                    <option
-                                        @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                        10
-                                    </option>
-                                    <option
-                                        @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                        20
-                                    </option>
-                                    <option
-                                        @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                        30
-                                    </option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div>
-                        @if($check_role == 1  ||key_exists(4, $check_role))
-                        <a href="{{route('admin.setup.list')}}" class="btn btn-primary">
-                            Quay lại
-                        </a>
-                        @endif
-                    </div>
-                    {{-- <div class="d-flex flex-row align-items-center view-trash">
-                        <i class="far fa-trash-alt mr-2"></i>
-                        <div class="link-custom">
-                            <a href="#"><span style="color: #347ab6">Xem thùng rác</span>
-                                <span class="badge badge-pill badge-danger trashnum"
-                                      style="font-weight: 500">{{2}}</span>
-                            </a>
-                        </div>
-                    </div> --}}
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="count-item">Tổng cộng: {{$trash_setup->total()}} items</div>
-                    <div>
-                        @if($trash_setup)
-                 {{ $trash_setup->render('Admin.Layouts.Pagination') }}
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- /Main row -->
-
-        </div><!-- /.container-fluid -->
-
+            <x-admin.table-footer
+                :check-role="$check_role"
+                :lists="$trash_setup"
+                force-delete-url="{{ route('admin.setup.force-delete-multiple') }}"
+                restore-url="{{ route('admin.setup.restore-multiple') }}"
+            />
+        </div>
     </section>
-
-
-
-
 @endsection
 @section('Script')
 <script src="js/table.js"></script>
-
-<script>
-    $('.delete').click(function () {
-        var id = $(this).data('id');
-        var created_by = $(this).data('created_by');
-        Swal.fire({
-            title: 'Xác nhận khôi phục',
-            text: "Nhấn đồng ý thì sẽ tiến hành khôi phục!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "/admin/setup/untrash-setup/" + id+"/"+created_by;
-            }
-        });
-    });
-    $('.unToTrash').click(function () {
-        Swal.fire({
-            title: 'Xác nhận khôi phục',
-            text: "Nhấn đồng ý thì sẽ tiến hành khôi phục !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $('#formtrash').submit();
-
-            }
-        });
-    });
- </script>
 @endsection

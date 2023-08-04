@@ -62,10 +62,10 @@
         <div class="py-1 d-flex">
           <span class="node">{{ $properties[10]->name }}</span>
           <span class="name text-danger bold text-ellipsis js-content-title d-inline-block"
-            data-title="{{ $item->classified_area . ' ' . data_get($item->unit_area, 'unit_name') }}"
+            data-title="{{ $item->getAreaLabel() }}"
           >
             <strong>
-              {{ $item->classified_area . ' ' . data_get($item->unit_area, 'unit_name') }}
+              {{ $item->getAreaLabel() }}
             </strong>
           </span>
         </div>
@@ -244,7 +244,7 @@
         <div class="py-1 d-flex">
           <span class="node">{{ $properties[10]->name }}</span>
           <span
-            class="name text-danger bold text-ellipsis js-content-title"><strong>{{ $item->classified_area . ' ' . data_get($item->unit_area, 'unit_name') }}</strong></span>
+            class="name text-danger bold text-ellipsis js-content-title"><strong>{{ $item->getAreaLabel() }}</strong></span>
         </div>
       </div>
       <div class="col-xl-4 col-sm-6 col-12 detail-item border border-left-0">
@@ -324,7 +324,6 @@
           @endif
           <span class="name text-danger bold text-ellipsis js-content-title">
             {{ $item->getPriceWithUnit() }}
-            {{-- {{ $item->classified_price != null ? '~' . number_format($item->classified_price, 0, '', '.') . ' ' . data_get($item->unit_price, 'unit_name') : 'Liên hệ' }} --}}
           </span>
         </div>
       </div>
@@ -360,7 +359,7 @@
           <span class="node">{{ $properties[10]->name }}</span>
           <span class="name text-danger bold text-ellipsis js-content-title">
             <strong>
-              {{ $item->classified_area . ' ' . data_get($item->unit_area, 'unit_name') }}
+              {{ $item->getAreaLabel() }}
             </strong>
           </span>
         </div>

@@ -15,7 +15,7 @@ class MailCampaignService
      * Get all campaigns for a user
      * @param User $user
      * @param array $queries = []
-     * 
+     *
      * return $campaigns
      */
     public function index(User $user, array $queries = [])
@@ -36,7 +36,7 @@ class MailCampaignService
      * Get all campaign details
      * @param UserMailCampaign $campaign
      * @param array $queries = []
-     * 
+     *
      * return $details
      */
     public function getDetails(UserMailCampaign $campaign, array $queries = [])
@@ -224,7 +224,7 @@ class MailCampaignService
     /**
      * Send mail immediately
      * @param UserMailCampaign $campaign
-     * 
+     *
      * @return void
      */
     public function checkShouldSendNow(UserMailCampaign $campaign)
@@ -248,44 +248,58 @@ class MailCampaignService
      */
     public function getCustomers(UserMailCampaign $campaign)
     {
-        if (count($campaign->customers)) {
-            // send to specifically customers
-            $customers = $campaign->customers;
-        } else {
-            if (!$campaign->user) return [];
+        if (count($campaign->customers)) return $campaign->customers;
+        if (!$campaign->user) return [];
 
-            $jobId = $campaign->cus_job;
-            $sourceId = $campaign->cus_source;
-            $statusId = $campaign->cus_status;
-            $provinceId = $campaign->province_id;
-            $fromDate = $campaign->date_from ? Carbon::parse($campaign->date_from)->startOfDay()->timestamp : null;
-            $toDate = $campaign->date_to ? Carbon::parse($campaign->date_to)->endOfDay()->timestamp : null;
+        $params = [
+            'job_id' => $campaign->cus_job,
+            'source_id' => $campaign->cus_source,
+            'status_id' => $campaign->cus_status,
+            'province_id' => $campaign->province_id,
+            'date_from' => $campaign->date_from ? Carbon::parse($campaign->date_from)->startOfDay()->timestamp : null,
+            'date_to' => $campaign->date_to ? Carbon::parse($campaign->date_to)->endOfDay()->timestamp : null,
+        ];
 
-            $customers = $campaign->user
-                ->customers()
-                ->select('customer.*')
-                ->when($jobId, function ($query, $jobId) {
-                    return $query->where('customer.job', $jobId);
-                })
-                ->when($sourceId, function ($query, $sourceId) {
-                    return $query->where('customer.cus_source', $sourceId);
-                })
-                ->when($statusId, function ($query, $statusId) {
-                    return $query->where('customer.cus_status', $statusId);
-                })
-                ->when($fromDate, function ($query, $fromDate) {
-                    return $query->where('customer.created_at', '>=', $fromDate);
-                })
-                ->when($toDate, function ($query, $toDate) {
-                    return $query->where('customer.created_at', '<=', $toDate);
-                })
-                ->when($provinceId, function ($query, $provinceId) {
-                    return $query->leftJoin('customer_location', 'customer_location.cus_id', '=', 'customer.id')
-                        ->where('customer_location.province_id', $provinceId);
-                })
-                ->get();
-        }
+        return $this->getCustomersFromParams($campaign->user, $params);
+    }
 
-        return $customers;
+    /**
+     * Get customers from params
+     * @param User $user
+     * @param array $params
+     *
+     * @return $customers
+     */
+    public function getCustomersFromParams(User $user, array $params)
+    {
+        $jobId = data_get($params, 'job_id');
+        $sourceId = data_get($params, 'source_id');
+        $statusId = data_get($params, 'status_id');
+        $fromDate = data_get($params, 'date_from');
+        $toDate = data_get($params, 'date_to');
+        $provinceId = data_get($params, 'province_id');
+
+        return $user->customers()
+            ->select('customer.*')
+            ->when($jobId, function ($query, $jobId) {
+                return $query->where('customer.job', $jobId);
+            })
+            ->when($sourceId, function ($query, $sourceId) {
+                return $query->where('customer.cus_source', $sourceId);
+            })
+            ->when($statusId, function ($query, $statusId) {
+                return $query->where('customer.cus_status', $statusId);
+            })
+            ->when($fromDate, function ($query, $fromDate) {
+                return $query->where('customer.created_at', '>=', $fromDate);
+            })
+            ->when($toDate, function ($query, $toDate) {
+                return $query->where('customer.created_at', '<=', $toDate);
+            })
+            ->when($provinceId, function ($query, $provinceId) {
+                return $query->leftJoin('customer_location', 'customer_location.cus_id', '=', 'customer.id')
+                    ->where('customer_location.province_id', $provinceId);
+            })
+            ->get();
     }
 }

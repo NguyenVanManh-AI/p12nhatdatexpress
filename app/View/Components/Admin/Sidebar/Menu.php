@@ -3,6 +3,7 @@
 namespace App\View\Components\Admin\Sidebar;
 
 use App\Models\Admin\Page;
+use App\Models\Role;
 use App\Models\User\UserPostComment;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
@@ -49,16 +50,31 @@ class Menu extends Component
 
         if ($user->admin_type != 1) {
             // Get roles
+            $role = Role::query()
+                ->where('id', Auth::guard('admin')->user()->rol_id)
+                ->select('role_name', 'role_content')
+                ->first();
+
+
+            // remove
+            session()->put('role', $role);
             $role_session = session()->get('role');
             if ($role_session == null){
                 Toastr::warning('Vui lòng đăng nhập lại');
                 Auth::guard('admin')->logout();
                 session()->flush();
             }
+            // remove
+
+
             $role_detail = unserialize($role_session->role_content);
 
             // Get page from role
-            $key = collect($role_detail)->keys();
+            // $key = collect($role_detail)->keys();
+            // get page from role only have list permission. key = 4
+            $key = collect($role_detail)->filter(function ($item) {
+                return data_get($item, '4');
+            })->keys();
 
             // Check if is customer care
             if ($user->is_customer_care && !in_array(28, (array)$key)){
@@ -79,24 +95,31 @@ class Menu extends Component
 
             return Page::select(['id', 'page_name', 'page_icon', 'page_url','show_order'])
                 ->whereIn('id', $id_page_parent)
-                ->withCount('children')
+                ->withCount(['children' => function ($query){
+                    $query->showed();
+                }])
                 ->with('children', function ($query) use ($key){
                     $query->whereIn('id', $key)
-                    ->orderBy('show_order');
+                    ->orderBy('show_order')
+                    ->showed();
                 })
+                ->showed()
                 ->where('page_parent_id', null)
                 ->orderBy('show_order', 'asc')
                 ->get()
                 ->toArray();
-
         }
-        else{ 
+        else{
             return Cache::rememberForever('page_super_admin', function (){
                 return Page::select(['id', 'page_name', 'page_icon', 'page_url','show_order'])
-                    ->withCount('children')
+                    ->withCount(['children' => function ($query){
+                        $query->showed();
+                    }])
                     ->with('children', function ($query){
-                        $query->orderBy('show_order');
+                        $query->orderBy('show_order')
+                        ->showed();
                     })
+                    ->showed()
                     ->where('page_parent_id', null)
                     ->orderBy('show_order', 'asc')
                     ->get()

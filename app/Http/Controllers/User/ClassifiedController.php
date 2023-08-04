@@ -137,6 +137,7 @@ class ClassifiedController extends Controller
             ->latest()
             ->first();
 
+            // dd($request->parent, $params['paradigm']);
         // $params['countTrash'] = $user->classifieds()
         //     ->onlyIsDeleted()
         //     ->count();

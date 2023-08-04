@@ -10,6 +10,7 @@ class TextInput extends Component
     public $labelClass;
     public $required;
     public $inputClass;
+    public $hoverDate;
     public $type;
     public $name;
     public $value;
@@ -25,6 +26,7 @@ class TextInput extends Component
     public $id;
     public $showError; // should default false
     public $errorName;
+    public $hasCount;
 
     /**
      * Create a new component instance.
@@ -36,6 +38,7 @@ class TextInput extends Component
         $labelClass = null,
         $required = null,
         $inputClass = null,
+        $hoverDate = false,
         $type = 'text',
         $name = null,
         $value = null,
@@ -50,12 +53,14 @@ class TextInput extends Component
         $hint = '',
         $id = null,
         $showError = true,
-        $errorName = null
+        $errorName = null,
+        $hasCount = false
     ) {
         $this->label = $label;
         $this->labelClass = $labelClass;
         $this->required = $required;
         $this->inputClass = $inputClass;
+        $this->hoverDate = $hoverDate;
         $this->type = $type;
         $this->name = $name;
         $this->value = $value;
@@ -71,6 +76,7 @@ class TextInput extends Component
         $this->id = $id;
         $this->showError = $showError;
         $this->errorName = $errorName ?: $name;
+        $this->hasCount = $hasCount;
     }
 
     /**

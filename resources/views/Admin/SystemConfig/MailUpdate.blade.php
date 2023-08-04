@@ -17,7 +17,7 @@
                     /
                 </li>
                 <li class="recye px-2 pt-1 ml-1">
-                    <a href="{{route('admin.system.mail.mail_trash')}}">
+                    <a href="{{route('admin.templates.trash')}}">
                         Thùng rác
                     </a>
                 </li>
@@ -27,7 +27,7 @@
                     /
                 </li>
                 <li class="add px-2 pt-1 ml-1 check">
-                    <a href="{{route('admin.system.mail.new')}}">
+                    <a href="{{route('admin.templates.create')}}">
                         <i class="fa fa-edit mr-1"></i>Thêm
                     </a>
                 </li>

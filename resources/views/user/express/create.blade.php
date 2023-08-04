@@ -31,22 +31,26 @@
               <div class="col-md-5 selection-box mb-4">
                 <div class="row select-paradigm-box {{ old('banner_group') == 'H' ? 'd-none' : '' }}">
                   <div class="col-md-6 mb-2">
-                    <select
+                    <x-common.select2-input
                       name="category"
-                      data-old-paradigm="{{ old('paradigm') }}"
-                      class="form-control cs-select"
-                      data-placeholder="Chọn chuyên mục"
-                    >
-                      <option value="">-- Chọn chuyên mục --</option>
-                      @foreach($group as $item)
-                        <option {{ old('category') == $item->id ? 'selected' : '' }} value="{{ $item->id }}">{{ $item->group_name }}</option>
-                      @endforeach
-                    </select>
+                      :items="$group"
+                      item-text="group_name"
+                      placeholder="Chọn chuyên mục"
+                      items-current-value="{{ old('category') }}"
+                      data-selected="{{ old('category') }}"
+                      with-child="{{ false }}"
+                    />
                   </div>
                   <div class="col-md-6 mb-2">
-                    <select name="paradigm" class="form-control cs-select" data-placeholder="Chọn mô hình">
-                      <option value="">-- Chọn mô hình --</option>
-                    </select>
+                    <x-common.select2-input
+                      name="paradigm"
+                      :items="[]"
+                      item-text="group_name"
+                      placeholder="Chọn mô hình"
+                      items-current-value="{{ old('paradigm') }}"
+                      data-selected="{{ old('paradigm') }}"
+                      with-child="{{ false }}"
+                    />
                   </div>
                 </div>
                 <div class="position-box bg-white">
@@ -170,7 +174,7 @@
           </div>
           <div class="row">
             <div class="col-md-7 mb-3">
-              <div class="display-time bg-white h-100 mh-450">
+              <div class="display-time bg-white h-100 mih-450">
                 <div class="time-title">Chọn thời gian hiển thị</div>
                 <div class="px-4 py-4">
                   <div class="display-time__input-calendar calendar relative">

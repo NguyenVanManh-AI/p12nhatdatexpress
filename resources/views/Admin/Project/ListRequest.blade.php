@@ -1,13 +1,12 @@
 @extends('Admin.Layouts.Master')
+
 @section('Title', 'Danh sách yêu cầu | Quản lý dự án')
-@section('Style')
-@endsection
+
 @section('Content')
     <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">
     <div class="box-fiter-reponsive">
         <form action="{{route('admin.request.list')}}" method="GET" id="search_button">
             <div class="row m-0 p-3">
-
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 p-0">
                     <div class="search-reponsive ">
                         <select class="custom-select" id="chuyenmuc" name="status">
@@ -76,8 +75,6 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <form action="{{route('admin.request.trashlist')}}" id="formtrash" method="post">
-                                @csrf
                                 @forelse ( $list_request as $item )
                                     <tr>
                                         <td class="active">
@@ -110,130 +107,52 @@
                                                 <span class="text-danger font-weight-bold">Không viết</span>
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="text-left">
                                             <div>
                                                 @if($item->confirmed_status== 0||$item->confirmed_status== 1)
-                                                    <div class="float-left ml-2">
-                                                        <i class="fas fa-cog mr-2"></i>
+                                                    <div class="mb-2 ml-2">
+                                                        <span class="icon-small-size mr-1 text-dark">
+                                                            <i class="fas fa-cog"></i>
+                                                        </span>
                                                         <a href="{{route('admin.request.write',[$item->id,Crypt::encryptString($item->confirmed_by)])}}"
                                                            class="text-primary ">Viết dự án</a>
                                                     </div>
-
-                                                    <br>
                                                 @endif
-                                                @if($check_role == 1  ||key_exists(5, $check_role))
-                                                    <div class="float-left ml10">
-                                                        <i class="fas fa-times mr12"></i>
-                                                        <a href="javascript:{}" data-id="{{$item->id}}"
-                                                           data-confirmed_by="{{Crypt::encryptString($item->confirmed_by)}}"
-                                                           class="text-danger action_delete delete">Xóa</a>
-                                                    </div>
-                                                    <br>
-                                                @endif
+                                                <x-admin.delete-button
+                                                    :check-role="$check_role"
+                                                    url="{{ route('admin.request.delete-multiple', ['ids' => $item->id]) }}"
+                                                />
                                                 @if($item->confirmed_status== 0||$item->confirmed_status== 1)
-                                                    <div class="float-left ml-2">
-                                                        <i class="fas fa-times mr12"></i>
+                                                    <div class="mb-2 ml-2">
+                                                        <span class="icon-small-size mr-1 text-dark">
+                                                            <i class="fas fa-times"></i>
+                                                        </span>
                                                         <a href="javascript:{}" data-id="{{$item->id}}"
                                                            data-confirmed_by="{{Crypt::encryptString($item->confirmed_by)}}"
                                                            class="text-primary dont_write">Không viết</a>
                                                     </div>
-
                                                 @endif
-                                                <div class="clear-both"></div>
                                             </div>
                                         </td>
                                     </tr>
                                 @empty
                                     <td colspan="7">Chưa có dữ liệu</td>
                                 @endforelse
-                            </form>
                             </tbody>
                         </table>
                     </div>
-                    <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                        <div class="text-left d-flex align-items-center">
-                            <div class="manipulation d-flex mr-4">
-                                <img src="image/manipulation.png" alt="" id="btnTop">
-                                <div class="btn-group ml-1">
-                                    <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                            data-toggle="dropdown"
-                                            aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                        Thao tác
-                                    </button>
-
-                                    <div class="dropdown-menu">
-                                        @if($check_role == 1  ||key_exists(5, $check_role))
-                                            <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                                <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                                   style="color: white !important;font-size: 15px"></i>Thùng rác
-                                                <input type="hidden" name="action" value="trash">
-                                            </a>
-                                        @else
-                                            <p class="dropdown-item m-0 disabled">
-                                                Bạn không có quyền
-                                            </p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="display d-flex align-items-center mr-4">
-                                <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                                <label class="select-custom2">
-                                    <select id="paginateNumber" name="items" onchange="submitPaginate(event, this)">
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                            10
-                                        </option>
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                            20
-                                        </option>
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                            30
-                                        </option>
-                                    </select>
-                                </label>
-                            </div>
-                            @if($check_role == 1  ||key_exists(8, $check_role))
-                                <div class="view-trash">
-                                    <a href="{{route('admin.request.trashrequest')}}"><i class="far fa-trash-alt mr-1"></i>Xem thùng rác</a>
-                                    <span class="count-trash">{{$count_trash}}</span>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="count-item">Tổng cộng: @empty($list_request) {{0}} @else {{$list_request->total()}} @endempty
-                                items
-                            </div>
-                            <div class="count-item count-item-reponsive"
-                                 style="display: none">@empty($list_request) {{0}} @else {{$list_request->total()}} @endempty items
-                            </div>
-                            @if($list_request)
-                                {{ $list_request->render('Admin.Layouts.Pagination') }}
-                            @endif
-                        </div>
-                    </div>
+                    
+                    <x-admin.table-footer
+                        :check-role="$check_role"
+                        :lists="$list_request"
+                        :count-trash="$count_trash"
+                        view-trash-url="{{ route('admin.request.trash') }}"
+                        delete-url="{{ route('admin.request.delete-multiple') }}"
+                    />
                 </div>
             </div>
         </div>
     </section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css"/>
-    <script type="text/javascript">
-        // $(document).ready(function () {
-        //   $('#chuyenmuc').chosen();
-        //   $('#mohinh').chosen();
-        //   $('#taikhoandang').chosen();
-        // });
-    </script>
-    <script type="text/javascript">
-        $('#quanlyduan').addClass('active');
-        $('#danhsachyeucau').addClass('active');
-        $('#nav-quanlyduan').addClass('menu-is-opening menu-open');
-    </script>
-    <!-- /.content -->
-
 @endsection
 
 @section('Script')
@@ -253,24 +172,6 @@
             $('#txtDateEnd').hide();
         }
 
-        $('.delete').click(function () {
-            var id = $(this).data('id');
-            var confirmed_by = $(this).data('confirmed_by');
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/admin/project/request/delete/" + id + "/" + confirmed_by;
-                }
-            });
-        });
         $('.dont_write').click(function () {
             var id = $(this).data('id');
             var confirmed_by = $(this).data('confirmed_by');
@@ -286,27 +187,6 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "/admin/project/request/dont-write/" + id + "/" + confirmed_by;
-                }
-            });
-        });
-        $('.moveToTrash').click(function () {
-            const selectedArray = getSelected();
-            if (!selectedArray) return;
-            var id = $(this).data('id');
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('#formtrash').submit();
-
                 }
             });
         });

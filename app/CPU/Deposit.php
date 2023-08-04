@@ -2,7 +2,7 @@
 
 namespace App\CPU;
 
-use Brian2694\Toastr\Facades\Toastr;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -52,9 +52,7 @@ class Deposit
                 $depositResult['message'] = 'Mã khuyến mãi không khả dụng!';
                 return $depositResult;
             }
-
         }
-
 
         #voucher coin amount
         $voucherCoinAmount = round(0.01*$depositCoinAmount*$voucher['voucherPercent'], 0, PHP_ROUND_HALF_DOWN);
@@ -125,6 +123,5 @@ class Deposit
         }
 
         return $depositResult;
-
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Middleware\Admin;
 
+use App\Enums\AdminActionEnum;
 use Brian2694\Toastr\Facades\Toastr;
 use Closure;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -38,7 +39,7 @@ class AdminCheckMiddleware
                 return redirect($this->noPermissionRedirect());
             }
             // Self, group, all
-            if ($request->route('id')) {
+            if ($request->id && $request->created_by) {
                 // Check All
                 if (key_exists("all", $list_permission[$action])) {
                     view()->share('check_role', $list_permission);
@@ -70,6 +71,7 @@ class AdminCheckMiddleware
                         return $next($request);
                     }
                 }
+
                 return redirect($this->noPermissionRedirect());
             } else { // Cho các request không có id đi kèm
                 // get -> danh sách || lấy dữ liệu để thêm
@@ -98,6 +100,19 @@ class AdminCheckMiddleware
                     }
                     //////////////
                 } else {
+                    if (key_exists($action, $list_permission)) {
+                        if (key_exists('all', $list_permission[$action])) {
+                            $request->request->add(['request_list_scope' => 1]);
+                        } else if (key_exists('group', $list_permission[$action])) {
+                            $request->request->add(['request_list_scope' => 2]);
+                        } else if (key_exists('self', $list_permission[$action])) {
+                            $request->request->add(['request_list_scope' => 3]);
+                        } else if (key_exists('check', $list_permission[$action])) {
+                            $request->request->add(['request_list_scope' => 1]);
+                        }
+                    }
+
+                    // begin should remove
                     $action_form = null;
                     switch ($request->action) {
                         case "update":
@@ -116,7 +131,7 @@ class AdminCheckMiddleware
                             $action_form = 7;
                             break;
                     }
-//                    dd($request->all());
+
                     if ($action_form != null) {
                         if (key_exists('all', $list_permission[$action_form])) {
                             return $next($request);
@@ -151,8 +166,10 @@ class AdminCheckMiddleware
                             return $next($request);
                         }
                     }
+                    // end should remove
                 }
             }
+
             view()->share('check_role', $list_permission);
         } else {
             view()->share('check_role', 1);
@@ -169,8 +186,11 @@ class AdminCheckMiddleware
      */
     private function noPermissionRedirect($message = 'Không đủ quyền')
     {
-        Toastr::warning("Không đủ quyền");
+        if (request()->wantsJson() || request()->ajax()) {
+            return abort(401, $message);
+        }
 
+        Toastr::warning($message);
         return route('admin.dashboard.index');
     }
 }

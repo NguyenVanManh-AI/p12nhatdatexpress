@@ -109,12 +109,6 @@
                 $(this).removeClass('show');
             });
 
-            $('.info-contact .show-more a').on('click', function(e) {
-                e.preventDefault();
-                $(this).fadeOut();
-                $(this).parents(".info-contact").find(".list-contact").css("height", "auto");
-            });
-
             $('.close-button-usecode').click(function() {
                 $('.use-code-payment').css('display', 'none');
                 $('.use-code-payment-1').css('display', 'none');

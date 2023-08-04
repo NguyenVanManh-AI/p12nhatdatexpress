@@ -304,21 +304,46 @@ class Classified extends Model
             : 'Liên hệ';
     }
 
+    public function getAreaLabel()
+    {
+        $label = '';
+
+        if ($this->classified_area)
+            $label .= $this->classified_area;
+
+        $label .= data_get($this->unit_area, 'unit_name');
+
+        return $label;
+    }
+
     public function getShortAddress()
     {
         return data_get($this->location, 'province.province_name');
     }
-
-    public function getFullAddress()
+    
+    public function getFullAddress($fields = [])
     {
-        $address = data_get($this->location, 'address');
-        $ward = data_get($this->location, 'ward.ward_name');
-        $district = data_get($this->location, 'district.district_name');
-        $province = data_get($this->location, 'province.province_name');
+        $address = $ward = $district = $province = null;
+
+        if (!$fields || in_array('address', $fields))
+            $address = data_get($this->location, 'address');
+        if (!$fields || in_array('ward', $fields))
+            $ward = data_get($this->location, 'ward.ward_name');
+        if (!$fields || in_array('district', $fields))
+            $district = data_get($this->location, 'district.district_name');
+        if (!$fields || in_array('province', $fields))
+            $province = data_get($this->location, 'province.province_name');
 
         $fullAddressArr = array_filter([$address, $ward, $district, $province]);
 
         return join(', ', $fullAddressArr);
+    }
+
+    public function getShowUrl()
+    {
+        return $this->group && $this->classified_url && $this->isShow()
+            ? route('home.classified.detail', [$this->group->getLastParentGroup(), $this->classified_url])
+            : null;
     }
 
     public function canRenew()

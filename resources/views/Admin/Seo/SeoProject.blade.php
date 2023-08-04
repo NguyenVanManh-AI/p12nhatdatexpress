@@ -40,15 +40,13 @@
                                             <span>{{$item->group_url}}</span>
                                         </td>
                                         <td>
-                                            <div>
-                                                {{-- @if($check_role == 1  ||key_exists(2, $check_role)) --}}
-                                                    <div class="float-left ml-2">
-                                                        <i class="fas fa-cog mr-2"></i>
-                                                        <a href="{{route('admin.seo.editproject',$item->id)}}"
-                                                           class="text-primary ">Chỉnh sửa</a>
-                                                    </div>
-                                                {{-- @endif --}}
-                                                <div class="clear-both"></div>
+                                            <div class="flex-column">
+                                                <x-admin.action-button
+                                                    action="update"
+                                                    :check-role="$check_role"
+                                                    :item="$item"
+                                                    url="{{ route('admin.seo.editproject', $item) }}"
+                                                />
                                             </div>
                                         </td>
                                     </tr>
@@ -62,96 +60,15 @@
                             </table>
                         </form>
                     </div>
-                    <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                        <div class="text-left d-flex align-items-center">
 
-
-                            <div class="display d-flex align-items-center mr-4">
-                                <span>Hiển thị:</span>
-                                <form method="get" id="paginateform" action="{{route('admin.seo.listproject')}}">
-                                    <select class="custom-select" id="paginateNumber" name="items">
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                            10
-                                        </option>
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                            20
-                                        </option>
-                                        <option
-                                            @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                            30
-                                        </option>
-                                    </select>
-                                </form>
-                            </div>
-
-
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="count-item">Tổng cộng: {{$group->total()}} items</div>
-                            @if($group)
-                                {{ $group->render('Admin.Layouts.Pagination') }}
-                            @endif
-                        </div>
-                    </div>
+                    <x-admin.table-footer
+                        :check-role="$check_role"
+                        :lists="$group"
+                        hide-action
+                    />
                 </div>
             </div>
         </div>
     </section>
     <!-- /.content -->
-@endsection
-
-@section('Script')
-    <script type="text/javascript">
-        $('#tieudiem').addClass('active');
-        $('#quanlydanhmuc').addClass('active');
-        $('#nav-tieudiem').addClass('menu-is-opening menu-open');
-    </script>
-    <script>
-        $('#paginateNumber').change(function (e) {
-            $('#paginateform').submit();
-        });
-        $('.trash').click(function () {
-            created_by = $(this).data('created_by');
-            id = $(this).data('id');
-            Swal.fire({
-                title: 'Chuyển danh mục vào thùng rác',
-                text: "Nhấn đồng ý để chuyển danh mục vào thùng rác !",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/admin/classified-group/trash-item/" + id + "/" + created_by;
-                }
-            })
-        });
-        $('.moveToTrash').click(function () {
-            var id = $(this).data('id');
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#action_list').val("trash");
-                    $('#formtrash').submit();
-
-                }
-            });
-        });
-
-    </script>
-
-    <script src="js/table.js"></script>
-
 @endsection

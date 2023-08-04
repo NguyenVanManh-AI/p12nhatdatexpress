@@ -186,136 +186,42 @@ class CategoryController extends Controller
         return redirect(route('admin.projectcategory.list'));
     }
 
-    public function trash_item($id)
+    public function deleteMultiple(Request $request)
     {
-        // maybe check id = 34 for project group. should add key for group table
-        $group = Group::findOrFail($id);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        // should check confirm should delete child or not
-        // old is check children
-        if($group->children->count()) {
-            Toastr::error('Vui lòng xóa danh mục con trước');
-            return back();
-        }
+        Group::query()
+            ->find($ids)
+            ->each(function($item) {
+                foreach ($item->children()->get() as $child) {
+                    $child->children()->each(function($grandChild) {
+                        $grandChild->delete();
+                    });
+                    $child->delete();
+                }
+                $item->delete();
+            });
 
-        $group->delete();
-        // Helper::create_admin_log(50,['is_deleted'=>1]);
-
-        Toastr::success("Xóa thành công");
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    public function untrash_item($id){
-        $group = Group::onlyIsDeleted()->findOrFail($id);
-
-        if ($group->parent()->onlyIsDeleted()->first()) {
-            Toastr::error("Vui lòng khôi phục danh mục cha trước !");
-            return back();
-        }
-
-        $group->restore();
-
-        // if($item->parent_id == 34){
-        //     Group::where('id',$id)->update([
-        //         'is_deleted'=>0,
-        //     ]);
-        //     Helper::create_admin_log(51,['is_deleted'=>0]);
-
-        //     Toastr::success("Khôi phục danh mục thành công ");
-        //     return back();
-        // }
-
-    //    $parent = Group::find($item->parent_id);
-    //         if($parent->is_deleted == 1){
-    //             Toastr::error("Vui lòng khôi phục danh mục cha trước !");
-    //             return back();
-    //         }
-
-    //     Group::where('id',$id)->update([
-    //         'is_deleted'=>0,
-    //     ]);
-    //     Helper::create_admin_log(51,['is_deleted'=>0]);
-
-        Toastr::success("Khôi phục danh mục thành công");
-        return back();
-    }
-
-    //xóa nhiều danh mục
-    public function trash_list(Request $request)
+    public function restoreMultiple(Request $request)
     {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-// kiểm tra điều kiện trước khi xóa hàng loạt
-foreach ($request->select_item as $value) {
-            //kiểm tra có phải là phần tử cha hay không
-            // nếu có sẽ kiểm tra phần tử con
-
-            if (isset($request->parent)  && array_key_exists($value, $request->parent)) {
-                $children = Group::where('parent_id', $value)->get();
-                // có phần tử sẽ kiểm tra con có nằm trong danh sách xóa không ?
-                if ($children->count() > 0) {
-                    foreach($children as $child){
-                        if(!in_array($child->id,$request->select_item)){
-                            Toastr::error("Vui lòng chọn cả phần tử con của danh mục muốn xóa !");
-                            return back();
-                        }
-                    }
-                }
-            }
-            foreach ($request->select_item as $item) {
-                $group = Group::find($item);
-
-                if (!$group) continue;
-                $group->delete();
-                // Group::where('id', $item)->update(['is_deleted' => 1]);
-                // Helper::create_admin_log(50,['is_deleted'=> 1]);
-            }
-        }
-
-        Toastr::success('Thành công');
-        return back();
-    }
-
-
-    //khôi phục nhiều danh mục
-    public function untrash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        //kiểm tra đk khôi phục
-        foreach ($request->select_item as $value) {
-            //kiểm tra phần tử có phải phần tử con hay không ?
-            if (isset($request->child) && array_key_exists($value, $request->child)) {
-                $child = Group::withIsDeleted()->find($value);
-                $parent = Group::withIsDeleted()->where(['id'=>$child->parent_id])->first();
-
-                if($parent== null){
-                    Toastr::error("Đã xảy ra lỗi");
-                    return back();
+        Group::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                foreach ($item->children()->withIsDeleted()->get() as $child) {
+                    $child->children()->withIsDeleted()->each(function($grandChild) {
+                        $grandChild->restore();
+                    });
+                    $child->restore();
                 }
 
-                if($parent->is_deleted != 0  && !in_array($parent->id,$request->select_item) ){
-                    Toastr::error("Vui lòng chọn cả phần tử cha của danh mục muốn khôi phục !");
-                    return back();
-                }
-            }
-        }
-
-        foreach ($request->select_item as $item) {
-            $group = Group::onlyIsDeleted()
-                ->find($item);
-
-            if (!$group) continue;
-            $group->restore();
-            // Helper::create_admin_log(51,['is_deleted'=> 0]);
-        }
+                $item->restore();
+            });
 
         Toastr::success('Khôi phục thành công');
         return back();
@@ -335,8 +241,6 @@ foreach ($request->select_item as $value) {
                     $child->forceDelete();
                 }
                 $item->forceDelete();
-
-                // should create log force delete
             });
 
         Toastr::success('Xóa thành công');

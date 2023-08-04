@@ -79,8 +79,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <form action="{{route('admin.classified.trash_list')}}" id="trash_list" method="post">
-                    @csrf
                     <input type="hidden" name="action" id="action_list" value="">
                 @foreach($classified as $item)
 
@@ -132,7 +130,7 @@
                                 <img src="{{ asset('user/images/icon/new.gif') }}" class="small-hot-icon mr-1" alt="">
                             @endif
                             <a
-                                href="{{ $item->group && $item->classified_url && $item->isShow() ? route('home.classified.detail',[$item->group->getLastParentGroup(), $item->classified_url]) : 'javascript:void(0);' }}"
+                                href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}"
                                 class="{{ $item->isVip() || $item->isHighLight() ? 'link-red-flat' : '' }}"
                                 target="{{ $item->isShow() ? '_blank' : '' }}"
                             >
@@ -202,9 +200,12 @@
                         @if($check_role == 1  ||key_exists(2, $check_role))
                         <a href="{{route('admin.classified.edit',$item->id)}}" class="setting-item edit mb-2"  style="margin-left: 3px" ><i style="margin-right: 3px" class="fas fa-cog"></i> Chỉnh sửa</a>
                         @endif
-                        @if($check_role == 1  ||key_exists(5, $check_role))
-                        <a style="margin-left: 3px;cursor: pointer"    data-id="{{$item->id}}" data-created_by="{{Crypt::encryptString($item->confirmed_by)}}" class="setting-item delete delete_classified mb-2"><i style="margin-right: 6px;" class="fas fa-times"></i> Xóa</a>
-                        @endif
+
+                        <x-admin.delete-button
+                            :check-role="$check_role"
+                            url="{{ route('admin.classified.delete-multiple', ['ids' => $item->id]) }}"
+                        />
+
                         @if($check_role == 1  ||key_exists(2, $check_role))
 
                             <a style="margin-left: 3px;cursor: pointer" href="{{route('admin.classified.toggle_classified', [$item->id, Crypt::encryptString($item->confirmed_by)])}}" class="setting-item toggle_classified mb-2">
@@ -228,75 +229,22 @@
                     </td>
                 </tr>
                 @endforeach
-                </form>
                 </tbody>
             </table>
-                <!-- /Main row -->
         </div>
-        <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-            <div class="text-left d-flex align-items-center">
-                <div class="manipulation d-flex mr-4 ">
-                    <img src="image/manipulation.png" alt="" id="btnTop">
-                    <div class="btn-group ml-1">
-                        <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                data-toggle="dropdown"
-                                aria-expanded="false" data-flip="false" aria-haspopup="true">
-                            Thao tác
-                        </button>
-                        <div class="dropdown-menu">
-                            @if($check_role == 1  ||key_exists(5, $check_role))
-                                <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                    <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                       style="color: white !important;font-size: 15px"></i>Thùng rác
-                                    <input type="hidden" name="action" value="trash">
-                                </a>
-                            @else
-                                <p>Không đủ quyền</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
 
-                <div class="display d-flex align-items-center mr-4">
-                    <span>Hiển thị:</span>
-                    <form method="get" id="paginateform" action="{{route('admin.classified.list')}}">
-                        <select class="custom-select" id="paginateNumber" name="items" >
-                            <option
-                                @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                10
-                            </option>
-                            <option
-                                @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                20
-                            </option>
-                            <option
-                                @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                30
-                            </option>
-                        </select>
-                    </form>
-                </div>
-                @if($check_role == 1  ||key_exists(8, $check_role))
-                    <div class="view-trash">
-                        <a href="{{route('admin.classified.listtrash')}}" class=" text-primary"><i class="text-primary far fa-trash-alt"></i>
-                            Xem thùng rác</a>
-                        <span class="count-trash">{{$trash_count}}</span>
-                    </div>
-                @endif
-            </div>
-            <div class="d-flex align-items-center">
-                <div class="count-item">Tổng cộng: {{$classified->total()}} items</div>
-                @if($classified)
-                    {{ $classified->render('Admin.Layouts.Pagination') }}
-                @endif
-            </div>
-        </div>
+        <x-admin.table-footer
+            :check-role="$check_role"
+            :lists="$classified"
+            :count-trash="$trash_count"
+            view-trash-url="{{ route('admin.classified.trash') }}"
+            delete-url="{{ route('admin.classified.delete-multiple') }}"
+        />
     </section>
 @endsection
 
 @section('Style')
 {{--    <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">--}}
-
     <style>
         .content-wrapper>.content {
             padding-top: 25px;
@@ -617,9 +565,6 @@
     @endif
 </script>
 <script>
-    $('#paginateNumber').change(function (e) {
-        $('#paginateform').submit();
-    });
     $(document).ready(function(){
         @if(isset($_GET['start_day'])&&$_GET['start_day']!="" )
         $('.end_day').attr('min','{{$_GET['start_day']}}');
@@ -636,64 +581,6 @@
     });
 </script>
 <script>
-    // $('.refresh_classified').click(function () {
-    //     var id = $(this).data('id');
-    //     var created_by = $(this).data('created_by');
-    //     Swal.fire({
-    //         title: 'Làm mới tin',
-    //         text: "Sau khi xác nhận thì không thể hoàn tác",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#d33',
-    //         cancelButtonColor: '#3085d6',
-    //         cancelButtonText: 'Quay lại',
-    //         confirmButtonText: 'Đồng ý'
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             window.location.href = "/admin/classified/refresh/" + id+"/"+created_by;
-    //
-    //         }
-    //     });
-    // });
-
-    // $('.vip_classified').click(function () {
-    //     var id = $(this).data('id');
-    //     var created_by = $(this).data('created_by');
-    //     Swal.fire({
-    //         title: 'Nâng cấp tin vip',
-    //         text: "Sau khi xác nhận thì không thể hoàn tác",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#d33',
-    //         cancelButtonColor: '#3085d6',
-    //         cancelButtonText: 'Quay lại',
-    //         confirmButtonText: 'Đồng ý'
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             window.location.href = "/admin/classified/upgrade-vip/" + id+"/"+created_by;
-    //
-    //         }
-    //     });
-    // });
-    // $('.highlight_classified').click(function () {
-    //     var id = $(this).data('id');
-    //     var created_by = $(this).data('created_by');
-    //     Swal.fire({
-    //         title: 'Nâng cấp tin nổi bật',
-    //         text: "Sau khi xác nhận thì không thể hoàn tác",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#d33',
-    //         cancelButtonColor: '#3085d6',
-    //         cancelButtonText: 'Quay lại',
-    //         confirmButtonText: 'Đồng ý'
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             window.location.href = "/admin/classified/upgrade-highlight/" + id+"/"+created_by;
-    //
-    //         }
-    //     });
-    // });
     $('.delete_classified').click(function () {
         var id = $(this).data('id');
         var created_by = $(this).data('created_by');
@@ -735,24 +622,7 @@
         }
     });
 });
-    $('.moveToTrash').click(function () {
-        Swal.fire({
-            title: 'Xóa tin rao',
-            text: "Sau khi đồng ý sẽ xóa tin rao",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#action_list').val("trash");
-                // $('#action_method').val("list_deleted");
-                $('#trash_list').submit();
-            }
-        });
-    });
+
     $('.toggle_classified').click(function (evt) {
         evt.preventDefault()
         let url = evt.currentTarget.href;

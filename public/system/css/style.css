@@ -820,16 +820,6 @@ input.input-number-show-arrow[type=number]::-webkit-outer-spin-button {
     color: #000 !important;
 }
 
-.badge-info {
-    background: #ff0000;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    padding: 0;
-    text-align: center;
-    line-height: 18px;
-    margin-left: 5px;
-}
 .nav-sidebar .nav-link>.right, .nav-sidebar .nav-link>p>.badge{
     top: 0.5rem;
     right: 0.5rem;

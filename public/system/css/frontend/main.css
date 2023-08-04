@@ -1075,22 +1075,6 @@ input[type=file]::-webkit-file-upload-button {
     font-weight: 700;
 }
 
-.table .info-contact {
-    list-style: none;
-}
-
-.table .info-contact li a,
-.table .info-contact li {
-    color: #1b1b1b;
-    font-size: 12px;
-    margin-bottom: 8px;
-}
-
-.table .info-contact li i {
-    width: 15px;
-    margin-right: 5px;
-}
-
 .table td .show-number {
     cursor: pointer;
     text-decoration: underline;

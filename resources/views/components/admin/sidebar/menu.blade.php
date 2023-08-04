@@ -8,7 +8,7 @@
                     <p>{{$item['page_name']}}
 {{--                        - {{$item['id']}}--}}
                         @if(isset($notify[$item['id']]) && $notify[$item['id']] > 0)
-                            <span class="badge badge-info right">{{ $notify[$item['id']] < 100 ? $notify[$item['id']] : '99+' }}</span>
+                            <span class="badge badge-danger right">{{ $notify[$item['id']] < 100 ? $notify[$item['id']] : '99+' }}</span>
                         @elseif($item['children_count'] > 0)
                             <i class="right fas fa-angle-left"></i>
                         @endif
@@ -23,7 +23,7 @@
                                 <p>{{$child['page_name']}}
 {{--                                    - {{$child['id']}}--}}
                                     @if(isset($notify[$child['id']]) && $notify[$child['id']] > 0)
-                                        <span class="badge badge-info right">{{ $notify[$child['id']] < 100 ? $notify[$child['id']] : '99+' }}</span>
+                                        <span class="badge badge-danger right">{{ $notify[$child['id']] < 100 ? $notify[$child['id']] : '99+' }}</span>
                                     @endif
                                 </p>
                             </a>

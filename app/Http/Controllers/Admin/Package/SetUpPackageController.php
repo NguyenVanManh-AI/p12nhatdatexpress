@@ -238,68 +238,32 @@ class SetUpPackageController extends Controller
         Toastr::success('Cập nhật thành công');
         return back();
     }
-    public function delete_setup($id)
+
+    public function deleteMultiple(Request $request)
     {
-        $package = ClassifiedPackage::findOrFail($id);
-        $package->delete();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-    //    $data = [
-    //        'id'=>$id,
-    //        'is_deleted'=>1
-    //    ];
-    //    Helper::create_admin_log(118,$data);
+        ClassifiedPackage::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-        Toastr::success('Chuyển vào thùng rác thành công');
+        Toastr::success('Xóa thành công');
         return back();
     }
-    public function untrash_setup($id){
-        $package = ClassifiedPackage::onlyIsDeleted()->findOrFail($id);
-        $package->restore();
 
-        // $data =['id'=>$id,'is_deleted'=>0];
-        // Helper::create_admin_log(119,$data);
-
-        Toastr::success('Khôi phục thành công');
-        return back();
-
-    }
-    public function trash_list(Request $request)
+    public function restoreMultiple(Request $request)
     {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        foreach ($request->select_item as $id) {
-            $package = ClassifiedPackage::find($id);
-            if (!$package) continue;
-            $package->delete();
-            // ClassifiedPackage::where('id', $item)->update(['is_deleted' => 1]);
-            // Helper::create_admin_log(118,$item);
-        }
+        ClassifiedPackage::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
 
-        Toastr::success(' Xóa thành công');
-        return back();
-
-    }
-
-    public function untrash_list(Request $request)
-    {
-        // dd($request->check);
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $package = ClassifiedPackage::onlyIsDeleted()->find($id);
-            if (!$package) continue;
-            $package->restore();
-            // ClassifiedPackage::where('id', $item)->update(['is_deleted' => 1]);
-            // Helper::create_admin_log(119,$data);
-        }
-
-        Toastr::success('Khôi phục thành công');
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 
@@ -311,8 +275,6 @@ class SetUpPackageController extends Controller
             ->find($ids)
             ->each(function($item) {
                 $item->forceDelete();
-
-                // should create log force delete
             });
 
         Toastr::success('Xóa thành công');

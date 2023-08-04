@@ -8,7 +8,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-7-3 mb-0 mb-md-4">
-        <form action="{{ route('user.campaigns.store') }}" method="POST">
+        <form action="{{ route('user.campaigns.store') }}" class="js-campaigns-form" method="POST">
           @csrf
 
           @include('user.mail.campaigns.partials._form', [

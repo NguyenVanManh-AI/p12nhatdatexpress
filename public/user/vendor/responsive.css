@@ -35,12 +35,6 @@
 	footer span {
     	font-size: 14px;
 	}
-	.focus .title a {
-    	font-size: 16px;
-    }
-    .focus .title h4 {
-    	line-height: 20px;
-	}
 	.list-house .name-country ul {
     	grid-template-columns: 1fr 1fr 1fr 1fr;
 	}
@@ -275,9 +269,6 @@
 	}
 	.hot-area {
     	padding: 0;
-	}
-	.focus {
-		padding: 20px 0;
 	}
 	.widget-event .widget-content {
 	    border: none;

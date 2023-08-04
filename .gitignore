@@ -21,9 +21,11 @@ yarn-error.log
 /public/system/images/post_promotion
 /public/thumbs
 /public/system/audio/*
+/public/system/config/*
 /public/uploads/admin/guide
 /public/mix-manifest.json
 /public/css/*
 /public/js/*
+/public/.htaccess
 laravel-echo-server.lock
 laravel-echo-server.json

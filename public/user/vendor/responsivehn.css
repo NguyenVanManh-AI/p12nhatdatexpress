@@ -935,11 +935,6 @@
     .knowledge-item {
         flex-direction: column;
     }
-    .knowledge-item .thumbnail {
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-bottom: 10px;
-    }
     .single-contact-buttons a {
         font-size: 14px;
     }

@@ -1,5 +1,7 @@
 @extends('Admin.Layouts.Master')
+
 @section('Title', 'Thùng rác | Tin rao')
+
 @section('Content')
     <div class="row m-0 p-3">
         <ol class="breadcrumb">
@@ -28,8 +30,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <form action="{{route('admin.classified.trash_list')}}" id="trash_list" method="post">
-                    @csrf
                     <input type="hidden" name="action" id="action_list" value="">
                     @foreach($classified as $item)
 
@@ -115,115 +115,35 @@
                                 {{--End Modal--}}
                             </td>
                             <td>
-{{--                                @if($check_role == 1  ||key_exists(2, $check_role))--}}
-{{--                                    @if($item->hightlight_end < strtotime(\Carbon\Carbon::now())|| $item->vip_end < strtotime(\Carbon\Carbon::now()))--}}
-{{--                                        <a type="button"  data-toggle="dropdown"  id="dropdownMenuButtonda{{$item->id}}" aria-expanded="true"  class="setting-item delete mb-2 dropdown" data-id="{{$item->id}}" style="margin-left: -10px"><img src="/system/image/icon-hot.png" alt=""> Nâng cấp tin</a>--}}
-{{--                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonda{{$item->id}}" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(773px, 190px, 0px);" x-out-of-boundaries="">--}}
-{{--                                            @if($item->hightlight_end < strtotime(\Carbon\Carbon::now()))--}}
-{{--                                                <a style="cursor: pointer" class="dropdown-item  highlight_classified" data-id="{{$item->id}}" data-created_by="{{Crypt::encryptString($item->confirmed_by)}}">Nổi bật</a>--}}
-{{--                                            @endif--}}
-{{--                                            @if($item->vip_end < strtotime(\Carbon\Carbon::now()))--}}
-{{--                                                <a style="cursor: pointer" class="dropdown-item  vip_classified" data-id="{{$item->id}}" data-created_by="{{Crypt::encryptString($item->confirmed_by)}}">Vip</a>--}}
-{{--                                            @endif--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
-{{--                                @endif--}}
-{{--                                @if($check_role == 1  ||key_exists(2, $check_role))--}}
-{{--                                    <a href="javascript:{}" class="refresh_classified setting-item edit mb-2" data-id="{{$item->id}}" data-created_by="{{Crypt::encryptString($item->confirmed_by)}}" style="margin-left: 3px"><i style="margin-right: 3px" class="fas fa-redo-alt"></i> Làm mới tin</a>--}}
-{{--                                @endif--}}
-{{--                                @if($check_role == 1  ||key_exists(2, $check_role))--}}
-{{--                                    <a href="#" class="setting-item edit mb-2"  style="margin-left: 3px" ><i style="margin-right: 3px" class="fas fa-cog"></i> Chỉnh sửa</a>--}}
-{{--                                @endif--}}
-                                @if($check_role == 1  ||key_exists(5, $check_role))
-                                    <a style="margin-left: 3px;cursor: pointer"    data-id="{{$item->id}}" data-created_by="{{Crypt::encryptString($item->confirmed_by)}}" class="setting-item delete restore_classified mb-2 text-primary"><i style="margin-right: 6px;" class="fas fa-undo-alt text-dark"></i> Khôi phục</a>
-                                @endif
-                                <x-admin.force-delete-button
-                                    :check-role="$check_role"
-                                    id="{{ $item->id }}"
-                                    url="{{ route('admin.classified.force-delete-multiple') }}"
-                                />
-
-{{--                                @if($check_role == 1  ||key_exists(2, $check_role))--}}
-{{--                                    <a style="margin-left: 3px" href="#" class="setting-item edit"><i style="margin-right: 3px" class="fas fa-comment-dots"></i> Tạo thông báo <span class="count">2</span></a>--}}
-{{--                                @endif--}}
+                                <div class="flex-column">
+                                    <x-admin.restore-button
+                                        :check-role="$check_role"
+                                        url="{{ route('admin.classified.restore-multiple', ['ids' => $item->id]) }}"
+                                    />
+                    
+                                    <x-admin.force-delete-button
+                                        :check-role="$check_role"
+                                        url="{{ route('admin.classified.force-delete-multiple', ['ids' => $item->id]) }}"
+                                    />
+                                </div>
                             </td>
                         </tr>
                     @endforeach
-                </form>
                 </tbody>
             </table>
             <!-- /Main row -->
         </div>
 
-        <form action="" class="force-delete-item-form d-none" method="POST">
-            @csrf
-            <input type="hidden" name="ids">
-        </form>
-
-        <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-            <div class="text-left d-flex align-items-center">
-                <div class="manipulation d-flex mr-4 ">
-                    <img src="image/manipulation.png" alt="" id="btnTop">
-                    <div class="btn-group ml-1">
-                        <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                data-toggle="dropdown"
-                                aria-expanded="false" data-flip="false" aria-haspopup="true">
-                            Thao tác
-                        </button>
-                        <div class="dropdown-menu">
-                            @if($check_role == 1  ||key_exists(5, $check_role))
-                                <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                    <i class="fas fa-undo-alt bg-primary p-1 mr-2 rounded"
-                                       style="color: white !important;font-size: 15px"></i>Khôi phục
-                                    <input type="hidden" name="action" value="restore">
-                                </a>
-                            @else
-                                <p>Không đủ quyền</p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                <div class="display d-flex align-items-center mr-4">
-                    <span>Hiển thị:</span>
-                    <form method="get" id="paginateform" action="{{route('admin.classified.list')}}">
-                        <select class="custom-select" id="paginateNumber" name="items" >
-                            <option
-                                @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                10
-                            </option>
-                            <option
-                                @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                20
-                            </option>
-                            <option
-                                @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                30
-                            </option>
-                        </select>
-                    </form>
-                </div>
-                @if($check_role == 1  ||key_exists(8, $check_role))
-                    <div class="view-trash">
-                        <a href="{{route('admin.classified.list')}}" class="btn btn-primary text-decoration-none text-white">Quay lại</a>
-{{--                        <a href="{{route('admin.groupclassified.listtrash')}}" class=" text-primary"><i class="text-primary far fa-trash-alt"></i>--}}
-{{--                            Xem thùng rác</a>--}}
-{{--                        <span class="count-trash">{{$trash_count}}</span>--}}
-                    </div>
-                @endif
-            </div>
-            <div class="d-flex align-items-center">
-                <div class="count-item">Tổng cộng: {{$classified->total()}} items</div>
-                @if($classified)
-                    {{ $classified->render('Admin.Layouts.Pagination') }}
-                @endif
-            </div>
-        </div>
+        <x-admin.table-footer
+            :check-role="$check_role"
+            :lists="$classified"
+            force-delete-url="{{ route('admin.classified.force-delete-multiple') }}"
+            restore-url="{{ route('admin.classified.restore-multiple') }}"
+        />
     </section>
 @endsection
 
 @section('Style')
-    {{--    <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">--}}
-
     <style>
         .breadcrumb {
             padding: 8px 15px;
@@ -535,107 +455,7 @@
         }
     </style>
 @endsection
+
 @section('Script')
-    <script>
-        $('#group_id').change(function (){
-            if($('#group_id').val()!=""){
-                var url = "{{route('param.get_child')}}";
-                var group_id = $('#group_id').val();
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    dataType: "json",
-                    data: {
-                        group_id: group_id
-                    },
-                    success: function (data) {
-                        $('#group_child').html('');
-                        console.log(data['group_child']);
-                        $('#group_child').append(data['group_child']);
-                    }
-                });
-            }
-            else{
-                $('#group_child').html('<option selected disabled>Mô hình</option>');
-            }
-        });
-        @if(isset($_GET['group_id'])&& $_GET['group_id']!="")
-        var url = "{{route('param.get_child')}}";
-        var group_id =  {{$_GET['group_id']}};
-        $.ajax({
-            url: url,
-            type: "GET",
-            dataType: "json",
-            data: {
-                group_id: group_id
-            },
-            success: function (data) {
-                $('#group_child').html('');
-                console.log(data['group_child']);
-                $('#group_child').append(data['group_child']);
-                @if(isset($_GET['group_child'])&& $_GET['group_child']!="")
-                $('#group_child').val("{{$_GET['group_child']}}").change();
-                @endif
-            }
-        });
-        @endif
-    </script>
-    <script>
-        $('#paginateNumber').change(function (e) {
-            $('#paginateform').submit();
-        });
-        $(document).ready(function(){
-            @if(isset($_GET['start_day'])&&$_GET['start_day']!="" )
-            $('.end_day').attr('min','{{$_GET['start_day']}}');
-            @endif
-            @if(isset($_GET['end_day'])&&$_GET['end_day']!="" )
-            $('.start_day').attr('max','{{$_GET['end_day']}}');
-            @endif
-            $('.start_day').change(function (){
-                $('.end_day').attr('min',$('.start_day').val());
-            });
-            $('.end_day').change(function (){
-                $('.start_day').attr('max',$('.end_day').val());
-            });
-        });
-    </script>
-    <script>
-        $('.restore_classified').click(function () {
-            var id = $(this).data('id');
-            var created_by = $(this).data('created_by');
-            Swal.fire({
-                title: 'Xác nhận khôi phục',
-                text: "Sau khi xác nhận sẽ tiến hành khôi phục",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/admin/classified/untrash-item/" + id+"/"+created_by;
-                }
-            });
-        });
-        $('.moveToTrash').click(function () {
-            Swal.fire({
-                title: 'Xác nhận khôi phục',
-                text: "Sau khi đồng ý sẽ tiến hành khôi phục",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#action_list').val("restore");
-                    $('#trash_list').submit();
-
-                }
-            });
-        });
-    </script>
-
+    <script src="js/table.js" type="text/javascript"></script>
 @endsection

@@ -22,6 +22,7 @@ class TextareaInput extends Component
     public $hint;
     public $id;
     public $isTinyMce;
+    public $inputClass;
     public $showError;
 
     /**
@@ -46,6 +47,7 @@ class TextareaInput extends Component
         $hint = '',
         $id = null,
         $isTinyMce = false,
+        $inputClass = null,
         $showError = true
     ) {
         $this->label = $label;
@@ -64,6 +66,7 @@ class TextareaInput extends Component
         $this->hint = $hint;
         $this->id = $id;
         $this->isTinyMce = $isTinyMce;
+        $this->inputClass = $inputClass;
         $this->showError = $showError;
     }
 

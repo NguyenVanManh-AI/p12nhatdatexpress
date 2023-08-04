@@ -8,13 +8,16 @@ class PropertyItem extends Component
 {
     public $group;
     public $property;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($property, $group)
-    {
+    public function __construct(
+        $property,
+        $group = null
+    ) {
         $this->property = $property;
         $this->group = $group;
     }

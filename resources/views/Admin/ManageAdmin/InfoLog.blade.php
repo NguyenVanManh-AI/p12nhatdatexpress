@@ -150,7 +150,7 @@
                                         {{ $history->created_at ? $history->created_at->format('d-m-Y H:i') : '' }}
                                     </td>
                                     <td>
-                                        <div class="flex-end">
+                                        <div class="flex-column">
                                             <button
                                                 type="button"
                                                 class="btn btn-sm btn-info mb-2 mr-2"

@@ -105,9 +105,7 @@
         </form>
     </div>
     @endif
-    <form action="{{route('admin.manage.trashlist')}}" id="formtrash" method="post">
         <table class="table  table-custom" id="table" >
-            @csrf
             <thead>
                 <tr>
                     <th><input type="checkbox" class="select-all"></th>
@@ -169,12 +167,18 @@
                         <td>{{\Carbon\Carbon::parse($item->created_at)->format('d/m/Y')}}</td>
                         <td class="text-left">
                             @if($check_role == 1  ||key_exists(2, $check_role))
-                            <a href="{{route('admin.manage.editaccount',[$item->id,\Crypt::encryptString($item->created_by)])}}" class="setting-item edit  mb-2"><i class="fas fa-cog mr-1"></i> Chỉnh sửa</a>
-                            @endif
-                            @if($check_role == 1  ||key_exists(5, $check_role))
-                            <a  class="setting-item delete  mb-2" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}"><i class="fas fa-times mr-2"></i> Xóa</a>
+                                <div class="mb-2 ml-2">
+                                    <span class="icon-small-size mr-1 text-dark">
+                                        <i class="fas fa-cog"></i>
+                                    </span>
+                                    <a href="{{route('admin.manage.editaccount',[$item->id,\Crypt::encryptString($item->created_by)])}}" class="text-primary ">Chỉnh sửa</a>
+                                </div>
                             @endif
 
+                            <x-admin.delete-button
+                                :check-role="$check_role"
+                                url="{{ route('admin.manage.accounts.delete-multiple', ['ids' => $item->id]) }}"
+                            />
                             {{-- maybe should check permission --}}
                             {{-- @if($check_role == 1)
                                 <a
@@ -192,68 +196,16 @@
 
                 </tbody>
             </table>
-        </form>
 
         {{-- @include('admin.accounts.partials._view-log-modal') --}}
-
-        <div class="table-bottom d-flex align-items-center justify-content-between mb-4">
-           <div class="text-left d-flex align-items-center">
-               <div class="manipulation d-flex mr-4">
-                   <img src="image/manipulation.png" alt="" id="btnTop">
-                   <div class="btn-group ml-1">
-                       <button type="button" class="btn dropdown-toggle dropdown-custom" data-toggle="dropdown"
-                       aria-expanded="false" data-flip="false" aria-haspopup="true">
-                       Thao tác
-                   </button>
-                   <div class="dropdown-menu">
-                    @if($check_role == 1  ||key_exists(5, $check_role))
-                    <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                       <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                       style="color: white !important;font-size: 15px"></i>Thùng rác
-                       <input type="hidden" name="action" value="trash">
-                   </a>
-                   @else
-                   <p class="dropdown-item m-0 disabled">
-                       Bạn không có quyền
-                   </p>
-                   @endif
-               </div>
-           </div>
-       </div>
-
-       <div class="display d-flex align-items-center mr-4">
-           <span>Hiển thị:</span>
-           <form method="get" action="{{route('admin.manage.accounts')}}">
-               <select name="items" class="custom-select" onchange="this.form.submit()">
-                   <option {{(isset($_GET['items'])&& $_GET['items']==10)?"selected":""}}  class=""
-                   value="10">10
-               </option>
-               <option {{(isset($_GET['items'])&& $_GET['items']==20)?"selected":""}} value="20">20
-               </option>
-               <option {{(isset($_GET['items'])&& $_GET['items']==30)?"selected":""}} value="30">30
-               </option>
-           </select>
-       </form>
-   </div>
-   @if($check_role == 1  ||key_exists(8, $check_role))
-   <div class="view-trash">
-       <a href="{{route('admin.manage.trashaccount')}}"><i class="far fa-trash-alt"></i> Xem thùng rác</a>
-       <span class="count-trash">
-        @if(isset($count_trash))
-        {{$count_trash}}
-        @endif
-    </span>
-</div>
-@endif
-</div>
-<div class="d-flex align-items-center">
-   <div class="count-item">Tổng cộng: @empty($list_account) {{0}} @else {{$list_account->total()}} @endempty items</div>
-   @if($list_account)
-   {{ $list_account->render('Admin.Layouts.Pagination') }}
-   @endif
-</div>
-</div>
-</div>
+        <x-admin.table-footer
+          :check-role="$check_role"
+          :lists="$list_account"
+          :count-trash="$count_trash"
+          view-trash-url="{{ route('admin.manage.accounts.trash') }}"
+          delete-url="{{ route('admin.manage.accounts.delete-multiple') }}"
+        />
+    </div>
 </section>
 @endsection
 
@@ -483,45 +435,6 @@
 </script>
 
 <script>
-    $('.delete').click(function () {
-        var id = $(this).data('id');
-        var created_by = $(this).data('created_by');
-        Swal.fire({
-            title: 'Xác nhận xóa',
-            text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "/admin/manage-admin/delete/" + id + "/" + created_by;
-            }
-        });
-    });
-    $('.moveToTrash').click(function () {
-        var id = $(this).data('id');
-        Swal.fire({
-            title: 'Xác nhận xóa',
-            text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $('#formtrash').submit();
-
-            }
-        });
-    });
-</script>
-<script>
     $('.inputimage').change(function(){
         var id  =$(this).data('id');
         const inputAvatar = document.getElementById('input'+id);
@@ -574,5 +487,4 @@
         $('.admin_email').val($('.admin_email').val().toLowerCase());
     });
 </script>
-
 @endsection

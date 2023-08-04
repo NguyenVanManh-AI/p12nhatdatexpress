@@ -11,7 +11,7 @@
     @forelse($notifies as $notify)
     <a href="javascript:void(0);" class="user-notify-box__item dropdown-item flex-start position-relative">
       <i class="{{ $notify->icon }} mr-2"></i>
-      <span class="text-ellipsis flex-1 mr-1">
+      <span class="text-ellipsis flex-1 mr-1" data-title="{{ $notify->content }}">
         {{ $notify->content }}
       </span>
       <span class="float-right text-muted text-sm">{{ \App\Helpers\Helper::getHumanTimeWithPeriod($notify->created_at) }}</span>

@@ -3,53 +3,31 @@
 namespace App\View\Components\Home\Focus;
 
 use App\Helpers\Helper;
-use App\Models\News;
-use Illuminate\Support\Facades\DB;
+use App\Models\Group;
+use App\Services\FocusService;
+use Illuminate\Http\Request;
 use Illuminate\View\Component;
-use App\Traits\Filterable;
 
 class Property extends Component
 {
-    use Filterable;
     public $group;
     public $list;
-
-    protected $table = 'news';
-    protected $filterable = [
-      'keyword'
-    ];
-    /**
-     * Filter keyword
-     * @param $query
-     * @param $value
-     * @return mixed
-     */
-    protected function filterKeyword($query, $value)
-    {
-        return $query->where($this->table . '.' . 'news_title', 'like', "%$value%");
-    }
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->group = DB::table('group')
-            ->where('id', 50)
-            ->first();
+        $this->group = Group::find(50); // tin bat dong san
 
-        $this->list = News::with('group')
-        ->showed()
-        ->where('group_id', $this->group->id)
-        ->orderBy('is_highlight', 'desc')
-        ->orderBy('created_at', 'desc');
+        $focusService = new FocusService;
+        $queries = $request->all();
+        $queries['limit'] = config('constants.focus-news.news.property', 20);
+        $queries['group_id'] = 50;
 
-        $params = Helper::array_remove_null(request()->all());
-        $this->list = $this->scopeFilter($this->list, $params);
-
-        $this->list = $this->list->take(20)->get();
+        $this->list = $focusService->getListFromQuery($queries);
     }
 
     /**

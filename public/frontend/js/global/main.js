@@ -50,6 +50,22 @@ function sleep(ms) {
             $(this).attr('data-title', content)
     })
 
+    // js has count
+    const jsHasCountUpdate = _$element => {
+        const _$parents = _$element.parents('.js-has-count__area'),
+        _text = _$parents.find('.js-has-count__input').val()
+
+        if (_text)
+            _$parents.find('.js-has-count__length').text(_text.length)
+    }
+    $('.js-has-count__input').each(function() {
+        jsHasCountUpdate($(this))
+    })
+    $('body').on('change keyup', '.js-has-count__area .js-has-count__input', function () {
+        jsHasCountUpdate($(this))
+    })
+    // end js has count
+
     $(document).on('mouseover', '[data-title]', function (event) {
         showTitle($(this))
     });
@@ -67,6 +83,7 @@ function sleep(ms) {
     });
 
     const showTitle = (self) => {
+        if (!self.attr('data-title')) return
         if (!$('.title-container').length) {
             $('body').append('<div class="title-container"></div>')
         }
@@ -241,7 +258,6 @@ function sleep(ms) {
                     $('.classified-view-map__box').modal('show')
                     $('.classified-view-map__box .classified-view-map__append-box').html(res.data.html)
                 }
-                loadingImage()
 
                 const viewMapInitLocation = {
                     lat: parseFloat(res.data.location.map_latitude) || 0,
@@ -301,6 +317,14 @@ function sleep(ms) {
         }
     });
 
+    $('body').on('click', '.js-need-toggle-in .js-toggle-in', function (e) {
+        e.preventDefault();
+        let _this = $(this),
+            $parents = _this.parents('.js-need-toggle-in');
+
+        $parents.toggleClass('in')
+    });
+
     // input date placeholder
     $('.js-date-placeholder').on('keypress', function(e) {
         if (this.type != 'date') return false
@@ -312,6 +336,15 @@ function sleep(ms) {
         if (!$(this).val() && this.type != 'text') this.type = 'text'
     })
     // end input date placeholder
+
+    // c-input__control
+    $('.c-input__control input').on('change', function () {
+        let isDisabled = $(this).prop('disabled')
+        isDisabled
+          ? $(this).parents('.c-input__control').addClass('c-input__disabled')
+          : $(this).parents('.c-input__control').removeClass('c-input__disabled')
+    })
+    // end c-input__control
 
     // fancybox
     if ($('[data-fancybox="gallery"]') && $('[data-fancybox="gallery"]').length) {
@@ -463,6 +496,20 @@ function sleep(ms) {
     const showMessage = res => {
         if (res && res.message)
             res.success ? toastr.success(res.message) : toastr.error(res.message)
+    }
+
+    const openHtml5lightBox = data => {
+        $('body').find('.js-html5lightbox-append').remove()
+
+        if (data && data.html && data.video_url) {
+            $('body').append(`<a href="${data.video_url}" class="js-html5lightbox-append d-none"
+                    data-titlestyle="right"
+                ></a>`)
+            let $html5lightbox = $('.js-html5lightbox-append')
+            $html5lightbox.attr('data-description', data.html)
+            $html5lightbox.html5lightbox()
+            $html5lightbox.trigger('click')
+        }
     }
 
     const comment = selectValue => {
@@ -803,7 +850,6 @@ function sleep(ms) {
                 if (data && data.html && data.html.trim() !== '' && res.success) {
                     $resultBody.html(data.html)
                     $resultBody.removeClass('hide')
-                    loadingImage()
                 } else {
                     $resultBody.addClass('hide')
                 }
@@ -916,11 +962,6 @@ function sleep(ms) {
         });
     }
 
-    $('.province-load-district').on('change', function () {
-        // should add parent class group-load-address
-        getDistrict($(this))
-    });
-
     async function getWard(_this) {
         let district_id = _this.val(),
         $wardDistrictSelect = _this.parents('.group-load-address').find('.ward-district'),
@@ -958,9 +999,58 @@ function sleep(ms) {
         });
     }
 
-    $('.district-load-ward').on('change', function () {
+    $('body').on('change', '.district-load-ward', function () {
         getWard($(this))
     });
+
+    $('body').on('change', '.province-load-district', function () {
+        // should add parent class group-load-address
+        getDistrict($(this))
+    });
+
+    // group load paradigm
+    $('body').on('change', '.group-load-paradigm .category-load-paradigm', function () {
+        getParadigm($(this))
+    })
+
+    async function getParadigm(_this) {
+        let categoryId = _this.val(),
+            $paradigmSelect = _this.parents('.group-load-paradigm').find('.paradigm-category'),
+            paradigmPlaceholder = $paradigmSelect.data('placeholder') || 'Chọn mô hình'
+
+        $paradigmSelect.empty();
+        $paradigmSelect.append(`<option selected value="">${paradigmPlaceholder}</option>`);
+
+        if (!categoryId) {
+            if ($paradigmSelect.val())
+                $paradigmSelect.trigger('change')
+
+            return
+        }
+
+        await $.ajax({
+            url: '/params/ajax-get-child-group',
+            method: 'GET',
+            dataType: 'JSON',
+            data: {
+                parent_id: categoryId
+            },
+            success: data => {
+                appendOptions($paradigmSelect, data['child_group'], 'id', 'group_name', paradigmPlaceholder)
+
+                const oldVal = $paradigmSelect.val(),
+                    selectedParadigm = $paradigmSelect.attr('data-selected');
+
+                $paradigmSelect.val(selectedParadigm)
+
+                if (oldVal != selectedParadigm)
+                    $paradigmSelect.trigger('change')
+            },
+            error: () => {}
+        });
+    }
+
+    // end group load paradigm
 
     // trigger change for select2 old input
     const checkAddressSelect = () => {
@@ -1104,11 +1194,11 @@ function sleep(ms) {
         })
     })
 
-    // like focus news
-    $(".js-post-like").on('click', function(e) {
+    $('body').on('click', '.js-focus__like-action .js-focus__toggle-reaction, .js-focus__detail-like-action .js-focus__toggle-reaction', function(e) {
         e.preventDefault();
         let _this = $(this),
-            id = _this.data('id')
+            id = _this.data('id'),
+            type = _this.data('type') ? 1 : 0;
 
         if (!id) return;
 
@@ -1116,8 +1206,12 @@ function sleep(ms) {
         _this.find('.c-overlay-loading').addClass('loading')
 
         $.ajax({
-            url: `/tieu-diem/ajax-toggle-like/${id}`,
+            url: `/focus/toggle-reaction`,
             method: 'POST',
+            data: {
+                id: id,
+                type: type
+            },
             success: res => {
                 const data = res.data
                 _this.prop('disabled', false);
@@ -1125,18 +1219,54 @@ function sleep(ms) {
                 showMessage(res)
 
                 if (data && res.success) {
-                    data.liked
-                        ? _this.find('.like-icon').removeAttr('class').attr('class', 'fa fa-check')
-                        : _this.find('.like-icon').removeAttr('class').attr('class', 'fa fa-thumbs-up')
+                    let isDetail = _this.parent().hasClass('js-focus__detail-like-action')
+                    
+                    if (!isDetail) {
+                        data.toggled
+                            ? _this.find('.js-reaction-icon').addClass('active')
+                            : _this.find('.js-reaction-icon').removeClass('active')
+
+                        _this.parents('.js-focus__like-action').find('.js-num-likes').text(data.likesCount || 0)
+                        _this.parents('.js-focus__like-action').find('.js-num-dislikes').text(data.dislikeCount || 0)
+                    } else {
+                        data.toggled
+                            ? _this.find('.like-icon').removeAttr('class').attr('class', 'like-icon fa fa-check')
+                            : _this.find('.like-icon').removeAttr('class').attr('class', 'like-icon fa fa-thumbs-up')
+                    }
                 }
             },
             error: err => {
                 _this.prop('disabled', false);
                 _this.find('.c-overlay-loading').removeClass('loading')
-                showError(error)
+                showError(err)
             }
         })
     });
+
+    $('body').on('click', '.js-focus__open-html5lightbox', function () {
+        let _this = $(this),
+            id = _this.attr('data-id')
+        if (!id) return
+        $('.c-overlay-loading:not(.inner)').addClass('loading')
+
+        $.ajax({
+            url: `/focus/get-description`,
+            method: 'GET',
+            data: {
+                id: id,
+            },
+            success: res => {
+                const data = res.data
+                $('.c-overlay-loading:not(.inner)').removeClass('loading')
+
+                if (res.success)
+                    openHtml5lightBox(res.data)
+            },
+            error: () => {
+                $('.c-overlay-loading:not(.inner)').removeClass('loading')
+            }
+        })
+    })
 
     // phone
     $('body').on('click', '.phone .click-show-phone', function (event) {
@@ -1182,8 +1312,12 @@ function sleep(ms) {
     // end phone
 
     // old paginate should change
-    $('#paginateNumber').change(function (e) {
-        $('#paginateform').submit();
-    });
-    // end old
+    $('#paginateNumber').on('change', function (e) {
+        const searchParams = new URLSearchParams(window.location.search);
+        let itemsPerPage = $(this).val(),
+            name = $(this).attr('name');
+
+        searchParams.set(name, itemsPerPage);
+        window.location.href = window.location.pathname + '?' + searchParams.toString()
+    })
 }) ()

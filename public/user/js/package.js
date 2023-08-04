@@ -25,7 +25,7 @@ $('#deposit-voucher').change(function () {
         return;
     }
     $.ajax({
-        url: 'ajax-valid-voucher',
+        url: '/thanh-vien/ajax-valid-voucher',
         async: false,
         type: "GET",
         dataType: "json",

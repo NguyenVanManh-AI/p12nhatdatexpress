@@ -170,7 +170,7 @@ class ClassifiedController extends Controller
             $group = $this->groupService->prepareData($group_parent);
             $classified = new Collection([]);
             foreach ($group as $item){
-                $classified_query = Classified::query();
+                $classified_query = Classified::onlyIsDeleted();
                 $classified_query = $classified_query
                     ->join('group', 'classified.group_id', '=', 'group.id')
                     ->leftJoin('group as group_parent', 'group.parent_id', '=', 'group_parent.id')
@@ -186,7 +186,7 @@ class ClassifiedController extends Controller
         }
         // Nếu không lọc theo chuyên mục sẽ lấy tất cả các tin rao
         else{
-            $classified_query = Classified::query();
+            $classified_query = Classified::onlyIsDeleted();
             $classified_query = $classified_query
                 ->join('group', 'classified.group_id', '=', 'group.id')
                 ->leftJoin('group as group_parent', 'group.parent_id', '=', 'group_parent.id')
@@ -197,9 +197,6 @@ class ClassifiedController extends Controller
                 'user.email', 'user_detail.fullname', 'user.username');
             $classified = $classified_query->get();
         }
-
-        $trashQuery = clone $classified;
-        $trash_count = $trashQuery->onlyIsDeleted()->count();
 
         //lọc theo chuyên mục - mô hình
         if(isset($request->group_child) && $request->group_child!=""){
@@ -276,11 +273,10 @@ class ClassifiedController extends Controller
             $admin_id = Auth::guard('admin')->user()->id;
             $classified = $classified->where('confirmed_by',$admin_id);
         }
-        $classified = $classified->onlyIsDeleted();
         $classified->sortBy('created_at');
 
         $classified = CollectionHelper::paginate($classified,$items);
-        return view('Admin.Classified.ListClassified.TrashClassified',compact('classified','trash_count'));
+        return view('Admin.Classified.ListClassified.TrashClassified',compact('classified'));
     }
     public function refresh($id){
         $classified = Classified::find($id);
@@ -415,46 +411,39 @@ class ClassifiedController extends Controller
         return back();
     }
 
-    public function trash_list(Request $request){
-        if($request->select_item ==null){
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        if($request->has('action') && $request->action == "trash"){
-            foreach($request->select_item as $item){
-                $classified = Classified::find($item);
-                if (!$classified) continue;
+    public function deleteMultiple(Request $request)
+    {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-                $classified->delete();
-                // Helper::create_admin_log(26,[
-                //     'id'=>$item,
-                //     'is_deleted'=>1,
-                // ]);
-            }
-            Toastr::success("Chuyển vào thùng rác thành công");
-            return back();
-        }
-        if($request->has('action') && $request->action == "restore"){
-            foreach($request->select_item as $item){
-                $classified = Classified::onlyIsDeleted()->find($item);
-                if (!$classified) continue;
+        Classified::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-                $classified->restore();
-                // Helper::create_admin_log(27,[
-                //     'id'=>$item,
-                //     'is_deleted'=>0,
-                // ]);
-            }
-            Toastr::success("Khôi phục tin rao thành công");
-            return back();
-        }
+        Toastr::success('Xóa thành công');
+        return back();
+    }
+
+    public function restoreMultiple(Request $request)
+    {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+
+        Classified::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
+
+        Toastr::success('Khôi phục thành công');
+        return back();
     }
 
     public function forceDeleteMultiple(Request $request)
     {
         $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Group::onlyIsDeleted()
+        Classified::onlyIsDeleted()
             ->find($ids)
             ->each(function($item) {
                 foreach ($item->children()->withIsDeleted()->get() as $child) {

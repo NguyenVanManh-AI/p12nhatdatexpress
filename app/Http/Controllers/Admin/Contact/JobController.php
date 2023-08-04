@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\Contact\AddJobRequest;
 use App\Http\Requests\Admin\Contact\UpdateJobRequest;
 use App\Models\User\CustomerParam;
 use Brian2694\Toastr\Facades\Toastr;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -87,90 +87,31 @@ class JobController extends Controller
         return back();
     }
 
-    # Xóa vĩnh viễn
-    public function delete($id): RedirectResponse
+    public function deleteMultiple(Request $request)
     {
-        $param = CustomerParam::onlyIsDeleted()->findOrFail($id);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        $param->forceDelete();
-        // Helper::create_admin_log(self::LOG['REMOVE'], CustomerParam::where('id', $id)->first());
+        CustomerParam::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-        Toastr::success('Xóa thành công');
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    # Xóa tạm thời
-    public function soft_delete($id): RedirectResponse
+    public function restoreMultiple(Request $request)
     {
-        $param = CustomerParam::findOrFail($id);
-        $param->delete();
-        // Helper::create_admin_log(self::LOG['SOFT_REMOVE'], ['id' => $id, 'is_deleted' => 1]);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
+        CustomerParam::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
 
-    # Khôi phục
-    public function untrash($id): RedirectResponse
-    {
-        $param = CustomerParam::onlyIsDeleted()->findOrFail($id);
-        $param->restore();
-        // Helper::create_admin_log(self::LOG['RESTORE'], [
-        //     'id' => $id,
-        //     'is_deleted' => 0
-        // ]);
-
-        Toastr::success('Khôi phục thành công');
-        return back();
-
-    }
-
-    public function trash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $item) {
-            $param = CustomerParam::find($item);
-            if (!$param) continue;
-            $param->delete();
-            // Helper::create_admin_log(self::LOG['SOFT_REMOVE'], ['id' => $item, 'is_deleted' => 1]);
-        }
-
-        Toastr::success(' Xóa thành công');
-        return back();
-    }
-
-    # List action
-    public function untrash_list(Request $request): RedirectResponse
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        if ($request->action == "restore") {
-
-            foreach ($request->select_item as $item) {
-                $param = CustomerParam::onlyIsDeleted()->find($item);
-                if (!$param) continue;
-                $param->restore();
-                // Helper::create_admin_log(self::LOG['RESTORE'], ['id' => $item, 'is_deleted' => 0]);
-            }
-            Toastr::success('Khôi phục thành công');
-        }
-
-        /*
-        if ($request->action == "delete") {
-
-            foreach ($request->select_item as $item) {
-                CustomerParam::where('id', $item)->delete();
-                Helper::create_admin_log(self::LOG['REMOVE'], CustomerParam::where('id', $item)->first());
-            }
-            Toastr::success('Xóa thành công');
-        }
-        */
-
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 

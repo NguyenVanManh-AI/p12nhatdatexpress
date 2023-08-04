@@ -6,24 +6,28 @@
   <div class="col-md-7-3 project-main">
     <div class="section mb-4">
       <div class="head-divide flex-wrap">
-        <div class="left">
+        <div class="left h-100">
           <h3>{{ $group->group_name }}</h3>
         </div>
-        <div class="right">
-          <div class="md-hide p-0">
-            <div class="flex-start">
+        <div class="right h-100">
+          <div class="md-hide p-0 h-100">
+            <div class="flex-start h-100">
               <x-news.classified.sort-list />
               <x-common.accept-location
                 :is-individual="true"
+                enable-btn-class="btn-orange h-100"
+                disable-btn-class="btn-primary h-100"
                 disable-text="Quay lại"
               />
             </div>
           </div>
-          <div class="md-show hide p-0">
-            <div class="flex-start">
+          <div class="md-show hide p-0 h-100">
+            <div class="flex-start h-100">
               <x-news.classified.sort-list selected-text="Sắp xếp" />
               <x-common.accept-location
                 :is-individual="true"
+                enable-btn-class="btn-orange h-100"
+                disable-btn-class="btn-primary h-100"
                 disable-text=""
                 enable-text=""
               />

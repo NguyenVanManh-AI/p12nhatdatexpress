@@ -154,51 +154,6 @@ class ProjectController extends Controller
         return view('Admin.Project.TrashProject', compact('trash'));
     }
 
-    public function trash_item($id)
-    {
-        $project = Project::findOrFail($id);
-        $project->delete();
-
-
-        // $data = [
-        //     'id' => $id,
-        //     'is_deleted' => 1
-        // ];
-        // Helper::create_admin_log(130, $data);
-
-        Toastr::success(' Xóa thành công');
-        return back();
-    }
-
-    public function untrash_item($id)
-    {
-        $project = Project::onlyIsDeleted()->findOrFail($id);
-        $project->restore();
-
-        // Helper::create_admin_log(131, $data);
-        Toastr::success('Khôi phục thành công');
-        return back();
-    }
-
-    public function trash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $item) {
-            $project = Project::find($item);
-            if (!$project) continue;
-
-            $project->delete();
-            // Helper::create_admin_log(130, $data);
-        }
-
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
     public function preview(PreviewProjectRequest $request)
     {
         $data = $request->data;
@@ -400,22 +355,31 @@ class ProjectController extends Controller
 
     }
 
-    public function untrash_list(Request $request)
+    public function deleteMultiple(Request $request)
     {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        foreach ($request->select_item as $item) {
-            $project = Project::onlyIsDeleted()->find($item);
-            if (!$project) continue;
+        Project::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-            $project->restore();
-            // Helper::create_admin_log(131, $data);
-        }
+        Toastr::success('Xóa thành công');
+        return back();
+    }
 
-        Toastr::success('Khôi phục thành công');
+    public function restoreMultiple(Request $request)
+    {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+
+        Project::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
+
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 

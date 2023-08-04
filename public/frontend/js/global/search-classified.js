@@ -322,9 +322,6 @@
                             'background-image': `url(${banner_image})`
                         })
                     }
-
-                    // lazy loading
-                    loadingImage()
                 }
 
                 if (link)
@@ -431,6 +428,19 @@
         }
     })
 
+    $('.home-banner-top-section .home-search-inner').on('click', '.open-advanced-button, .js-choose-price-btn', function () {
+        let _this = $(this),
+            $parents = _this.parents('.home-banner-top-section'),
+            category = $parents.find('[name="category"]:checked').val();
+
+        if (!category) {
+            $parents.find('[name="category"]').parents('.category-box').addClass('is-flicking')
+            setTimeout(function () {
+                $parents.find('[name="category"]').parents('.category-box').removeClass('is-flicking')
+            }, 800)
+        }
+    })
+
     // chon muc gia home
     $('body').on('click', '.js-home-search-box .js-choose-price-btn', function (e) {
         let _this = $(this),
@@ -503,7 +513,7 @@
     let individualPages = {},
         individualLoading = {};
 
-    // get geolocation | not use now
+    // get geolocation
     const getDistrictByName = districtName => {
         return new Promise((resolve, reject) => {
             return $.ajax({
@@ -534,7 +544,7 @@
         })
     }
 
-    const setGeolocation = (...[provinceId, districtId]) => {
+    const setGeolocation = (...[provinceId, districtId, latLng]) => {
         return new Promise((resolve, reject) => {
             return $.ajax({
                 url: '/params/set-geolocation',
@@ -543,6 +553,8 @@
                 data: {
                     province_id: provinceId,
                     district_id: districtId,
+                    lat: latLng.lat,
+                    lng: latLng.lng,
                 },
                 success: res => resolve(res),
                 error: err => reject(err)
@@ -560,7 +572,7 @@
             })
 
         if (!districtId) {
-            await getProvinceByName(result.district_name)
+            await getProvinceByName(result.province_name)
                 .then(province => {
                     if (province && province.id)
                         provinceId = province.id
@@ -568,34 +580,41 @@
         }
 
         if (districtId || provinceId) {
-            await setGeolocation([provinceId, districtId])
+            await setGeolocation(provinceId, districtId, result.latLng)
         }
     }
 
-    // const getGeolocation = () => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             function (position) {
-    //                 const pos = {
-    //                     lat: position.coords.latitude,
-    //                     lng: position.coords.longitude,
-    //                 };
-    //                 let loc = new google.maps.LatLng(pos.lat, pos.lng)
-    //                 markerToAddress({ location: loc }).then((r) => callbackLocationToAddress(r));
-    //             },
-    //             function () {
-    //                 // alert('Không hỗ trợ định vị');
-    //             }
-    //         );
-    //     } else {
-    //         // alert('Không hỗ trợ định vị');
-    //     }
-    // }
+    const getGeolocation = () => {
+        return new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async function (position) {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                        let loc = new google.maps.LatLng(pos.lat, pos.lng)
+                        await markerToAddress({ location: loc }).then((r) => callbackLocationToAddress(r));
+                        resolve(true)
+                    },
+                    function () {
+                        $('.accept-location-instruct').addClass('in')
+                        // reject(true)
+                    }
+                );
+            } else {
+                $('.accept-location-instruct').addClass('in')
+                // reject(true)
+            }
+        });
+    }
     // end get geolocation
 
     // search near individual
-    $('body').on('click', '.js-need-load-individual:not(.category-search-results-box) .js-search-near-individual', function (event) {
+    $('body').on('click', '.js-need-load-individual:not(.category-search-results-box) .js-search-near-individual', async function (event) {
         event.preventDefault;
+
+        await getGeolocation()
 
         let _this = $(this),
             $parents = _this.parents('.js-need-load-individual'),
@@ -666,7 +685,6 @@
 
                     if (moreEstateHtml) {
                         $parents.find('.js-individual-list').append(moreEstateHtml)
-                        loadingImage()
                     }
 
                     if (res.data.onLastPage) {
@@ -694,8 +712,9 @@
         resetCount = 10; // by default auto reset auto load after loaded 10 pages
 
     // category search near individual
-    $('body').on('click', '.js-need-load-individual.category-search-results-box .js-search-near-individual', function (event) {
+    $('body').on('click', '.js-need-load-individual.category-search-results-box .js-search-near-individual', async function (event) {
         event.preventDefault;
+        await getGeolocation()
 
         let _this = $(this),
             $parents = _this.parents('.js-need-load-individual');
@@ -772,7 +791,6 @@
 
                     if (moreClassifiedHtml) {
                         $listsElement.append(moreClassifiedHtml)
-                        loadingImage()
                     }
 
                     if (res.data.onLastPage) {

@@ -24,6 +24,7 @@ class Select2Input extends Component
     public $hint;
     public $items;
     public $itemText;
+    public $subText;
     public $itemValue;
     public $itemsSelectName;
     public $itemsCurrentValue;
@@ -34,6 +35,7 @@ class Select2Input extends Component
     public $maxLength;
     public $dropdownClass;
     public $select2Parent;
+    public $withChild;
 
     /**
      * Create a new component instance.
@@ -58,6 +60,7 @@ class Select2Input extends Component
         $hint = '',
         $items = [],
         $itemText = 'name',
+        $subText = '',
         $itemValue = 'id',
         $itemsSelectName = null,
         $itemsCurrentValue = null,
@@ -67,7 +70,8 @@ class Select2Input extends Component
         $multiple = false,
         $maxLength = null,
         $dropdownClass = '',
-        $select2Parent = null
+        $select2Parent = null,
+        $withChild = true
     ) {
         $this->label = $label;
         $this->labelClass = $labelClass;
@@ -87,6 +91,7 @@ class Select2Input extends Component
         $this->hint = $hint;
         $this->items = $items;
         $this->itemText = $itemText;
+        $this->subText = $subText;
         $this->itemValue = $itemValue;
         $this->itemsSelectName = $itemsSelectName ?: $name;
         $this->itemsCurrentValue = $itemsCurrentValue;
@@ -100,6 +105,7 @@ class Select2Input extends Component
         $this->maxLength = $maxLength;
         $this->dropdownClass = $dropdownClass;
         $this->select2Parent = $select2Parent;
+        $this->withChild = $withChild;
     }
 
     /**

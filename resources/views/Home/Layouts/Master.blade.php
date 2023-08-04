@@ -160,6 +160,7 @@
 
 <x-home.project.view-map />
 <x-home.find-my-location />
+<x-common.accept-location-instruct />
 
 @if(!auth()->guard('user')->check())
     @include('components.home.user.reset-password')
@@ -264,6 +265,7 @@
 
 <script src="{{asset('frontend/js/app/app.js')}}"></script>
 <script src="{{asset('frontend/js/global/search-classified.js')}}"></script>
+<script src="{{asset('frontend/js/global/search-focus.js')}}"></script>
 <script src="{{asset('frontend/js/main.js')}}"></script>
 <script src="{{asset('frontend/js/plus1.js')}}"></script>
 <script src="{{asset('frontend/js/plus2.js')}}"></script>

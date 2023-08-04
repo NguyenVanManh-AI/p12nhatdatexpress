@@ -1,5 +1,5 @@
 <div>
-  <div class="image-ratio-box-half relative">
+  <div class="image-ratio-box-400px relative">
     <div class="absolute-full">
         <div
           {{ $id != null ? "id=$id" : '' }}

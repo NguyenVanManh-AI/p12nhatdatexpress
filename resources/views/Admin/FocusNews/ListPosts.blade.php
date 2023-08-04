@@ -4,9 +4,6 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">
 @endsection
 @section('Content')
-{{--<style type="text/css">--}}
-
-{{--</style>--}}
 <div class="row m-0 p-3">
   <ol class="breadcrumb mt-1">
       @if($check_role == 1  ||key_exists(4, $check_role))
@@ -136,7 +133,7 @@
                 <td >
                   <div class="image-box-main">
                    <div class="image-top">
-                     <img style="max-width: 100px;object-fit: cover" src="{{url($item->image_url)}}" class="h-100">
+                     <img style="max-width: 100px;object-fit: cover" src="{{ $item->getImageUrl() }}" class="h-100">
                    </div>
                  </div>
                 </td>
@@ -154,10 +151,10 @@
              </div>
            </td>
            <td class="">
-            <span style="{{($item->admin_deleted ==1)?"color: grey":""}}">{{$item->admin_fullname}}</span>
+            <span style="{{($item->admin_deleted ==1)?"color: grey":""}}">{{ data_get($item->admin, 'admin_fullname') }}</span>
           </td>
            <td class="">
-            <span style="{{($item->group_deleted ==1)?"color: grey":""}}">{{$item->group_name}}</span>
+            <span style="{{($item->group_deleted ==1)?"color: grey":""}}">{{ data_get($item->group, 'group_name') }}</span>
           </td>
           <td class="">
             <span>{{date('d/m/Y',$item->created_at)}}</span>
@@ -165,7 +162,7 @@
           <td class="p-0">
               <div class="float-left my-2 ml-2 pr-5">
                 <i class="icon-setup fas fa-file-alt mr-2 mb-1"></i>
-                <a target="__blank" href="{{route('home.focus.detail', [$item->group_url, $item->news_url])}}" class="text-primary ">Xem bài</a>
+                <a target="__blank" href="{{ $item->group ? route('home.focus.detail', [$item->group->group_url, $item->news_url]) : 'javascript:void(0);'}}" class="text-primary ">Xem bài</a>
               </div>
               @if($check_role == 1  ||key_exists(2, $check_role))
 
@@ -190,13 +187,13 @@
 
                 <a class="text-primary cusor-point dropdown dropdown-toggle"  data-toggle="dropdown" type="button" id="dropdownMenuButtonda"><span>Nâng cấp</span></a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonda">
-                      @if(($item->is_highlight == 0 )|| ($item->highlight_to < time()))
-                    <a class="dropdown-item cusor-point hightlight" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Nổi bật</a>
+                      @if(!$item->isHighlight())
+                        <a class="dropdown-item cusor-point hightlight" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Nổi bật</a>
                       @endif
-                      @if($item->is_express == 0)
-                    <a class="dropdown-item  cusor-point express" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Quảng cáo</a>
+                      @if(!$item->isAds())
+                        <a class="dropdown-item  cusor-point express" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Quảng cáo</a>
                       @else
-                              <a class="dropdown-item cusor-point unexpress" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Hủy quảng cáo</a>
+                        <a class="dropdown-item cusor-point unexpress" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Hủy quảng cáo</a>
                       @endif
                   </div>
               </div>

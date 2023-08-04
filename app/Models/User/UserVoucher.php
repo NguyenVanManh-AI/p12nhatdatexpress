@@ -29,5 +29,4 @@ class UserVoucher extends Model
       'user_id',
       'created_by'
     ];
-      
 }

@@ -171,9 +171,6 @@
 	.page-events .event-item .content .event-date .event-bg-green .date span {
 		font-size: 40px;
 	}
-	.widget-news .news-item .content .post-time {
-		bottom: 0;
-	}
 	.single-sidebar {
 		padding-left: 7.5px;
 	}
@@ -339,6 +336,10 @@
 	}
 }
 @media only screen and (max-width: 767px) {
+	.knowledge-item .thumbnail {
+		flex: 0 0 180px;
+		max-width: 180px;
+	}
 	.category-search-form .search-head-box {
 		display: none;
 	}
@@ -466,9 +467,6 @@
 	}
 	.link-list ul {
 		font-size: 15px;
-	}
-	.focus-right {
-		max-height: 47vh;
 	}
 	.focus-bottom .container > .row {
 		flex-direction: column;
@@ -624,9 +622,6 @@
 		width: 100%;
 		padding-bottom: 30px;
 	}
-	.fengshui-right {
-		margin-top: 15px;
-	}
 	.widget.widget-currency {
 		font-size: 14px;
 	}
@@ -719,13 +714,6 @@
 	}
 	.knowledge .section-title .tab a {
 		font-size: 16px;
-	}
-	.knowledge-item .thumbnail {
-		flex: 0 0 30vw;
-		max-width: 30vw;
-	}
-	.knowledge-item .content {
-		padding-left: 15px;
 	}
 	.popup {
 		width: calc(100% - 40px) !important;

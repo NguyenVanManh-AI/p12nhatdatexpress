@@ -716,35 +716,3 @@ function beforeLoaded() {
     });
 
 }
-
-$('.js-force-delete-button').on('click', function (e) {
-    e.preventDefault();
-
-    let url = $(this).data('url'),
-        id = $(this).data('id');
-    if (!url || !id) return;
-
-    // const selectedArray = getSelected();
-
-    Swal.fire({
-        title: 'Xác nhận xóa hẳn',
-        text: "Sau khi xóa sẽ không thể khôi phục",
-        icon: 'error',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        cancelButtonText: 'Quay lại',
-        confirmButtonText: 'Đồng ý'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // let ids = [];
-            // selectedArray.forEach(element => {
-            //     if ($(element).val())
-            //     ids.push($(element).val())
-            // })
-            $('.force-delete-item-form').attr('action', url)
-            $('.force-delete-item-form input[name="ids"]').val(id)
-            $('.force-delete-item-form').trigger('submit')
-        }
-    })
-})

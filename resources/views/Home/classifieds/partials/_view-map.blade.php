@@ -1,5 +1,5 @@
 <div class="row popup-view-map__box">
-  <div class="col-md-7-3">
+  <div class="col-md-7-3 mb-sm-0 mb-3">
     <div class="flex-column position-relative">
       <x-common.loading class="inner popup-view-map__load-utilities"/>
 
@@ -30,7 +30,7 @@
       <x-home.user.agency-detail :user="$classified->user">
         <x-slot name="footerAction">
           <div class="pt-2 px-3 text-center">
-            <a href="{{ $classified->group ? route('home.classified.detail', [$classified->group->getLastParentGroup(), $classified->classified_url]) : 'javascript:void(0);' }}"
+            <a href="{{ $classified->getShowUrl() ?: 'javascript:void(0);' }}"
               class="btn btn-success btn-sm fs-14"
             >
               Xem chi tiết tin đăng
@@ -42,7 +42,7 @@
       <x-home.user.agency-not-login :item="$classified">
         <x-slot name="footerAction">
           <div class="pt-2 px-3 text-center">
-            <a href="{{ $classified->group ? route('home.classified.detail', [$classified->group->getLastParentGroup(), $classified->classified_url]) : 'javascript:void(0);' }}"
+            <a href="{{ $classified->getShowUrl() ?: 'javascript:void(0);' }}"
               class="btn btn-success btn-sm fs-14"
             >
               Xem chi tiết tin đăng

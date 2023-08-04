@@ -2,7 +2,7 @@
     // tinymce
     tinymce.init({
         selector: '.js-admin-tiny-textarea',
-        height: 600,
+        height: 400,
         language: 'vi_VN',
         // plugins: [
         //     'advlist anchor autolink codesample fullscreen help image tinydrive',

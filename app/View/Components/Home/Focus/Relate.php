@@ -3,7 +3,6 @@
 namespace App\View\Components\Home\Focus;
 
 use App\Models\News;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
 class Relate extends Component
@@ -37,17 +36,19 @@ class Relate extends Component
      * @return void
      */
     public function get_relate_list($focus){
+        // old should check
         $this->list = collect([]);
         $ids = collect($focus->id);
 
-        foreach (explode(',', $focus->tag_list) as $tag){
+        foreach (explode(',', $focus->tag_list) as  $tag) {
             $news_has_tags = News::select('news.*', 'group.id as group_id', 'group.group_name', 'group.group_url')
                 ->showed()
                 ->whereNotNull('news.tag_list')
-                ->whereNotIn('news.id', [$ids])
+                ->whereNotIn('news.id', $ids)
                 ->where('news.tag_list', 'like', "%$tag%")
                 ->leftJoin('group', 'group.id', '=', 'news.group_id')
-                ->orderBy('news.created_at', 'desc')
+                ->latest('news.renew_at')
+                ->latest('news.created_at')
                 ->take(5)
                 ->get();
 
@@ -59,6 +60,5 @@ class Relate extends Component
                 }
             });
         }
-
     }
 }

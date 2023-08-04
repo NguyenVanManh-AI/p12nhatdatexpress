@@ -840,11 +840,13 @@ function getMyLocationToAddress() {
                 markerToAddress({location: loc}).then((r) => callbackLocationToAddress(r));
             },
             function () {
-                alert('Không hỗ trợ định vị');
+                $('.accept-location-instruct').addClass('in')
+                // alert('Không hỗ trợ định vị');
             }
         );
     } else {
-        alert('Không hỗ trợ định vị');
+        $('.accept-location-instruct').addClass('in')
+        // alert('Không hỗ trợ định vị');
     }
 }
 

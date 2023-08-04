@@ -26,15 +26,14 @@ class DepositRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        $validate_array =  [
-
+        return [
             'deposit_amount' => ['required', 'in:1,2,3,4,5,6,7,8'],
-            'deposit_voucher' => ['nullable', 'min:4', 'max:5'],
+            // 'deposit_voucher' => ['nullable', 'min:4', 'max:5'],
+            'deposit_voucher' => 'nullable',
             'deposit_code' => ['required', 'min:10', 'max:10'],
             'payment_method' => ['required','in:1,2,3'],
             'confirm_payment' => ['required','in:on'],
         ];
-        return $validate_array;
     }
 
     public function messages()
@@ -49,7 +48,6 @@ class DepositRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-
         Toastr::error('Thực hiện thanh toán không thành công');
         return parent::failedValidation($validator);
     }

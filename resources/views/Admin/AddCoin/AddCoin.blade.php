@@ -1,4 +1,7 @@
 @extends('Admin.Layouts.Master')
+
+@section('Title', 'Nạp express coin | Nạp Express coin')
+
 @section('Content')
 <section class="content">
     <div class="container-fluid">

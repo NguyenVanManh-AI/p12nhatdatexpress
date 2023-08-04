@@ -86,11 +86,6 @@
     object-fit: cover;
 }
 
-.fengshui-right .thumbnail img {
-    height: 80px;
-    object-fit: cover;
-}
-
 .fengshui-left .content {
     width: 100%;
     height: 160px;
@@ -211,7 +206,10 @@
 }
 
 .pagination .on {
-    background-color: #39b54a !important;
+    background-color: var(--success) !important;
+}
+.pagination .btn.on:hover {
+    background-image: unset;
 }
 
 .search-near, .search-near span, .search-near i {
@@ -339,7 +337,8 @@
     padding-inline: 15px;
     font-weight: 550;
     font-size: 12px;
-    line-height: 20px
+    line-height: 20px;
+    z-index: 1;
 }
 
 .list-knowledge .knowledge-item .highlight {
@@ -1485,13 +1484,13 @@ header .menu {
 }
 
 .widget-real-estate .item .thumbnail {
-    flex: 0 0 92px;
-    max-width: 92px;
+    flex: 0 0 80px;
+    max-width: 80px;
 }
 
 .widget-real-estate .item .thumbnail img {
-    width: 92px;
-    height: 92px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     border: 1px solid #1f5496;
 }
@@ -2204,8 +2203,3 @@ min-height: 0;
     height: 155px;
 
 }
-
-.thumbnail img {
-    height: 100%;
-}
-

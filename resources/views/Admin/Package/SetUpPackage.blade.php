@@ -1,6 +1,6 @@
 @extends('Admin.Layouts.Master')
 
-@section('Title', 'Quản lý gói tin')
+@section('Title', 'Thiết lập | Quản lý gói tin')
 
 @section('Style')
 <style>
@@ -176,8 +176,6 @@
                 <tbody>
              @foreach ( $list_setup as $item )
 
-             <form id="formtrash" action="{{route('admin.setup.trashlist')}}" method="POST">
-                @csrf
                     <tr>
                         <td class="active">
                             <input type="checkbox" class="select-item checkbox" name="select_item[]" value="{{$item->id}}"/>
@@ -216,129 +214,34 @@
                         </td>
                         <td>
                             @if($check_role == 1  ||key_exists(2, $check_role))
-                            <a href="{{route('admin.setup.edit',[$item->id,\Crypt::encryptString($item->created_by)])}}" class="setting-item edit mb-2" >
-                                <i class="fas fa-cog" style="width: 25px"></i> Chỉnh sửa
-                            </a>
-                            @endif
-                            @if($check_role == 1  ||key_exists(5, $check_role))
-                            <a href="javascrip:{}" class="setting-item delete text-red" style="margin-left: 2px" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">
-                                <i class="fas fa-times" style="width: 25px"></i> Xóa
-                            </a>
+                                <div class="mb-2 ml-2">
+                                    <span class="icon-small-size mr-1 text-dark">
+                                        <i class="fas fa-cog"></i>
+                                    </span>
+                                    <a href="{{route('admin.setup.edit',[$item->id,\Crypt::encryptString($item->created_by)])}}" class="text-primary ">Chỉnh sửa</a>
+                                </div>
                             @endif
 
+                            <x-admin.delete-button
+                                :check-role="$check_role"
+                                url="{{ route('admin.setup.delete-multiple', ['ids' => $item->id]) }}"
+                            />
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
-
             </table>
-
             </div>
-
-            <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                <div class="text-left d-flex align-items-center">
-                    <div class="manipulation d-flex mr-4">
-                        <img src="image/manipulation.png" alt="" id="btnTop">
-                        <div class="btn-group ml-1">
-                            <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                    data-toggle="dropdown"
-                                    aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                Thao tác
-                            </button>
-                            <div class="dropdown-menu">
-                                 @if($check_role == 1  ||key_exists(6, $check_role))
-                                <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                    <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                       style="color: white !important;font-size: 15px"></i>Thùng rác
-                                    <input type="hidden" name="action" value="trash">
-                                </a>
-                                 @else
-                                <p class="dropdown-item m-0 disabled">
-                                    Bạn không có quyền
-                                </p>
-                                 @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mx-4">
-                        <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                        <form action="{{route('admin.setup.list')}}" method="GET">
-                            <label class="select-custom2">
-                                <select id="paginateNumber" name="items" onchange="submitPaginate(event, this)">
-                                    <option @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">10</option>
-                                    <option @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">20</option>
-                                    <option @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">30</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div class="view-trash">
-                        <a href="{{route('admin.setup.trash')}}"><i class="far fa-trash-alt"></i> Xem thùng
-                            rác</a>
-                        <span class="count-trash">{{$count_trash}}</span>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center" >
-                    <div class="count-item" >Tổng cộng: @empty($list_setup) {{0}} @else {{$list_setup->total()}} @endempty items</div>
-                    <div class="count-item count-item-reponsive" style="display: none">@empty($list_setup) {{0}} @else {{$list_setup->total()}} @endempty items</div>
-                    @if($list_setup)
-                        {{ $list_setup->render('Admin.Layouts.Pagination') }}
-                    @endif
-                </div>
-            </div>
-
-
-            <!-- /Main row -->
-
-        </div><!-- /.container-fluid -->
-
+            <x-admin.table-footer
+                :check-role="$check_role"
+                :lists="$list_setup"
+                :count-trash="$count_trash"
+                view-trash-url="{{ route('admin.setup.trash') }}"
+                delete-url="{{ route('admin.setup.delete-multiple') }}"
+            />
+        </div>
     </section>
-
-
-
-
 @endsection
 @section('Script')
 <script src="js/table.js"></script>
-
-
-<script>
-    $('.delete').click(function () {
-        var id = $(this).data('id');
-        var created_by = $(this).data('created_by');
-        Swal.fire({
-            title: 'Xác nhận xóa',
-            text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "/admin/setup/delete/" + id +"/"+created_by;
-            }
-        });
-    });
-    $('.moveToTrash').click(function () {
-        // var id = $(this).data('id');
-        Swal.fire({
-            title: 'Xác nhận xóa',
-            text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $('#formtrash').submit();
-
-            }
-        });
-    });
-</script>
 @endsection

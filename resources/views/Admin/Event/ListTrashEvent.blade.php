@@ -7,12 +7,18 @@
 @endsection
 
 @section('Content')
-
-    <!-- Main content -->
-    <section class="content hiden-scroll mt-3">
+    <div class="row m-0 px-3 pt-3">
+        <ol class="breadcrumb mt-1">
+        <li class="recye px-2 pt-1  check">
+            <a href="{{ route('admin.event.list') }}">
+            <i class="fa fa-th-list mr-1"></i>Danh sách
+            </a>
+        </li>
+        </ol>
+    </div>
+    <h4 class="text-center font-weight-bold mb-3 mt-2">QUẢN LÝ THÙNG RÁC SỰ KIỆN</h4>
+    <section class="content mt-3">
         <div class="container-fluid">
-            <!-- Main row -->
-
             <div class="table-contents">
 
                 <table class="table">
@@ -22,21 +28,6 @@
                         <th>STT</th>
                         <th class="dropdown" style="min-width: 150px">
                             Tình trạng
-                            {{--                        <a href="#" class="nav-link" data-toggle="dropdown">Tình trạng</a>--}}
-                            {{--                        <div class="dropdown-menu dropdown-menu-right">--}}
-                            {{--                            <a href="#" class="dropdown-item">--}}
-                            {{--                                Đã duyệt--}}
-                            {{--                            </a>--}}
-                            {{--                            <a href="#" class="dropdown-item">--}}
-                            {{--                                Chờ duyệt--}}
-                            {{--                            </a>--}}
-                            {{--                            <a href="#" class="dropdown-item">--}}
-                            {{--                                Không duyệt--}}
-                            {{--                            </a>--}}
-                            {{--                            <a href="#" class="dropdown-item">--}}
-                            {{--                                Hết hạn--}}
-                            {{--                            </a>--}}
-                            {{--                        </div>--}}
                         </th>
                         <th>Sự kiện</th>
                         <th>Địa điểm</th>
@@ -84,18 +75,18 @@
                                     <p class="time mb-1">{{date('G', $item->start_date)}}h{{date('i', $item->start_date)}}</p>
                                     <p class="date">{{date('d/m/Y', $item->start_date)}}</p>
                                 </td>
-                                <td class="text-left">
-                                    @if( $check_role == 1 || key_exists(6, $check_role))
-                                        <div class="mb-2">
-                                            <i class="fas fa-undo-alt mr-2"></i>
-                                            <a href="javascript:{}" class="text-primary action_restore" data-c="{{$item->created_by}}" data-id="{{$item->id}}" data-created="{{\Crypt::encryptString($item->created_by)}}">Khôi phục</a>
-                                        </div>
-                                    @endif
-                                    <x-admin.force-delete-button
-                                        :check-role="$check_role"
-                                        id="{{ $item->id }}"
-                                        url="{{ route('admin.event.force-delete-multiple') }}"
-                                    />
+                                <td>
+                                    <div class="flex-column">
+                                        <x-admin.restore-button
+                                          :check-role="$check_role"
+                                          url="{{ route('admin.event.restore-multiple', ['ids' => $item->id]) }}"
+                                        />
+                      
+                                        <x-admin.force-delete-button
+                                          :check-role="$check_role"
+                                          url="{{ route('admin.event.force-delete-multiple', ['ids' => $item->id]) }}"
+                                        />
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -107,63 +98,14 @@
                     </tbody>
                 </table>
             </div>
-
-            <form action="" class="force-delete-item-form d-none" method="POST">
-                @csrf
-                <input type="hidden" name="ids">
-            </form>
-
-            <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                <div class="text-left d-flex align-items-center">
-                    <div class="manipulation d-flex mr-4">
-                        <img src="image/manipulation.png" alt="" id="btnTop">
-                        <div class="btn-group ml-1">
-                            <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                    data-toggle="dropdown"
-                                    aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                Thao tác
-                            </button>
-                            <div class="dropdown-menu">
-                                @if($check_role == 1 || key_exists(6, $check_role))
-                                    <a class="dropdown-item restoreItem" type="button" href="javascript:{}">
-                                        <i class="fas fa-undo-alt bg-blue p-1 mr-2 rounded text-center" style="color: white !important;font-size: 13px; width: 23px"></i>Khôi phục
-                                    </a>
-                                @else
-                                    <p class="dropdown-item m-0 disabled">
-                                        Bạn không có quyền
-                                    </p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mx-4">
-                        <div class="d-flex align-items-center mr-2">Hiển thị</div>
-                        <form action="{{route('admin.project.list')}}" method="GET">
-                            <label class="select-custom2">
-                                <select id="paginateNumber" name="items" onchange="submitPaginate(event, this)">
-                                    <option @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">10</option>
-                                    <option @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">20</option>
-                                    <option @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">30</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <a href="{{route('admin.event.list')}}" class="btn btn-primary">Quay lại</a>
-                </div>
-                <div class="d-flex align-items-center" >
-                    <div class="count-item" >Tổng cộng: @empty($list) {{0}} @else {{$list->total()}} @endempty items</div>
-                    <div class="count-item count-item-reponsive" style="display: none">@empty($list) {{0}} @else {{$list->total()}} @endempty items</div>
-                    @if($list)
-                        {{ $list->render('Admin.Layouts.Pagination') }}
-                    @endif
-                </div>
-            </div>
-
-            <!-- /Main row -->
-
-        </div><!-- /.container-fluid -->
+            <x-admin.table-footer
+                :check-role="$check_role"
+                :lists="$list"
+                force-delete-url="{{ route('admin.event.force-delete-multiple') }}"
+                restore-url="{{ route('admin.event.restore-multiple') }}"
+            />
+        </div>
     </section>
-    <!-- /.content -->
 @endsection
 
 @section('Script')
@@ -175,67 +117,5 @@
         function hideTextDateEnd(){
             $('#txtDateEnd').hide();
         }
-        function submitPaginate(event){
-            const uri = window.location.toString();
-            const exist = uri.indexOf('?')
-            const existItems = uri.indexOf('?items')
-            const re = /([&\?]items=\d*$|items=\d&|[?&]items=\d(?=#))/
-            exist > 0 && existItems < 0 ? window.location.href = uri.replace(re, '') + '&items=' + $('#paginateNumber').val() : window.location.href = uri.replace(re, '') + '?items=' + $('#paginateNumber').val()
-        }
-        function restoreItem(id, created)
-        {
-            Swal.fire({
-                title: 'Xác nhận khôi phục!',
-                text: `Sau khi khôi phục sẽ được chuyển sang danh sách`,
-                icon: 'warning',
-                showCancelButton: true,
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: 'btn btn-success btn-lg mr-2',
-                    cancelButton: 'btn btn-outline-secondary btn-lg'
-                },
-                confirmButtonText: 'Khôi phục',
-                cancelButtonText: 'Hủy',
-            }).then((e) => {
-                if (e.value) {
-                    window.location.href= `{{route('admin.event.restore', ['',''])}}/${id}/${created}`;
-                } else {
-                    e.dismiss;
-                }
-            })
-        }
-
-        $(document).ready(function () {
-            // restore click
-            $('.action_restore').click(function () {
-                restoreItem($(this).data('id'), $(this).data('created'))
-            })
-
-            // restote
-            $('.dropdown-item.restoreItem').click(function () {
-                const selectedArray = getSelected();
-                if (!selectedArray) return;
-                Swal.fire({
-                    title: 'Xác nhận khôi phục!',
-                    text: `Sau khi khôi phục sẽ được chuyển sang danh sách`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-success btn-lg mr-2',
-                        cancelButton: 'btn btn-outline-secondary btn-lg'
-                    },
-                    confirmButtonText: 'Khôi phục',
-                    cancelButtonText: 'Hủy',
-                }).then((e) => {
-                    if (e.value) {
-                        if (selectedArray)
-                            $('#formAction').attr('action', $('#formAction').attr('action') + '?action=restore').submit();
-                    } else {
-                        e.dismiss;
-                    }
-                })
-            })
-        });
     </script>
 @endsection

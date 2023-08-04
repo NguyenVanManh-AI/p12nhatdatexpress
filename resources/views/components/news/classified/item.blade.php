@@ -1,7 +1,7 @@
 <div class="col-12 classified-item-box flex-column px-3 pt-2 pb-2 bg-white rounded shadow mb-3 cursor-pointer">
   <div class="item-box">
-    <h3 class="item-title text-uppercase fs-18">
-      <a href="{{ route('home.classified.detail', [$item->group->getLastParentGroup(), $item->classified_url]) }}"
+    <h3 class="item-title text-uppercase fs-16">
+      <a href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}"
           class="d-flex {{ $item->isVip() || $item->isHighlight() ? 'link-red-flat' : 'link' }}">
         @if($item->isHighlight())
           <img class="hot-image ml-1" src="{{ asset('frontend/images/unnamed.gif') }}">
@@ -16,7 +16,7 @@
       <div class="d-flex">
         <div class="thumbnail-box relative">
           <a
-            href="{{ route('home.classified.detail', [$item->group->getLastParentGroup(), $item->classified_url]) }}"
+            href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}"
           >
             <div class="thumbnail-image">
               <img class="lazy object-cover" data-src="{{ $item->getThumbnailUrl() }}">

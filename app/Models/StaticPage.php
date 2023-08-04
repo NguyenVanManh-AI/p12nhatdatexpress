@@ -55,4 +55,13 @@ class StaticPage extends Model
                 $this->getTable() . '.is_show' => 1,
             ]);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $keyword = data_get($filters, 'keyword');
+
+        $query->when($keyword != null, function ($query) use ($keyword) {
+            $query->where($this->getTable() . '.page_title', 'LIKE', '%' . $keyword . '%');
+        });
+    }
 }

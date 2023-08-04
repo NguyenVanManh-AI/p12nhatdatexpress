@@ -17,14 +17,14 @@
       <label class="col-sm-3 col-form-label">Chon mẫu mail gửi</label>
       <div class="col-sm-9 d-flex align-items-start">
         <x-common.select2-input
-          class="flex-1 mb-0 mr-3 select2-auto"
+          class="flex-1 mb-0 mr-3 select2-auto miw-1"
           name="mail_template_id"
           :items="$mail_templates"
           item-text="mail_header"
           placeholder="Chúc mừng sinh nhật"
           items-current-value="{{ old('mail_template_id', $campaign->mail_template_id) }}"
         />
-        <a href="{{ route('user.template-mail') }}" class="btn btn-light-cyan">
+        <a href="{{ route('user.template-mail') }}" class="btn btn-light-cyan py-2">
           <i class="fas fa-plus-circle"></i>&nbsp;Tạo mẫu mail
         </a>
       </div>
@@ -99,24 +99,28 @@
       <div class="col-md-6">
         <x-common.text-input
           label="Thời gian phát sinh"
-          input-class="js-date-placeholder"
           :type="old('date_from', $campaign->date_from) ? 'date' : 'text'"
           name="date_from"
           value="{{ old('date_from', $campaign->date_from ? $campaign->date_from->format('Y-m-d') : '') }}"
           placeholder="Từ"
+          hover-date
         />
       </div>
 
       <div class="col-md-6">
         <x-common.text-input
           class="mt-md-4 pt-md-2"
-          input-class="js-date-placeholder"
           :type="old('date_to', $campaign->date_to) ? 'date' : 'text'"
           name="date_to"
           value="{{ old('date_to', $campaign->date_to ? $campaign->date_to->format('Y-m-d') : '') }}"
           placeholder="Đến"
+          hover-date
         />
       </div>
+    </div>
+
+    <div class="js-show-list-customers">
+       Số người nhận mail: <span class="text-light-cyan js-show-list-customers__count">0</span>
     </div>
   </div>
 </div>
@@ -156,18 +160,58 @@
   (() => {
     const checkCustomerInput = () => {
       let $parents = $('.mail-campaign__customer-fields'),
-        customers = $parents.find('[name="customers[]"]').val(),
+      customerIds = $parents.find('[name="customers[]"]').val(),
         disableInputNames = [
           'province_id', 'date_from', 'date_to', 'cus_job', 'cus_source', 'cus_status'
         ];
 
       disableInputNames.forEach(inputName => {
-        if (customers && customers.length) {
+        if (customerIds && customerIds.length) {
           $parents.find(`[name="${inputName}"]`).val('').prop('disabled', true).trigger('change')
         } else {
           $parents.find(`[name="${inputName}"]`).prop('disabled', false).trigger('change')
         }
       });
+
+      showCountCustomers(customerIds.length || 0)
+    }
+
+    const getListCustomers = () => {
+      let $form = $('.js-campaigns-form')
+
+      let data = {
+        province_id: $form.find('[name="province_id"]').val(),
+        date_from: $form.find('[name="date_from"]').val(),
+        date_to: $form.find('[name="date_to"]').val(),
+        cus_job: $form.find('[name="cus_job"]').val(),
+        cus_source: $form.find('[name="cus_source"]').val(),
+        cus_status: $form.find('[name="cus_status"]').val(),
+      }
+
+      data = Object.fromEntries(Object.entries(data).filter(([_, v]) => v));
+
+      if (!data || !Object.keys(data).length) {
+        showCountCustomers(0)
+        return
+      }
+
+      $.ajax({
+        url: '/user/campaigns/list-customers',
+        method: 'GET',
+        dataType: 'JSON',
+        data: data,
+        success: res => {
+          console.log(res)
+          showCountCustomers(res.data.customers_count)
+        },
+        error: () => {
+          showCountCustomers(0)
+        }
+      })
+    }
+
+    const showCountCustomers = count => {
+      $('.js-show-list-customers__count').html(count)
     }
 
     const checkScheduleInput = () => {
@@ -183,6 +227,14 @@
 
     $('.mail-campaign__customer-fields [name="customers[]"]').on('change', function () {
       checkCustomerInput();
+    })
+
+    $('.mail-campaign__customer-fields').on('change', 'input, select', function () {
+      let $form = $('.js-campaigns-form'),
+        customerIds = $form.find('[name="customers[]"]').val();
+
+      if (!customerIds || !customerIds.length)
+        getListCustomers()
     })
 
     $('.mail-campaign__schedule-fields [name="start_date"]').on('change', function () {

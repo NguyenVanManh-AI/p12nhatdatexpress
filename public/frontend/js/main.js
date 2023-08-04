@@ -87,6 +87,7 @@ jQuery(document).ready(function($) {
 
     var images = document.images;
     for (var i=0; i<images.length; i++) {
+        break
         images[i].src = images[i].src.replace(/\btime=[^&]*/, 'time=' + new Date().getTime());
     }
 });

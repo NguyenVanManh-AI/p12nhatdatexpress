@@ -56,6 +56,11 @@ class Group extends Model
         return $this->hasMany(Classified::class, 'group_id');
     }
 
+    public function news(): HasMany
+    {
+        return $this->hasMany(News::class);
+    }
+
     public function featuredKeywords(): MorphMany
     {
         return $this->morphMany(

@@ -55,7 +55,7 @@ class UpdateUserInfoRequest extends BaseRequest
     {
         $attributes = config('constants.validate_attribute_alias',[]);
         $user = Auth::guard('user')->user();
-        $attributes['tax_number'] = $user->user_type_id == 3 ? 'Mã số thuế' : 'CMND/CCCD';
+        $attributes['tax_number'] = $user->isEnterprise() ? 'Mã số thuế' : 'CMND/CCCD';
 
         return $attributes;
     }

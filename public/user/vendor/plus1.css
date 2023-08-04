@@ -119,10 +119,6 @@ span.text-basic.violet {
     color: darkgreen;
 }
 
-.customer-management-content a.registration-link {
-    color: #06abdd;
-}
-
 .customer-management-content a.fakebook {
     color: #0f2ab3;
 }
@@ -145,7 +141,6 @@ span.text-basic.violet {
 
 .customer-management-content .address-information .item {
     display: flex;
-    line-height: 2rem;
 }
 
 .customer-management-content .address-information .item .icon {

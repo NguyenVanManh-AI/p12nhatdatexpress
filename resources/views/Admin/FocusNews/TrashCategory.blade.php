@@ -26,10 +26,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <form action="{{route('admin.listcategory.untrashlist')}}" id="formtrash" method="post">
                             <input type="hidden" name="action" id="action_list" value="">
-
-                            @csrf
                             <table class="table table-bordered text-center table-custom" id="table"
                                    style="min-width: 1000px">
                                 <thead>
@@ -70,20 +67,15 @@
                                             <span>{{$item->group_url}}</span>
                                         </td>
                                         <td>
-                                            <div class="text-left">
-                                                @if($check_role == 1  ||key_exists(6, $check_role))
-                                                <div>
-                                                    <i class="fas fa-undo-alt"></i>
-                                                    <a class="setting-item delete text-danger action_delete cusor-point"
-                                                       data-id="{{$item->id}}"
-                                                       data-created_by="{{Crypt::encryptString($item->created_by)}}">Khôi
-                                                        phục</a>
-                                                </div>
-                                                @endif
+                                            <div class="flex-column">
+                                                <x-admin.restore-button
+                                                    :check-role="$check_role"
+                                                    url="{{ route('admin.focuscategory.restore-multiple', ['ids' => $item->id]) }}"
+                                                />
+                                
                                                 <x-admin.force-delete-button
                                                     :check-role="$check_role"
-                                                    id="{{ $item->id }}"
-                                                    url="{{ route('admin.listcategory.force-delete-multiple') }}"
+                                                    url="{{ route('admin.focuscategory.force-delete-multiple', ['ids' => $item->id]) }}"
                                                 />
                                             </div>
                                         </td>
@@ -91,76 +83,14 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                        </form>
                     </div>
 
-                    <form action="" class="force-delete-item-form d-none" method="POST">
-                        @csrf
-                        <input type="hidden" name="ids">
-                    </form>
-
-                    <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                        <div class="text-left d-flex align-items-center">
-                            <div class="manipulation d-flex mr-4">
-                                <img src="image/manipulation.png" alt="" id="btnTop">
-                                <div class="btn-group ml-1">
-                                    <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                            data-toggle="dropdown"
-                                            aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                        Thao tác
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        @if($check_role == 1  ||key_exists(6, $check_role))
-                                        <a class="dropdown-item unToTrash" type="button" href="javascript:{}">
-                                            <i class="fas fa-undo-alt bg-primary p-1 mr-2 rounded"
-                                               style="color: white !important;font-size: 15px"></i>Khôi phục
-                                            <input type="hidden" name="action" value="restore">
-                                        </a>
-                                        @else
-                                            <p class="dropdown-item m-0 disabled">
-                                                Bạn không có quyền
-                                            </p>
-                                        @endif
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="display d-flex align-items-center mr-4">
-                                <span>Hiển thị:</span>
-                                <form method="get" action="{{route('admin.focuscategory.listtrash')}}">
-                                    <select name="items" class="custom-select" onchange="this.form.submit()">
-                                        <option {{(isset($_GET['items'])&& $_GET['items']==10)?"selected":""}}  class=""
-                                                value="10">10
-                                        </option>
-                                        <option
-                                            {{(isset($_GET['items'])&& $_GET['items']==20)?"selected":""}} value="20">20
-                                        </option>
-                                        <option
-                                            {{(isset($_GET['items'])&& $_GET['items']==30)?"selected":""}} value="30">30
-                                        </option>
-                                    </select>
-                                </form>
-                            </div>
-                            <div>
-                                @if($check_role == 1  ||key_exists(4, $check_role))
-                                <a href="{{route('admin.focuscategory.list')}}" class="btn btn-primary">
-                                    Quay lại
-                                </a>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="count-item">Tổng cộng: @empty($group) {{0}} @else {{$group->total()}} @endempty
-                                items
-                            </div>
-                            @if($group)
-                                {{ $group->render('Admin.Layouts.Pagination') }}
-                            @endif
-                        </div>
-
-                    </div>
-
+                    <x-admin.table-footer
+                        :check-role="$check_role"
+                        :lists="$group"
+                        force-delete-url="{{ route('admin.focuscategory.force-delete-multiple') }}"
+                        restore-url="{{ route('admin.focuscategory.restore-multiple') }}"
+                    />
                 </div>
             </div>
         </div>

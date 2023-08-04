@@ -77,23 +77,16 @@
                     @endif
                 </div>
 
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 p-2">
-                    <label>Danh mục <span class="required"></span></label>
-                    <div class="search-reponsive">
-                        <select name="group_id" class="form-control select2" style="width: 100%;height: 34px !important;">
-                            @foreach($group as $item)
-                                <option
-                                    {{( old('group_id') == $item->id || $news->group_id == $item->id) ? "selected" : ""}}
-                                    value="{{$item->id}}">{{(isset($item->child))?"---- ".$item->group_name:$item->group_name}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @if($errors->has('group_id'))
-                        <small class="text-danger">
-                            {{$errors->first('group_id')}}
-                        </small>
-                    @endif
+                <div class="col-md-6 p-2">
+                    <x-common.select2-input
+                        label="Danh mục"
+                        name="group_id"
+                        :items="$groups"
+                        item-text="group_name"
+                        placeholder="Chọn danh mục"
+                        items-current-value="{{ $news->group_id }}"
+                        required
+                    />
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 p-2">
@@ -251,6 +244,8 @@
     <!-- /.content -->
 @endsection
 @section('Script')
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js'></script>
+
     <script>
         @if(count($errors) > 0)
         toastr.error("Vui lòng kiểm tra các trường");

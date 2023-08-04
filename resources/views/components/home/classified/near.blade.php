@@ -11,8 +11,8 @@
         <span class="note">Cần xác định vị trí để hiển thị chính xác thông tin</span>
     </div>
     <div class="near-list">
-       @foreach($list as $i)
-        <x-home.classified.near-item  :item="$i" />
+        @foreach($list as $item)
+            <x-home.classified.near-item  :item="$item" />
         @endforeach
     </div>
 </div>

@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserViolate extends Model
 {
     use HasFactory,
-        SoftDeletes;
-    use AdminHistoryTrait;
+        SoftDeletes,
+        AdminHistoryTrait;
 
     protected $fillable = [
         'user_id',

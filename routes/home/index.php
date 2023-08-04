@@ -10,11 +10,13 @@ use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Param\ParamController;
 use App\Http\Controllers\Home\ProjectController;
 use App\Http\Controllers\Home\Focus\FocusController;
+use App\Http\Controllers\Home\FocusController as HomeFocusController;
 use App\Http\Controllers\Home\PhoneBook\ConsultantsController;
 use App\Http\Controllers\Home\PhoneBook\EnterpriseController;
 use App\Http\Controllers\Home\Project\CommentController as ProjectCommentController;
 use App\Http\Controllers\Home\Project\CommentProjectController;
 use App\Http\Controllers\Home\StaticPageController;
+use App\Http\Controllers\User\Mail\CampaignController;
 use App\Http\Controllers\User\UserPostController;
 use App\Models\StaticPage;
 
@@ -86,11 +88,15 @@ Route::name('home.')->prefix('/')->middleware('visitor')->group(function() {
         Route::get('/', [FocusController::class, 'list'])->name('list');
         Route::get('/{group_url}', [FocusController::class, 'list_children'])->name('list-children');
         Route::get('/{group_url}/{focus_url}.html', [FocusController::class, 'detail'])->name('detail');
-        Route::post('/ajax-new', [FocusController::class, 'ajax_new'])->name('ajax_new');
-        Route::post('/ajax-list/{group_id}', [FocusController::class, 'ajax_list'])->name('ajax_list');
         Route::post('/ajax-knowledge/{group_id}', [FocusController::class, 'ajax_knowledge'])->name('ajax_knowledge');
-        Route::post('/ajax-toggle-like/{focus_id}', [FocusController::class, 'ajax_toggle_like'])->name('ajax_toggle_like');
-        Route::post('/ajax-toggle-dislike/{focus_id}', [FocusController::class, 'ajax_toggle_dislike'])->name('ajax_toggle_dislike');
+    });
+
+    Route::group([
+        'prefix' => 'focus'
+    ], function () {
+        Route::get('more-news', [HomeFocusController::class, 'moreNews']);
+        Route::post('/toggle-reaction', [HomeFocusController::class, 'toggleReaction']);
+        Route::get('/get-description', [HomeFocusController::class, 'getDescription']);
     });
 
     Route::get('danh-ba/chuyen-vien-tu-van', [ConsultantsController::class, 'index'])->name('danh-ba.chuyen-vien-tu-van');
@@ -156,6 +162,12 @@ Route::name('home.')->prefix('/')->middleware('visitor')->group(function() {
         // rating
         Route::post('/rating/{event_id}',[EventController::class, 'rating']);
         Route::post('/{id}/send-advisory', [EventController::class, 'sendAdvisory'])->name('send-advisory');;
+    });
+
+    Route::group([
+        'prefix' => '/user/campaigns',
+    ], function () {
+        Route::get('list-customers',[CampaignController::class, 'listCustomers']);
     });
 
     Route::get('tin-rao/view-map/{id}', [ClassifiedController::class, 'viewMap'])->name('view-map');

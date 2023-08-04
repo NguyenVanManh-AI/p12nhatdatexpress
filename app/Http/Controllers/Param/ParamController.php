@@ -272,7 +272,6 @@ class ParamController extends Controller
 
     public function set_location(Request $request)
     {
-
         Session::put('province', $request->province_location);
         Session::put('district', $request->district_location);
         Session::put('latLng', [
@@ -290,8 +289,19 @@ class ParamController extends Controller
         if ($request->province_id)
             Session::put('province', $request->province_id);
 
-        if ($request->district_id)
+        if ($request->district_id) {
             Session::put('district', $request->district_id);
+            $district = District::find($request->district_id);
+            if ($district) {
+                Session::put('province', $district->province_id);
+            }
+        }
+
+        if ($request->lat && $request->lng)
+            Session::put('latLng', [
+                'lat' => $request->lat,
+                'lng' => $request->lng,
+            ]);
 
         return response()->json([
             'success' => true,

@@ -1276,15 +1276,24 @@ input#upload-ava {
     font-weight: 400;
 }
 .content-introduce-account-done .delete-account {
-    background-image: url('/frontend/images/loi11.jpg');
     width: 100%;
     height: 200px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    z-index: 1;
+}
+.content-introduce-account-done .account__delete-button {
+    position: relative;
+    z-index: 1;
+}
+.content-introduce-account-done .account__delete-background {
+    background-image: url('/frontend/images/loi11.jpg');
+    background-size: auto 200px;
+    background-repeat: no-repeat;
+    background-position: top 5px center;
+    opacity: .4;
 }
 .content-introduce-account-done .delete-account h5 {
     font-size: 30px;

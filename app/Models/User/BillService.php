@@ -51,7 +51,7 @@ class BillService extends Model
 
     // relationship user detail
     public function user_detail(){
-        return $this->belongsTo(User\UserDetail::class, 'user_id', 'id');
+        return $this->belongsTo(User\UserDetail::class, 'user_id', 'user_id');
     }
 
     // relationship user detail

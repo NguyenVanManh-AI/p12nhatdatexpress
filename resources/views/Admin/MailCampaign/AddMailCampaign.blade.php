@@ -4,11 +4,6 @@
 {{-- link css project chính --}}
 <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">
 {{-- màu hiển thị thanh toastr --}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/select2/3.4.8/select2.css'>
-<style type="text/css">
-  #error{background: red;}
-</style>
 <style type="text/css">
     .select2-container {
         height: auto;

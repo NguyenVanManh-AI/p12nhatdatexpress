@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class CategoryPageConfigController extends Controller
 {
-    protected $var_array = array(2, 10, 18);
+    protected $var_array = array(2, 10, 18, 34);
 
     //lấy thông tin cấu hình củ
     public function page_config()

@@ -91,8 +91,15 @@
                                 <input type="hidden" class="select-item checkbox" name="select_item_created[{{$item->id}}]" value="{{\Crypt::encryptString($item->confirmed_by)}}" /></td>
                             </td>
                             <td>{{$item->id}}</td>
-                            <td>
-                                <h3 class="title mb-3 text-left"><a href="javascript:{}">{{$item->classified_name}}</a></h3>
+                            <td class="mw-250px">
+                                <h3 class="title mb-3 text-left w-100 text-ellipsis">
+                                    <a
+                                        href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}"
+                                        target="_blank"
+                                    >
+                                        {{  strlen($item->classified_name) > 40 ? substr($item->classified_name, 0, 39) . '...' : $item->classified_name  }}
+                                    </a>
+                                </h3>
                                 <div class="text-left text-gray">
                                     <p class="mb-0">Người đăng: {{data_get($item->user_detail, 'fullname')}}</p>
                                     <p class="mb-0">Mã tin: {{$item->id}}</p>
@@ -101,7 +108,6 @@
                             <td>
                                 <div class="content-report">
                                     <div class="list-report mb-2">
-
                                         @foreach($item->report_classified->groupBy('report_type') as $i)
                                             <div class="item mb-2">{{$i[0]->report_group->content}}<span class="text-gray">({{count($i)}})</span></div>
                                         @endforeach

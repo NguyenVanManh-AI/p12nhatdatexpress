@@ -595,20 +595,6 @@ footer .footer li {
     margin: 0 5px;
 }
 
-.focus .title a {
-    font-size: 18px;
-    color: #000;
-    font-weight: 600;
-}
-
-.focus .title a:hover {
-    color: #DD0000;
-}
-
-.focus .owl-nav button {
-    top: 25%;
-}
-
 .list-house {
     background-color: #f1f1f1;
     border: 1px solid #d6d2c7;

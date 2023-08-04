@@ -19,7 +19,6 @@
                         <h3 class="title text-break"><a class="{{$event->is_highlight ? 'highlight' : '' }}" href="su-kien/{{$event->event_url}}">{{$event->event_title}}</a></h3>
                         <span class="location">
                             {{ $event->getLocationAddress() }}
-                            {{-- {{$event->location->district->district_name}}, {{$event->location->province->province_name}} --}}
                          </span>
                         <span class="post-time">{{date('d/m/Y', $event->start_date)}}</span>
                     </div>

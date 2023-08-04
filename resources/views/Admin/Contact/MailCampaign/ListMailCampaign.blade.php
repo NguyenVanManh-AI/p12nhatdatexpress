@@ -124,9 +124,6 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <form action="{{route('admin.email-campaign.delete-mail-campaign-list')}}" id="formtrash"
-                              method="post">
-                            @csrf
                             <table class="table table-bordered text-center table-hover table-custom " id="table"
                                    style="min-width: 1050px">
                                 <thead>
@@ -221,7 +218,6 @@
 
                                 </tbody>
                             </table>
-                        </form>
                     </div>
                     <div class="table-bottom d-flex align-items-center justify-content-between  pb-5">
                         <div class=" d-flex box-panage align-items-center">

@@ -10,6 +10,9 @@ use App\Models\User\Customer;
 use App\Models\UserMailCampaign;
 use App\Services\Users\MailCampaignService;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CampaignController extends Controller
@@ -141,5 +144,32 @@ class CampaignController extends Controller
 
         Toastr::success('Hủy đăng ký nhận email thành công.');
         return redirect(route('home.index'));
+    }
+
+    /**
+     * Get list customers send mail
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listCustomers(Request $request): JsonResponse
+    {
+        $user = Auth::guard('user')->user();
+        $params = [
+            'job_id' => $request->cus_job,
+            'source_id' => $request->cus_source,
+            'status_id' => $request->cus_status,
+            'province_id' => $request->province_id,
+            'date_from' => $request->date_from ? Carbon::parse($request->date_from)->startOfDay()->timestamp : null,
+            'date_to' => $request->date_to ? Carbon::parse($request->date_to)->endOfDay()->timestamp : null,
+        ];
+
+        $customers = $this->campaignService->getCustomersFromParams($user, $params);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'customers_count' => $customers->count()
+            ]
+        ]);
     }
 }

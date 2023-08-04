@@ -19,10 +19,10 @@
                     {{ $item->getPriceWithUnit() }}
                 </div>
                 <div class="area bold text-danger prepend-image-icon-area">
-                    {{number_format($item->classified_area,0,'','.')}} {{$item->unit_area->unit_name}}
+                    {{ $item->getAreaLabel() }}
                 </div>
                 <div class="location bold text-danger prepend-image-icon-address">
-                    {{ data_get($item->location, 'district.district_name') . ', ' . data_get($item->location, 'province.province_name') }}
+                    {{ $item->getFullAddress(['province', 'district']) }}
                 </div>
             </div>
             <div class="right">

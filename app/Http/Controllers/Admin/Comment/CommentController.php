@@ -58,81 +58,6 @@ class CommentController extends Controller
 
     //bình luận dự án -------------------------------------------------------------------------
 
-    //xóa 1 bình luận
-    public function trash_item_project($id)
-    {
-        $comment = ProjectComment::findOrFail($id);
-        $comment->delete();
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục 1 bình luận
-    public function untrash_item_project($id)
-    {
-        $comment = ProjectComment::onlyIsDeleted()->findOrFail($id);
-        $comment->restore();
-
-        Toastr::success('Thành công');
-        return back();
-    }
-
-    //xóa nhiều bình luận
-    public function trash_list_project(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $comment = ProjectComment::find($id);
-            if (!$comment) continue;
-            $comment->delete();
-        }
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục nhiều bình luận
-    public function untrash_list_project(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $id) {
-            $comment = ProjectComment::onlyIsDeleted()->find($id);
-            if (!$comment) continue;
-            $comment->restore();
-        }
-
-        Toastr::success('Thành công');
-        return back();
-    }
-
-    public function listProjectForceDeleteMultiple(Request $request)
-    {
-        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
-
-        ProjectComment::withIsDeleted()
-            ->find($ids)
-            ->each(function ($item) {
-                foreach ($item->children()->withIsDeleted()->get() as $child) {
-                    $child->forceDelete();
-                }
-                $item->forceDelete();
-
-                // should create log force delete
-            });
-
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
-
     public function trash_project(Request $request)
     {
         $items = 10;
@@ -140,7 +65,7 @@ class CommentController extends Controller
             $items = $request->items;
         }
 
-        $listQuery = ProjectComment::query()
+        $listQuery = ProjectComment::onlyIsDeleted()
             ->join('user', 'project_comment.user_id', 'user.id')
             ->join('user_detail', 'user_detail.user_id', 'user.id')
             ->join('project', 'project.id', 'project_comment.project_id')
@@ -170,8 +95,7 @@ class CommentController extends Controller
             $listQuery = $listQuery->where('project.created_by', $admin_id);
         }
         //phân quyền
-        $list = $listQuery->onlyIsDeleted()
-            ->latest('project_comment.id')
+        $list = $listQuery->latest('project_comment.id')
             ->paginate($items);
 
         return view('Admin/Comment/TrashListCommentProject', [
@@ -205,10 +129,10 @@ class CommentController extends Controller
             'user.phone_number'
         )
             ->with('project', 'user')
-            ->join('user', 'project_comment.user_id', 'user.id')
-            ->join('user_detail', 'user_detail.user_id', 'user.id')
-            ->join('project', 'project.id', 'project_comment.project_id')
-            ->join('group', 'group.id', 'project.group_id');
+            ->leftJoin('user', 'project_comment.user_id', 'user.id')
+            ->leftJoin('user_detail', 'user_detail.user_id', 'user.id')
+            ->leftJoin('project', 'project.id', 'project_comment.project_id')
+            ->leftJoin('group', 'group.id', 'project.group_id');
 
         //phân quyền
         if ($request->request_list_scope == 2) { // group
@@ -251,10 +175,11 @@ class CommentController extends Controller
             $listQuery->where('user.is_forbidden', '=', 1);
         }
 
+        $trashQuery = clone $listQuery;
+        $count_trash = $trashQuery->onlyIsDeleted()->count();
+
         $list = $listQuery->latest('project_comment.id')
             ->paginate($items);
-
-        $count_trash = ProjectComment::onlyIsDeleted()->count();
 
         return view('Admin.Comment.ListCommentProject', [
             'list' => $list,
@@ -296,83 +221,6 @@ class CommentController extends Controller
         return redirect(route('admin.comment.list-project'));
     }
 
-    //xóa 1 bình luận
-    public function trash_item_classified($id)
-    {
-        $comment = ClassifiedComment::findOrFail($id);
-        $comment->delete();
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục 1 bình luận
-    public function untrash_item_classified($id)
-    {
-        $comment = ClassifiedComment::onlyIsDeleted()->findOrFail($id);
-        $comment->restore();
-
-        Toastr::success('Thành công');
-        return back();
-    }
-
-    //xóa nhiều bình luận
-    public function trash_list_classified(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $comment = ClassifiedComment::find($id);
-            if (!$comment) continue;
-
-            $comment->delete();
-        }
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục nhiều bình luận
-    public function untrash_list_classified(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $comment = ClassifiedComment::onlyIsDeleted()->findOrFail($id);
-            if (!$comment) continue;
-
-            $comment->restore();
-        }
-
-        Toastr::success('Thành công');
-        return back();
-    }
-
-    public function listClassifiedForceDeleteMultiple(Request $request)
-    {
-        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
-
-        ClassifiedComment::withIsDeleted()
-            ->find($ids)
-            ->each(function ($item) {
-                foreach ($item->children()->withIsDeleted()->get() as $child) {
-                    $child->forceDelete();
-                }
-                $item->forceDelete();
-                // should create log force delete
-            });
-
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
-
     public function trash_classified(Request $request)
     {
         $items = 10;
@@ -381,13 +229,12 @@ class CommentController extends Controller
         }
 
         // old should improve
-        $listQuery = ClassifiedComment::query()
+        $listQuery = ClassifiedComment::onlyIsDeleted()
             ->select('classified_comment.id', 'classified_comment.comment_content', 'classified_comment.created_at', 'user.username', 'group.group_name', 'classified_comment.user_id as created_by', 'classified.classified_url', 'user.is_forbidden', 'user.is_locked')
-            ->join('user', 'classified_comment.user_id', 'user.id')
-            ->join('user_detail', 'user_detail.user_id', 'user.id')
-            ->join('classified', 'classified.id', 'classified_comment.classified_id')
-            ->join('group', 'group.id', 'classified.group_id')
-            ->onlyIsDeleted();
+            ->leftJoin('user', 'classified_comment.user_id', 'user.id')
+            ->leftJoin('user_detail', 'user_detail.user_id', 'user.id')
+            ->leftJoin('classified', 'classified.id', 'classified_comment.classified_id')
+            ->leftJoin('group', 'group.id', 'classified.group_id');
 
         if ($request->request_list_scope == 2) { // group
             $admin_role_id = Auth::guard('admin')->user()->rol_id;
@@ -457,89 +304,6 @@ class CommentController extends Controller
         return back();
     }
 
-    //xóa 1 bình luận
-    public function trash_item_user_post($id)
-    {
-        //kiểm tra tk có tồn tại
-        $comment = UserPostComment::findOrFail($id);
-
-        $comment->delete();
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục 1 bình luận
-    public function untrash_item_user_post($id)
-    {
-        $comment = UserPostComment::onlyIsDeleted()
-            ->findOrFail($id);
-        $comment->restore();
-
-        Toastr::success('Thành công');
-        return back();
-    }
-
-    //xóa nhiều bình luận
-    public function trash_list_user_post(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $comment = UserPostComment::find($id);
-
-            if (!$comment) continue;
-
-            $comment->delete();
-        }
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục nhiều bình luận
-    public function untrash_list_user_post(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $id) {
-            $comment = UserPostComment::onlyIsDeleted()->find($id);
-
-            if (!$comment) continue;
-
-            $comment->restore();
-        }
-
-        Toastr::success('Khôi phục thành công');
-        return back();
-    }
-
-    public function userPostForceDeleteMultiple(Request $request)
-    {
-        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
-
-        UserPostComment::withIsDeleted()
-            ->find($ids)
-            ->each(function ($item) {
-                foreach ($item->children()->withIsDeleted()->get() as $child) {
-                    $child->forceDelete();
-                }
-                $item->forceDelete();
-
-                // should create log force delete
-            });
-
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
-
     public function trash_user_post(Request $request)
     {
         $items = 10;
@@ -547,13 +311,12 @@ class CommentController extends Controller
             $items = $request->items;
         }
 
-        $listQuery = UserPostComment::query()
+        $listQuery = UserPostComment::onlyIsDeleted()
             ->select('user_post_comment.id', 'user_post_comment.comment_content', 'user_post_comment.created_at', 'user.username', 'user_post_comment.user_id as created_by', 'user_post.post_code', 'user.is_forbidden', 'user.is_locked')
-            ->join('user', 'user_post_comment.user_id', 'user.id')
-            ->join('user_detail', 'user_detail.user_id', 'user.id')
-            ->join('user_post', 'user_post.id', 'user_post_comment.user_post_id')
-            ->onlyIsDeleted()
-            ->join('admin', 'user_post.created_by', '=', 'admin.id');
+            ->leftJoin('user', 'user_post_comment.user_id', 'user.id')
+            ->leftJoin('user_detail', 'user_detail.user_id', 'user.id')
+            ->leftJoin('user_post', 'user_post.id', 'user_post_comment.user_post_id')
+            ->leftJoin('admin', 'user_post.created_by', '=', 'admin.id');
 
         //phân quyền
         if ($request->request_list_scope == 2) {
@@ -643,10 +406,12 @@ class CommentController extends Controller
             $listQuery->where('user.is_forbidden', '=', 1);
         }
 
+        $trashQuery = clone $listQuery;
+
         $list = $listQuery->latest('user_post_comment.id')
             ->paginate($items);
 
-        $count_trash = UserPostComment::onlyIsDeleted()->count();
+        $count_trash = $trashQuery->onlyIsDeleted()->count();
 
         return view('Admin/Comment/ListCommentUserPost', [
             'list' => $list,

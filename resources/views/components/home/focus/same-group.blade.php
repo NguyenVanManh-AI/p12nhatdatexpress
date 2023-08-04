@@ -3,7 +3,7 @@
 
         <h2 class="title">Cùng chuyên mục</h2>
 
-        <a href="{{route('home.focus.list-children', $group_url)}}" class="view-more">Xem thêm</a>
+        <a href="{{route('home.focus.list-children', $group_url)}}" class="custom-view-more">Xem thêm</a>
 
     </div>
 

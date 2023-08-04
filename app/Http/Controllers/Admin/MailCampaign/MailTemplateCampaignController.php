@@ -76,79 +76,32 @@ class MailTemplateCampaignController extends Controller
         return view('Admin.MailCampaign.AddMailTemplate');
     }
 
-    //hàm xóa 1 mẫu mail
-    public function delete_mail_template($id)
+    public function deleteMultiple(Request $request)
     {
-        $template = $this->mailTemplateService->getPermissionQuery()
-            ->findOrFail($id);
-        $template->delete();
-
-        // $data = [
-        //     'id' => $id,
-        //     'is_deleted' => 1
-        // ];
-        // Helper::create_admin_log(179, $data);
-
-        Toastr::success('Chuyển vào thùng rác thành công');
-        return back();
-    }
-
-    //khôi phục 1 mẫu mail
-    public function un_delete_mail_template($id)
-    {
-        $template = $this->mailTemplateService->getPermissionQuery()
-            ->onlyIsDeleted()
-            ->findOrFail($id);
-
-        $template->restore();
-        // $data = [
-        //     'id' => $id,
-        //     'is_deleted' => 0
-        // ];
-        // Helper::create_admin_log(180, $data);
-
-        Toastr::success('Khôi phục thành công');
-        return back();
-    }
-
-    //xóa nhiều bình mẫu mail
-    public function delete_mail_template_list(Request $request)
-    {
-        $ids = is_array($request->select_item) ? $request->select_item : explode(',', $request->select_item);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
         $this->mailTemplateService->getPermissionQuery()
             ->find($ids)
             ->each(function($item) {
                 $item->delete();
-                // $data = [
-                //     'id' => $item->id,
-                //     'is_deleted' => 1
-                // ];
-                // Helper::create_admin_log(179, $data);
             });
 
-        Toastr::success('Chuyển vào thùng rác thành công');
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    //khôi phục nhiều bình mẫu mail
-    public function un_delete_mail_template_list(Request $request)
+    public function restoreMultiple(Request $request)
     {
-        $ids = is_array($request->select_item) ? $request->select_item : explode(',', $request->select_item);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
         $this->mailTemplateService->getPermissionQuery()
             ->onlyIsDeleted()
             ->find($ids)
             ->each(function($item) {
                 $item->restore();
-                // $data = [
-                //     'id' => $item->id,
-                //     'is_deleted' => 0
-                // ];
-                // Helper::create_admin_log(180, $data);
             });
 
-        Toastr::success('Khôi phục thành công');
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 
@@ -222,7 +175,7 @@ class MailTemplateCampaignController extends Controller
             ->latest('admin_mail_template.id')
             ->paginate($items);
         //đếm item đã xóa
-        $trash_num = $this->mailTemplateService->getPermissionQuery()
+        $trash_num = $this->mailTemplateService->getPermissionQuery($request)
             ->onlyIsDeleted()->count();
 
         //truyền list và trash_num sang view
@@ -230,7 +183,7 @@ class MailTemplateCampaignController extends Controller
     }
 
     //danh sách thùng rác
-    public function trash_list_mail_template(Request $request)
+    public function trash(Request $request)
     {
         //lấy ra 10 dòng
         $items = 10;
@@ -305,11 +258,6 @@ class MailTemplateCampaignController extends Controller
                         'updated_by' => Auth::guard('admin')->user()->id
                     ]);
                 });
-            // $data = [
-            //     'id' => $request->select_item[$i],
-            //     'show_order' => $value
-            // ];
-            // Helper::create_admin_log(181, $data);
         }
 
         Toastr::success("Thành công");

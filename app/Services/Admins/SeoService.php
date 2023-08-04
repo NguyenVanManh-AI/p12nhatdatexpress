@@ -3,6 +3,7 @@
 namespace App\Services\Admins;
 
 use App\Models\Province;
+use Illuminate\Support\Facades\Auth;
 
 class SeoService
 {
@@ -21,13 +22,20 @@ class SeoService
             'keyword' => data_get($queries, 'keyword'),
         ];
 
-        $provinces = Province::filter($filters)
+        $provinces = $this->getPermissionQuery()
+            ->filter($filters)
             ->showed()
             ->oldest('province_name')
             ->skip(($page - 1) * $itemsPerPage)
             ->paginate($itemsPerPage);
 
         return $provinces;
+    }
+
+    public function getById($id)
+    {
+        return $this->getPermissionQuery()
+            ->findOrFail($id);
     }
 
     /**
@@ -52,5 +60,18 @@ class SeoService
         // create log
 
         return $province;
+    }
+
+    /**
+     * get query from permission
+     *
+     * @return $query
+     */
+    public function getPermissionQuery()
+    {
+        $query = Province::select('province.*')
+            ->showed();
+
+        return $query;
     }
 }

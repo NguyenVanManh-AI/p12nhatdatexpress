@@ -9,7 +9,7 @@
         <x-home.focus.high-light :group="$group"/>
 
         <section class="focus-bottom">
-            <div class="container">
+            <div class="">
                 <div class="row">
                     <div class="col-md-7-3">
                         <div class="content-main">
@@ -25,7 +25,7 @@
                             <br>
                         </div>
                     </div>
-                    <div class="col-md-3-7 pr-0">
+                    <div class="col-md-3-7">
                         <div class="sidebar-right">
 
                             <!-- search -->

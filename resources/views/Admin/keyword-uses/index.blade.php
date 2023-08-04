@@ -94,7 +94,7 @@
         <table class="table">
           <thead class="thead-main">
             <tr>
-              {{-- <th class="text-center"><input type="checkbox" class="select-all checkbox" name="select-all" /></th> --}}
+              <th class="text-center"><input type="checkbox" class="select-all checkbox" name="select-all" /></th>
               <th class="text-center">#</th>
               <th>Nội dung</th>
               <th class="text-center">Lượt tìm kiếm</th>
@@ -107,10 +107,10 @@
             <input type="hidden" name="action" id="action_list" value="">
             @foreach ($featuredKeywords as $keyword)
               <tr>
-                {{-- <td class="text-center">
+                <td class="text-center">
                   <input type="checkbox" class="select-item checkbox" name="select_item[]" value="{{$keyword->id}}" />
                   <input type="hidden" class="select-item checkbox" name="select_item_created[{{$keyword->id}}]" value="{{\Crypt::encryptString($keyword->confirmed_by)}}" />
-                </td> --}}
+                </td>
                 <td class="text-center">
                   {{ ($featuredKeywords->currentPage() - 1) * $featuredKeywords->perPage() + $loop->index + 1 }}
                 </td>
@@ -143,38 +143,26 @@
                   {{ $keyword->created_at->format('d-m-Y') }}
                 </td>
                 <td>
-                  <div class="flex-end">
+                  <div class="flex-column">
                     @if(!$keyword->deleted_at)
                       @if($check_role == 1 || key_exists(2, $check_role))
                         <a href="{{ route('admin.keywords.edit', $keyword) }}" class="btn btn-sm btn-info mb-2 mr-2" title="Chỉnh sửa">
                           <i class="fas fa-edit"></i>
                         </a>
                       @endif
-                      @if($check_role == 1 || key_exists(5, $check_role))
-                        <form action="{{ route('admin.keywords.delete', $keyword) }}" class="d-inline-block" method="POST">
-                          @csrf
-                          @method('DELETE')
-                          <button type="button" class="btn btn-sm btn-danger mb-2 mr-2 submit-accept-alert" data-action="xóa" title="Xóa">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </form>
-                      @endif
+                      <x-admin.delete-button
+                        :check-role="$check_role"
+                        url="{{ route('admin.keywords.delete-multiple', ['ids' => $keyword->id]) }}"
+                      />
                     @else
-                      @if($check_role == 1 || key_exists(6, $check_role))
-                        <form action="{{ route('admin.keywords.restore', $keyword) }}" class="d-inline-block" method="POST">
-                          @csrf
-                          @method('PUT')
-                          <button type="button" class="btn btn-sm btn-success mb-2 mr-2 submit-accept-alert" data-action="khôi phục" title="Khôi phục">
-                            <i class="fas fa-redo"></i>
-                          </button>
-                        </form>
-                      @endif
+                      <x-admin.restore-button
+                        :check-role="$check_role"
+                        url="{{ route('admin.keywords.restore-multiple', ['ids' => $keyword->id]) }}"
+                      />
 
                       <x-admin.force-delete-button
                         :check-role="$check_role"
-                        id="{{ $keyword->id }}"
-                        url="{{ route('admin.keywords.force-delete-multiple') }}"
-                        is-button
+                        url="{{ route('admin.keywords.force-delete-multiple', ['ids' => $keyword->id]) }}"
                       />
                     @endif
                   </div>
@@ -185,50 +173,17 @@
         </table>
       </div>
 
-      <form action="" class="force-delete-item-form d-none" method="POST">
-        @csrf
-        <input type="hidden" name="ids">
-      </form>
-
-      <!-- /Main row -->
-      <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-        <div class="text-left d-flex align-items-center">
-          <div class="display d-flex align-items-center mr-4">
-            <a href="javascript:void(0);" class="mr-2">
-              <img src="{{ asset('/system/image/manipulation.png') }}" class="js-go-to-top cursor-pointer py-1"
-                title="Về đầu trang" alt="">
-              </a>
-            <span class="mr-2">Hiển thị:</span>
-            <form method="get" id="paginateform" action="{{ route('admin.classified.list') }}">
-              <select class="custom-select" id="paginateNumber" name="items">
-                <option @if (request()->items == 10) {{ 'selected' }} @endif value="10">
-                  10
-                </option>
-                <option @if (request()->items == 20) {{ 'selected' }} @endif value="20">
-                  20
-                </option>
-                <option @if (request()->items == 30) {{ 'selected' }} @endif value="30">
-                  30
-                </option>
-              </select>
-            </form>
-          </div>
-          {{-- @if ($check_role == 1 || key_exists(8, $check_role))
-            <div class="view-trash">
-              <a href="{{ route('admin.classified.listtrash') }}" class=" text-primary"><i
-                  class="text-primary far fa-trash-alt"></i>
-                Xem thùng rác</a>
-              <span class="count-trash">{{ $trash_count }}</span>
-            </div>
-          @endif --}}
-        </div>
-        <div class="d-flex align-items-center">
-          <div class="count-item">Tổng cộng: {{ $featuredKeywords->total() }} mục</div>
-          @if ($featuredKeywords)
-            {{ $featuredKeywords->render('Admin.Layouts.Pagination') }}
-          @endif
-        </div>
-      </div>
+      <x-admin.table-footer
+        :check-role="$check_role"
+        :lists="$featuredKeywords"
+        delete-url="{{ route('admin.keywords.delete-multiple') }}"
+        force-delete-url="{{ route('admin.keywords.force-delete-multiple') }}"
+        restore-url="{{ route('admin.keywords.restore-multiple') }}"
+      />
     </div>
   </section>
+@endsection
+
+@section('Script')
+  <script src="js/table.js"></script>
 @endsection

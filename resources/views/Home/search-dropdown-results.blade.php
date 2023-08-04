@@ -6,7 +6,7 @@
         class="flex-start w-100 p-2 hover-bg-gray"
         href="{{
           $type == 'classified'
-            ? route('home.classified.detail', [$result->group->getLastParentGroup(), $result->classified_url])
+            ? $result->getShowUrl()
             : route('home.project.project-detail', [$result->project_url])
         }}"
       >
@@ -20,7 +20,7 @@
               <img class="icon-squad-2 mr-1" src="{{ asset('frontend/images/unnamed.gif') }}">
             @endif
 
-            <h4 class="result-title text-uppercase text-ellipsis text-break ellipsis-2 fs-12 mb-0 {{ $type == 'classified' && ($result->isVip() || $result->isHighlight()) ? 'link-red-flat' : 'link' }}">
+            <h4 class="result-title text-uppercase text-ellipsis text-break ellipsis-2 lh-12 fs-12 mb-0 {{ $type == 'classified' && ($result->isVip() || $result->isHighlight()) ? 'link-red-flat' : 'link' }}">
               {{ $type == 'classified' ? $result->classified_name : $result->project_name }}
             </h4>
           </div>

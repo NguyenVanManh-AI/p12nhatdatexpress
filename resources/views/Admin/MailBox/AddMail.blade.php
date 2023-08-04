@@ -4,16 +4,6 @@
 {{-- link css project chính --}}
 <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">
 {{-- link css toastr --}}
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-{{-- link js toastr --}}
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-{{-- màu hiển thị thanh toastr --}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/select2/3.4.8/select2.css'>
-
-<style type="text/css">
-  #error{background: red;}
-</style>
 
 @endsection
 @section('Content')

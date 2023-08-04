@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,7 +44,8 @@ class Page extends Model
         'created_at',
         'updated_by',
         'updated_at',
-        'show_order'
+        'show_order',
+        'is_show'
     ];
 
     public function children()
@@ -53,5 +55,18 @@ class Page extends Model
     public function parent()
     {
         return $this->belongsTo(self::class, 'page_parent_id');
+    }
+
+    /**
+     * Scope a query to only include
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeShowed($query): Builder
+    {
+        return $query->where([
+                $this->getTable() . '.is_show' => 1,
+            ]);
     }
 }

@@ -234,50 +234,32 @@ class BannerController extends Controller
         return redirect(route('admin.banner.list'));
     }
 
-    /** Restore
-     * @param $ids
-     * @return RedirectResponse
-     */
-    public function restore($ids)
+    public function deleteMultiple(Request $request)
     {
-        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        foreach ($ids as $id) {
-            $banner = Banner::onlyIsDeleted()->find($id);
-            if (!$banner) continue;
+        Banner::query()
+            ->find($ids)
+            ->each(function($new) {
+                $new->delete();
+            });
 
-            $banner->restore();
-            // Helper::create_admin_log(74, $item);
-        }
-
-        // Notify
-        Toastr::success('Khôi phục thành công!');
-        return redirect()->back();
+        Toastr::success('Xóa thành công');
+        return back();
     }
 
-    //------------------------------------------------------------------------DELETE------------------------------------------------------------------------//
-
-    /** Delete
-     * @param $ids
-     * @return RedirectResponse
-     */
-    public function delete($ids)
+    public function restoreMultiple(Request $request)
     {
-        // Convert array
-        $ids = is_array($ids) ? $ids : explode(',', $ids);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        // Loop
-        foreach ($ids as $id) {
-            $banner = Banner::find($id);
-            if (!$banner) continue;
+        Banner::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($new) {
+                $new->restore();
+            });
 
-            $banner->delete();
-            // Helper::create_admin_log(73, ['id' => $id, 'is_deleted' => 1, 'updated_at' => strtotime('now'), 'updated_by' => Auth::guard('admin')->user()->id]);
-        }
-
-        // Notify
-        Toastr::success('Xóa thành công');
-        return redirect()->back();
+        Toastr::success('Khôi phục thành công');
+        return back();
     }
 
     public function forceDeleteMultiple(Request $request)
@@ -298,77 +280,6 @@ class BannerController extends Controller
         Toastr::success('Xóa thành công');
         return back();
     }
-
-    /** Force delete
-     * @param $ids
-     * @return RedirectResponse
-     */
-    public function force_delete($ids)
-    {
-        // Convert array
-        $ids = is_array($ids) ? $ids : explode(',', $ids);
-
-        // Loop
-        foreach ($ids as $id) {
-            $banner = Banner::onlyIsDeleted()->find($id);
-            if (!$banner) continue;
-
-            $banner->forceDelete();
-        }
-
-        // Notify
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
-    //------------------------------------------------------------------------ACTION---------------------------------------------------------------------//
-
-    /** Action in table
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function action(Request $request)
-    {
-        // Check selected is not empty
-        if ($request->select_item == null || !is_array($request->select_item)) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        // Action Delete
-        if ($request->query('action') == "trash") {
-            $this->delete(array_values($request->select_item));
-        } // Action Duplicate
-        else if ($request->query('action') == "duplicate") {
-            $this->duplicate(array_values($request->select_item));
-        } // Action Force Delete
-        else if ($request->query('action') == "delete") {
-            $this->force_delete(array_values($request->select_item));
-        } // Action Restore
-        else if ($request->query('action') == "restore") {
-            $this->restore(array_values($request->select_item));
-        } // Update show order
-        else if ($request->query('action') == "update") {
-            for ($i = 0; $i < count($request->select_item); $i++) {
-                $value = $request->show_order[$request->select_item[$i]];
-//                $highlight = $request->is_highlight[$request->select_item[$i]];
-                $banner = Banner::find($request->select_item[$i]);
-                if (!$banner) continue;
-
-                $banner->update([
-                    'show_order' => $value,
-                    'updated_at' => time(),
-                    'updated_by' => Auth::guard('admin')->user()->id
-                ]);
-            }
-
-            // Notify
-            Toastr::success("Thành công");
-        }
-
-        return redirect()->back();
-    }
-
-//------------------------------------------------------------------------AJAX---------------------------------------------------------------------//
 
     public function get_group($id_banner_group)
     {

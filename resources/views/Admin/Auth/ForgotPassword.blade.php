@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    {{-- should create layout --}}
+    <link rel="stylesheet" href="css/toastr/toastr.min.css">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -72,7 +73,7 @@
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+<script src="js/toastr/toastr.min.js"></script>
 {!! Toastr::message() !!}
 </body>
 </html>

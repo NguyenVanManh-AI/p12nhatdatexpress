@@ -195,6 +195,7 @@ class GroupAdminController extends Controller
         // Helper::create_admin_log(16,$data);
 
         Toastr::success('Cập nhật nhóm thành công');
+        return back();
         return redirect(route('admin.manage.group'));
     }
 

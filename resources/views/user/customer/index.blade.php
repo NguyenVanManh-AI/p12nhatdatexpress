@@ -1,4 +1,7 @@
 @extends('user.layouts.master')
+
+@section('title', 'Danh sách khách hàng | Quản lý khách hàng')
+
 @section('content')
     <section class="content customer-managements position-relative">
         <div class="container-fluid customer-management-content">
@@ -75,7 +78,7 @@
                 <thead>
                 <tr>
                     <th class="stt">STT</th>
-                    <th>Tên Khách hàng</th>
+                    <th class="w-350px">Tên Khách hàng</th>
                     <th>Ngày thêm</th>
                     <th>Nguồn</th>
                     <th>Tình trạng</th>
@@ -102,33 +105,32 @@
                                     <span class="id d-none">{{ $customer->id }}</span>
                                     <div class="more-customer-information">
                                         <a href="#" class="user-name d-block fullname">{{$customer->fullname}}</a>
-                                        <p class="job" data-job="{{$customer->job}}">{{$customer->job_name}}</p>
-                                        <p>{{date('d/m/Y', $customer->birthday)}}</p>
+                                        <p class="job mb-0" data-job="{{$customer->job}}">{{$customer->job_name}}</p>
+                                        <p class="mb-0 text-secondary fs-14">{{date('d/m/Y', $customer->birthday)}}</p>
                                         <input type="text" class="birthday" value="{{date('Y-m-d',$customer->birthday)}}" hidden>
                                     </div>
-                                    <div class="address-information">
+                                    <div class="address-information fs-14">
                                         <div class="list-contact">
-                                            <div class="item">
+                                            <div class="item mb-2">
                                                 <div class="info">
-                                                    <x-user.phone-number :phone="$customer->phone_number" class="link-flat phone__copy-small text-dark bold flex-start">
+                                                    <x-user.phone-number :phone="$customer->phone_number" class="link-red-flat phone__copy-small phone__copy-link">
                                                         <x-slot name="icon">
-                                                          <div class="text-dark mr-2">
+                                                          <div class="mr-2">
                                                             <i class="fas fa-phone-alt"></i>
                                                           </div>
                                                         </x-slot>
                                                     </x-user.phone-number>
-                                                    {{-- <i class="fas fa-phone-alt mr-2"> </i> --}}
                                                     <span class="phone-number d-none"> {{ $customer->phone_number }}</span>
                                                 </div>
                                             </div>
-                                            <div class="item">
+                                            <div class="item mb-2">
                                                 <div class="info">
                                                     <i class="fas fa-envelope mr-2"></i>
                                                     <a class="black email" href="mailto:{{auth()->guard('user')->user()->email}}"> {{$customer->email}}</a>
                                                 </div>
                                             </div>
                                             @if($customer->location)
-                                                <div class="item">
+                                                <div class="item mb-2">
                                                     <div class="info">
                                                         <i class="fas fa-map-marker-alt mr-2"></i>
                                                         <span class="address"> {{$customer->address}}</span>
@@ -138,10 +140,10 @@
                                                 </div>
                                             @endif
                                             @if($customer->classified)
-                                            <div class="item">
+                                            <div class="item mb-2">
                                                 <div class="info">
                                                     <i class="fas fa-paperclip mr-2"></i>Đường dẫn đăng ký:
-                                                    <a class="registration-link" target="_blank" href="{{ route('home.classified.detail', [$customer->classified->group->getLastParentGroup(), $customer->classified->classified_url]) }}">
+                                                    <a class="text-light-cyan" target="_blank" href="{{ $customer->classified->getShowUrl() ?: 'javascript:void(0);' }}">
                                                         {{ $customer->classified_name }}
                                                     </a>
                                                 </div>
@@ -152,7 +154,10 @@
                                 </div>
                             </td>
                             <td class="text-center">{{vn_date($customer->created_at)}}</td>
-                            <td class="registration-link text-center"><a class="registration-link source" data-source="{{$customer->cus_source}}">{{$customer->source}}</a>
+                            <td class="text-center">
+                                <a class="source text-color-{{ strtolower($customer->source) }}" data-source="{{$customer->cus_source}}">
+                                    {{ $customer->source }}
+                                </a>
                             </td>
                             <td class="cus_status text-center" data-status="{{$customer->cus_status}}">{{$customer->status}}</td>
                             {{-- <td class="note-customer cus_note"> {{$customer->note}}</td> --}}
@@ -166,7 +171,7 @@
                                 ])
                             </td>
                             <td>
-                                <a href="#" class="setting-item registration-link edit mb-2 edit-customer"  data-toggle="modal" data-target="#edit-customer"><i class="fas fa-cog"></i> Chỉnh sửa</a>
+                                <a href="#" class="setting-item text-light-cyan edit mb-2 edit-customer"  data-toggle="modal" data-target="#edit-customer"><i class="fas fa-cog"></i> Chỉnh sửa</a>
                                 <a href="{{route('user.delete-customer', $customer->id)}}" class="setting-item text-red mb-2 delete-alert"> <i class="fas fa-times"></i> Xóa</a>
     {{--                            <a href="#" class="setting-item send-mail mb-2" data-toggle="modal" data-target="#modalSendMail2"><i class="fas fa-envelope-square"></i>Gửi mail</a>--}}
                             </td>

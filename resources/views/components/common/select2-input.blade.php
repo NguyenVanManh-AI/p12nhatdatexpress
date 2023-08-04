@@ -30,7 +30,7 @@
         @if($multiple)
           {{ showSelectMultipleOptions($items, $itemValue, $itemText, $itemsCurrentValue) }}
         @else
-          {{ show_select_option($items, $itemValue, $itemText, $itemsSelectName, $itemsCurrentValue) }}
+          {{ show_select_option($items, $itemValue, $itemText, $itemsSelectName, $itemsCurrentValue, 0, $withChild, $subText) }}
         @endif
       @endif
     </select>

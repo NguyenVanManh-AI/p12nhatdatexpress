@@ -1,4 +1,7 @@
 @extends('Admin.Layouts.Master')
+
+@section('Title', 'Hóa đơn | Nạp Express coin')
+
 @section('Content')
 
 <section class="content">
@@ -52,7 +55,7 @@
                 <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Tài khoản</th>
+                        <th class="w-400px">Tài khoản</th>
                         <th>Loại</th>
                         <th>Số tiền</th>
                         <th>Ngày</th>
@@ -67,9 +70,9 @@
                     <tr>
                         <td>{{$loop->index + 1}}</td>
                         <td>
-                            <p class="mb-1 d-flex justify-content-start"><a class="text-cyan-blue" href="#">{{data_get($item->user_detail, 'fullname') ?? ''}}</a></p>
-                            <p class="mb-1 d-flex justify-content-start"><a class="text-cyan-blue" href="mailto:{{$item->user->email}}">{{$item->user->email ?? ''}}</a></p>
-                            <p class="mb-0 d-flex justify-content-start"><a class="text-cyan-blue" href="tel:{{$item->user->phone_number}}">{{$item->user->phone_number ?? ''}}</a></p>
+                            @include('Admin.User.partials._user-info', [
+                                'user' => $item->user,
+                            ])
                         </td>
                         <td>
                         @if (data_get($item->deposit, 'deposit_type')=='I')
@@ -115,40 +118,12 @@
                        </tr>
                    @endforelse
                 </tbody>
-
             </table>
-            <div class="d-flex align-items-center justify-content-between my-4">
-                <div class="d-flex align-items-center">
-                    <div class="d-flex align-items-center justify-content-between mx-4">
-                        <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                        <form action="{{route('admin.bill.list')}}" method="GET">
-                            <label class="select-custom2">
-                                <select id="paginateNumber" name="items" onchange="submitPaginate(event, this)">
-                                    <option
-                                        @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                        10
-                                    </option>
-                                    <option
-                                        @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                        20
-                                    </option>
-                                    <option
-                                        @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                        30
-                                    </option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="count-item">Tổng cộng: {{$list_buy->total()}} items</div>
-                    @if($list_buy)
-                {{ $list_buy->render('Admin.Layouts.Pagination') }}
-                    @endif
-                </div>
-            </div>
 
+            <x-admin.table-footer
+                :lists="$list_buy"
+                hide-action
+            />
         </div>
         @foreach ($list_buy as $item )
             <div class="modal fade" id="exampleModalCenter{{$item->id}}" tabindex="-1" role="dialog"
@@ -175,7 +150,11 @@
                                         <td>{{$item->company_name}}</td>
                                     @else
                                         <th scope="row">Tên khách hàng</th>
-                                        <td>{{data_get($item->user_detail, 'fullname') ?? ''}}</td>
+                                        <td>
+                                            <span class="text-left text-main font-weight-bold">
+                                                {{ $item->user ? $item->user->getFullName() : '' }}
+                                            </span>
+                                        </td>
                                     @endif
                                 </tr>
                                 @if($item->bill_type == 2)
@@ -196,10 +175,7 @@
                                     @else
                                         <th scope="row">Địa chỉ</th>
                                         <td>
-                                            {{ data_get($item->user, 'user_location.address') }},
-                                            {{ data_get($item->user, 'user_location.ward.ward_name') }},
-                                            {{ data_get($item->user, 'user_location.district.district_name') }},
-                                            {{ data_get($item->user, 'user_location.province.province_name') }}
+                                            {{ $item->user ? $item->user->getFullAddress() : '' }}
                                         </td>
                                     @endif
                                 </tr>
@@ -219,7 +195,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Số tiền</th>
-                                    <td>{{number_format(data_get($item->deposit, 'deposit_amount'),0,'','.')}} VNĐ</td>
+                                    <td class="text-success font-weight-bold">{{number_format(data_get($item->deposit, 'deposit_amount'),0,'','.')}} VNĐ</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Mã giao dịch</th>
@@ -236,7 +212,10 @@
                                 @if($item->bill_url)
                                     <tr>
                                         <th scope="row">File đính kèm</th>
-                                        <td><a href="{{asset($item->bill_url)}}" target="-_blank">Xem file đính kèm</a>
+                                        <td>
+                                            <a class="h-100 js-fancy-box" href="{{ asset($item->bill_url) }}">
+                                                Xem file đính kèm
+                                            </a>
                                         </td>
                                     </tr>
                                 @endif

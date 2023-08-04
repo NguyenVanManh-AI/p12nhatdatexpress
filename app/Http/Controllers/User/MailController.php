@@ -12,6 +12,7 @@ use App\Jobs\SendUserEmail;
 use App\Models\AdminConfig;
 use App\Models\UserMailConfig;
 use App\Models\UserMailTemplate;
+use App\Services\MailService;
 use App\Services\UserMailTemplateService;
 use App\Services\Users\MailConfigService;
 use Brian2694\Toastr\Facades\Toastr;
@@ -21,12 +22,14 @@ use Illuminate\Support\Facades\DB;
 class MailController extends Controller
 {
     private MailConfigService $mailConfigService;
+    private MailService $mailService;
     private UserMailTemplateService $userMailTemplateService;
     public $mailConfigGuide;
 
     public function __construct()
     {
         $this->mailConfigService = new MailConfigService;
+        $this->mailService = new MailService;
         $this->userMailTemplateService = new UserMailTemplateService;
         $this->mailConfigGuide = AdminConfig::firstWhere('config_code', 'N015');
     }
@@ -52,6 +55,7 @@ class MailController extends Controller
     {
         $user = Auth::guard('user')->user();
 
+        // maybe should check send test mail here
         $mailcount = DB::table('user_mail_config')->where('user_id', $user->id)->count();
         if ($mailcount > 10) {
             Toastr::error('Số mail cấu hình không lớn hơn 10!');
@@ -61,7 +65,6 @@ class MailController extends Controller
         $this->mailConfigService->create($user, $request->all());
 
         Toastr::success('Tạo cấu hình mail thành công');
-
         return redirect()->back();
     }
 
@@ -203,21 +206,28 @@ class MailController extends Controller
         $password = $request->mail_password;
         $sentToMail = $request->user_mail;
 
-        SendUserEmail::dispatch(
-            $host,
-            $port,
-            $encryption,
-            $userName,
-            $password,
-            $sentToMail,
-            null, // should remove
-            'Test Email marketing Nội dung',
-            'Test thành công, Bạn có thể lưu mail này để sử dụng'
-        );
+        try{
+            $this->mailService->sendMailTest(
+                $host,
+                $port,
+                $encryption,
+                $userName,
+                $password,
+                $sentToMail,
+                'Test Email marketing Nội dung',
+                'Test thành công, Bạn có thể lưu mail này để sử dụng'
+            );
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Thành công.',
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Gửi thử thành công! Bạn có thể thêm email này'
+            ], 200);
+		} catch (\Swift_TransportException $e) {
+            // Log::debug($e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gửi thử thất bại! Vui lòng kiểm tra lại thông tin cấu hình'
+            ], 422);
+		}
     }
 }

@@ -10,7 +10,6 @@ use App\Http\Controllers\Home\Project\CommentProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('project')->group(function () {
-
     Route::get('/', [ProjectController::class, 'list'])->name('admin.project.list')->middleware('admin.check:13,4');
     Route::get('/add', [ProjectController::class, 'add'])->name('admin.project.add')->middleware('admin.check:12,1');
     Route::post('/store', [ProjectController::class, 'store'])->name('admin.project.store')->middleware('admin.check:12,1');
@@ -19,11 +18,14 @@ Route::prefix('project')->group(function () {
     Route::post('/preview', [ProjectController::class, 'preview'])->name('admin.project.preview');
     Route::get('/view', [ProjectController::class, 'view'])->name('admin.project.view');
 
-    Route::get('/trash-project', [ProjectController::class, 'trash'])->name('admin.project.trash')->middleware('admin.check:13,8'); // trash
-    Route::get('/delete/{id}/{created_by}', [ProjectController::class, 'trash_item'])->name('admin.project.trash_item')->middleware('admin.check:13,7'); // delete
-    Route::get('/undelete/{id}', [ProjectController::class, 'untrash_item'])->name('admin.project.restore')->middleware('admin.check:13,6'); // restore
-    Route::post('/trash-list', [ProjectController::class, 'trash_list'])->name('admin.project.trashlist')->middleware('admin.check:13,2'); // action list
-    Route::post('/untrash-list', [ProjectController::class, 'untrash_list'])->name('admin.project.untrashlist')->middleware('admin.check:13,6');
+    Route::as('admin.project.')
+        ->group(function () {
+            Route::get('/trash', [ProjectController::class, 'trash'])->name('trash')->middleware('admin.check:13,8');
+            Route::post('/delete-multiple', [ProjectController::class, 'deleteMultiple'])->name('delete-multiple')->middleware('admin.check:13,5');
+            Route::post('/restore-multiple', [ProjectController::class, 'restoreMultiple'])->name('restore-multiple')->middleware('admin.check:13,6');
+            Route::post('/force-delete-multiple', [ProjectController::class, 'forceDeleteMultiple'])->name('force-delete-multiple')->middleware('admin.check:13,7');
+        });
+
     Route::post('/force-delete-multiple', [ProjectController::class, 'forceDeleteMultiple'])->name('admin.project.force-delete-multiple')->middleware('admin.check:13,7');
 
     Route::get('/like/{comment_id}',[CommentProjectController::class,'like_comment'])->name('admin.project.like-comment');
@@ -31,18 +33,16 @@ Route::prefix('project')->group(function () {
     Route::prefix('request')->group(function () {
         // danh sách
         Route::get('/', [ListRequestController::class, 'list_request'])->name('admin.request.list')->middleware('admin.check:14,4');
-        // danh sách đã xóa
-        Route::get('/trash-request', [ListRequestController::class, 'trash_request'])->name('admin.request.trashrequest')->middleware('admin.check:14,8');
-        // xóa 1 dự án yêu cầu
-        Route::get('/delete/{id}/{created_by}', [ListRequestController::class, 'trash_item'])->name('admin.request.delete')->middleware('admin.check:14,5');
         Route::get('/dont-write/{id}/{created_by}', [ListRequestController::class, 'dont_write_item'])->name('admin.request.dont_write')->middleware('admin.check:14,2');
-        // khôi phục 1 dự án yêu cầu
-        Route::get('/undelete/{id}/{created_by}', [ListRequestController::class, 'untrash_item'])->name('admin.request.untrashrequest')->middleware('admin.check:14,6');
-        // xóa nhiều dự án yêu cầu
-        Route::post('/trash-list', [ListRequestController::class, 'trash_list'])->name('admin.request.trashlist')->middleware('admin.check:14,5');
-        // khôi phục nhiều dự án yêu cầu
-        Route::post('/untrash-list', [ListRequestController::class, 'untrash_list'])->name('admin.request.untrashlist')->middleware('admin.check:14,6');
-        Route::post('/force-delete-multiple', [ListRequestController::class, 'forceDeleteMultiple'])->name('admin.request.force-delete-multiple')->middleware('admin.check:14,7');
+
+        Route::as('admin.request.')
+            ->group(function () {
+                Route::get('/trash', [ListRequestController::class, 'trash_request'])->name('trash')->middleware('admin.check:14,8');
+                Route::post('/delete-multiple', [ListRequestController::class, 'deleteMultiple'])->name('delete-multiple')->middleware('admin.check:14,5');
+                Route::post('/restore-multiple', [ListRequestController::class, 'restoreMultiple'])->name('restore-multiple')->middleware('admin.check:14,6');
+                Route::post('/force-delete-multiple', [ListRequestController::class, 'forceDeleteMultiple'])->name('force-delete-multiple')->middleware('admin.check:14,7');
+            });
+
         // viết dự án
         Route::get('write/{id}/{created_by}', [ListRequestController::class, 'add'])->name('admin.request.write')->middleware('admin.check:12,1');
         Route::post('write/{id}/{created_by}', [ListRequestController::class, 'store'])->middleware('admin.check:12,1');
@@ -51,17 +51,14 @@ Route::prefix('project')->group(function () {
     Route::prefix('category')->group(function () {
         // danh sách
         Route::get('/', [CategoryController::class, 'list'])->name('admin.projectcategory.list')->middleware('admin.check:16,4');
-        // thùng rác
-        Route::get('/trash', [CategoryController::class, 'trash'])->name('admin.projectcategory.trash')->middleware('admin.check:16,8');
-        // xóa 1 mục
-        Route::get('/delete/{id}/{created_by}', [CategoryController::class, 'trash_item'])->name('admin.projectcategory.trash_item')->middleware('admin.check:16,5');
-        // khôi phục 1 mục
-        Route::get('/undelete/{id}/{created_by}', [CategoryController::class, 'untrash_item'])->name('admin.projectcategory.untrash_item')->middleware('admin.check:16,6');
-        // xóa nhiều
-        Route::post('/trash-list', [CategoryController::class, 'trash_list'])->name('admin.projectcategory.trashlist')->middleware('admin.check:16,5');
-        // khôi phục nhiều
-        Route::post('/untrash-list', [CategoryController::class, 'untrash_list'])->name('admin.projectcategory.untrashlist')->middleware('admin.check:16,6');
-        Route::post('/force-delete-multiple', [CategoryController::class, 'forceDeleteMultiple'])->name('admin.projectcategory.force-delete-multiple')->middleware('admin.check:16,7');
+        Route::as('admin.projects.categories.')
+            ->group(function () {
+                Route::get('/trash', [CategoryController::class, 'trash'])->name('trash')->middleware('admin.check:16,8');
+                Route::post('/delete-multiple', [CategoryController::class, 'deleteMultiple'])->name('delete-multiple')->middleware('admin.check:16,5');
+                Route::post('/restore-multiple', [CategoryController::class, 'restoreMultiple'])->name('restore-multiple')->middleware('admin.check:16,6');
+                Route::post('/force-delete-multiple', [CategoryController::class, 'forceDeleteMultiple'])->name('force-delete-multiple')->middleware('admin.check:16,7');
+            });
+
         // thêm
         Route::get('/new', [CategoryController::class, 'new'])->name('admin.projectcategory.new')->middleware('admin.check:16,1');
         Route::post('/new', [CategoryController::class, 'post_new'])->middleware('admin.check:16,1');

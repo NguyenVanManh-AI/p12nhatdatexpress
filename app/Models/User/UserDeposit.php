@@ -30,12 +30,24 @@ class UserDeposit extends Model
      * @var array
      */
     protected $fillable = [
-        'deposit_status',
-        'confirm_by',
+        'user_id',
+        'is_transferred',
+        'deposit_time',
+        'deposit_type',
+        'payment_method_id',
+        'deposit_code',
+        'is_deposited',
+        'deposit_amount',
+        'user_transaction_id',
+        'deposit_note',
+        'payment_image_url',
         'is_confirm',
+        'confirm_by',
         'confirm_time',
+        'deposit_status',
+        'options',
         'one_time_confirm_token',
-        'options'
+        'is_deleted'
     ];
 
     protected $casts = [
@@ -62,7 +74,7 @@ class UserDeposit extends Model
 
     // relationship user detail
     public function user_detail(){
-        return $this->belongsTo(User\UserDetail::class, 'user_id', 'id');
+        return $this->belongsTo(User\UserDetail::class, 'user_id', 'user_id');
     }
 
     // relationship user banner

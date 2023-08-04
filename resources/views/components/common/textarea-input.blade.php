@@ -11,7 +11,7 @@
   @endif
 
   <textarea
-    class="form-control {{ $isTinyMce ? 'js-tiny-textarea' : '' }} {{ $showError && $errors->has($name) ? 'is-invalid' : '' }}"
+    class="form-control {{ $inputClass }} {{ $isTinyMce ? 'js-tiny-textarea' : '' }} {{ $showError && $errors->has($name) ? 'is-invalid' : '' }}"
     {{ $name != null ? "name=$name" : '' }}
     {{ $id != null ? "id=$id" : '' }}
     placeholder="{{ $placeholder }}"

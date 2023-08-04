@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Home\Focus;
 
-use App\Models\News;
-use Illuminate\Support\Facades\DB;
+use App\Services\FocusService;
+use Illuminate\Http\Request;
 use Illuminate\View\Component;
 
 class SameGroup extends Component
@@ -15,17 +15,17 @@ class SameGroup extends Component
      *
      * @return void
      */
-    public function __construct($groupId, $groupUrl)
+    public function __construct(Request $request, $groupId, $groupUrl)
     {
         $this->group_url = $groupUrl;
 
-        $this->list = News::select('news.*', 'group.id as group_id', 'group.group_name', 'group.group_url')
-            ->where('news.group_id', $groupId)
-            ->showed()
-            ->orderBy('news.id', 'desc')
-            ->leftJoin('group', 'group.id', '=', 'news.group_id')
-            ->take(9)
-            ->get();
+        $focusService = new FocusService;
+
+        $queries = $request->all();
+        $queries['limit'] = config('constants.focus-news.same-group.limit', 9);
+        $queries['group_id'] = $groupId;
+
+        $this->list = $focusService->getListFromQuery($queries);
     }
 
     /**

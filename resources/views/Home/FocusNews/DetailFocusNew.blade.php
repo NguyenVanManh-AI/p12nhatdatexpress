@@ -12,9 +12,10 @@
                         <div class="content-main">
                             <div class="post-single">
                                 @if($focus->image_url)
-                                <div class="image-ratio-box relative">
+                                <div class="image-ratio-box-half relative">
                                     <a href="{{ asset($focus->image_url) }}" class="absolute-full js-fancy-box">
-                                        <img class="object-cover" src="{{ asset($focus->image_url) }}" alt="">
+                                        <img class="object-cover" src="{{ $focus->getImageUrl() }}" alt="">
+                                        {{-- <img class="object-cover" src="{{ asset($focus->image_url) }}" alt=""> --}}
                                     </a>
                                 </div>
                                 @endif
@@ -28,20 +29,25 @@
                                     <div class="flex-start flex-wrap">
                                         <span class="text-gray mb-2 mr-2">
                                             <i class="fas fa-clock"></i>
-                                            {{ \App\Helpers\Helper::get_day_of_week($focus->created_at) }},
-                                            {{ date('d/m/Y', $focus->created_at) }}
-                                            {{ date('H:i', $focus->created_at) }}
+                                            {{ \App\Helpers\Helper::get_day_of_week((int) $focus->created_at) }},
+                                            {{ date('d/m/Y', (int) $focus->created_at) }}
+                                            {{ date('H:i', (int) $focus->created_at) }}
                                         </span>
                                         <span class="text-gray mr-2 mb-2">
                                             <i class="fas fa-signal"></i> Lượt xem:
                                             <span class="text-cyan">{{ $focus->num_view ?? 0 }}</span>
                                         </span>
-                                        <button type="button" class="btn btn-sm btn-cyan px-3 position-relative mr-2 mb-2 @auth('user') js-post-like @else js-open-login @endauth"
-                                            data-id="{{ $focus->id }}">
-                                            <x-common.loading class="inner small" />
-                                            <i class="like-icon fa {{ $liked < 1 ? 'fa-thumbs-up' : 'fa-check' }}"></i>
-                                            Like
-                                        </button>
+                                        <div class="js-focus__detail-like-action">
+                                            <button type="button"
+                                                class="btn btn-sm btn-cyan px-3 position-relative mr-2 mb-2 @auth('user') js-focus__toggle-reaction @else js-open-login @endauth"
+                                                data-id="{{ $focus->id }}"
+                                                data-type="1"
+                                            >
+                                                <x-common.loading class="inner small" />
+                                                <i class="like-icon fa {{ $liked < 1 ? 'fa-thumbs-up' : 'fa-check' }}"></i>
+                                                Like
+                                            </button>
+                                        </div>
 
                                         <div class="dropdown">
                                             <button type="button" class="btn btn-sm btn-danger px-3 mr-2 mb-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,6 +100,7 @@
                     </div>
                     <div class="col-md-3-7">
                         <div class="sidebar-right">
+                        {{-- <div class="sidebar-right sticky top-2"> --}}
                             <x-home.focus.focus-day/>
                         </div>
                     </div>
@@ -102,7 +109,7 @@
         </div>
 
         <div class="single-bottom">
-            <div class="container">
+            <div>
                 <div class="row">
                     <div class="col-md-7-3">
                         <div class="content-main">
@@ -111,7 +118,8 @@
                         </div>
                     </div>
                     <div class="col-md-3-7">
-                        <div class="sidebar-right">
+                        <div class="sidebar-right mb-4">
+                        {{-- <div class="sidebar-right sticky top-2 mb-4"> --}}
                             <x-home.event/>
                             <x-home.focus.most-viewed/>
                             {{-- <x-home.fanpage/> --}}

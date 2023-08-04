@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\Seo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Seo\UpdateProvinceRequest;
-use App\Models\Province;
 use App\Services\Admins\SeoService;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -29,7 +28,7 @@ class ProvinceController extends Controller
 
     public function edit($id)
     {
-        $province = Province::showed()->findOrFail($id);
+        $province = $this->seoService->getById($id);
 
         return view('Admin.Seo.provinces.edit', [
             'province' => $province
@@ -38,7 +37,7 @@ class ProvinceController extends Controller
 
     public function update(UpdateProvinceRequest $request, $id)
     {
-        $province = Province::showed()->findOrFail($id);
+        $province = $this->seoService->getById($id);
 
         $this->seoService->updateProvince($province, $request->all());
 

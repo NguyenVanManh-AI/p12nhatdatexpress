@@ -11,6 +11,7 @@ use App\Http\Requests\Project\ReportCommentRequest;
 use App\Http\Requests\Project\RequestUpdateRequest;
 use App\Http\Resources\Project\CommentResource;
 use App\Models\Admin\ProjectLocation;
+use App\Models\Progress;
 use App\Models\Project;
 use App\Models\ProjectComment;
 use App\Models\Utility;
@@ -224,48 +225,7 @@ class ProjectController extends Controller
         $request['load_individual'] = true;
         $projects = $this->projectService->getListFromQuery($request->all());
 
-        // $configPage = AdminConfig::firstWhere('config_code','C004');
-        // $itemPerPage = data_get($configPage, 'config_value', 20);
-
-        // $ProjectNewsQuery= DB::table('project')
-        // ->leftJoin('project_location','project_location.project_id','project.id')
-        // ->leftJoin('province','province.id','project_location.province_id')
-        // ->leftJoin('district','district.id','project_location.district_id')
-        // ->leftJoin('unit','unit.id','project.price_unit_id')
-        // ->leftJoin('group','group.id','project.group_id')
-        // ->leftJoin('progress','progress.id','project.project_progress')
-        // ->leftJoin('direction','direction.id','project.project_direction')
-        // ->leftJoin('furniture','furniture.id','project.project_furniture')
-        // ->select(
-        //     'project.id','project.project_name','project.project_price','project.project_progress',
-        //     'project.project_scale','project.is_deleted','project.is_show','unit.unit_name','project.project_unit_id','province.province_name','district.district_name','project.image_thumbnail','project.project_url',
-        //     'group.id as group_id', 'progress.progress_name', 'unit.id as unit_id',
-        //     DB::raw(
-        //         "(CASE
-        //         WHEN project.price_unit_id = 2 THEN project.project_price/" . self::MILLION
-        //         ." WHEN project.price_unit_id = 4 THEN project.project_price*". self::BILLION
-        //         ." WHEN project.price_unit_id = 6 THEN project.project_price/". self::MILLION
-        //         ." ELSE project.project_price END) as price_project_real"
-        //     )
-        // )
-        // ->where('project.is_deleted',0)
-        // ->where('project.is_show',1);
-
-        // $group && $group_url ? $ProjectNewsQuery->where('project.group_id', '=', $group->id) : null;
-
-        // $districtLocation = getDistrictLocation();
-        // if ($districtLocation) {
-        //     $ProjectNewsQuery = $ProjectNewsQuery->where('project_location.district_id', $districtLocation);
-        // }
-
-        // $ProjectNewsQuery = $this->filter_project($request, $ProjectNewsQuery);
-        // $ProjectNewsQuery = $this->sort_project($request, $ProjectNewsQuery);
-
-        // $ProjectNews = $ProjectNewsQuery->paginate($itemPerPage);
-
-        $progress = DB::table('progress')->get();
-
-        // $num_collection = collect(['num_cur' => $ProjectNews->currentPage() * $itemPerPage]);
+        $progress = Progress::get();
 
         $provinces = get_cache_province();
         $districts = get_cache_district();
@@ -286,10 +246,8 @@ class ProjectController extends Controller
         $districts_special = $districts_special->get();
 
         return view('Home.Project.Index', [
-                // 'ProjectNews' => $ProjectNews,
                 'projects' => $projects,
                 'progress' => $progress,
-                // 'num_collection' => $num_collection,
                 'group' => $group,
                 'provinces' => $provinces,
                 'districts' => $districts,

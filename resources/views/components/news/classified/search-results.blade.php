@@ -9,8 +9,8 @@
       <div class="col-md-7-3 project-main">
         <div class="property-list section">
           <div class="head-divide mb-3 flex-wrap">
-            <div class="left h-100">
-              <h3>{{ $province ? $province->getLabel() : data_get($group, 'group_name') }}</h3>
+            <div class="left h-100 flex-start">
+              <h3 class="lh-1">{{ $province ? $province->getLabel() : data_get($group, 'group_name') }}</h3>
             </div>
             <div class="right h-100">
               <div class="md-hide p-0 h-100">

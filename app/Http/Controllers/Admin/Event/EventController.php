@@ -84,35 +84,32 @@ class EventController extends Controller
         return redirect()->route('admin.event.list');
     }
 
-//------------------------------------------------------------------------DELETE---------------------------------------------------------------------//
-    public function delete($id)
+    public function deleteMultiple(Request $request)
     {
-        $ids = is_array($id) ? $id : array($id);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Event::find($ids)
-            ->each(function($event) {
-                $event->delete();
-                // Helper::create_admin_log(88, ['id' => $event->id, 'is_deleted' => 1]);
+        Event::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
             });
 
         Toastr::success('Xóa thành công');
-
-        return redirect(route('admin.event.list'));
+        return back();
     }
 
-    public function restore($id)
+    public function restoreMultiple(Request $request)
     {
-        $ids = is_array($id) ? $id : array($id);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
         Event::onlyIsDeleted()
             ->find($ids)
-            ->each(function($event) {
-                $event->restore();
-                // Helper::create_admin_log(89, ['id' => $event->id, 'is_deleted' => 0]);
+            ->each(function($item) {
+                $item->restore();
             });
 
-        Toastr::success('Khôi phục thành công!');
-        return redirect()->back();
+        Toastr::success('Khôi phục thành công');
+        return back();
     }
 
     public function forceDeleteMultiple(Request $request)

@@ -9,6 +9,7 @@ class TableFilter extends Component
     public $searchFilter;
     public $searchPlaceHolder;
     public $deleteFilter;
+    public $dateRangeFilter;
     public $addRoute;
 
     /**
@@ -20,11 +21,13 @@ class TableFilter extends Component
         $searchFilter = true,
         $searchPlaceHolder = 'Từ khóa...',
         $deleteFilter = false,
+        $dateRangeFilter = false,
         $addRoute = null
     ) {
         $this->searchFilter = $searchFilter;
         $this->searchPlaceHolder = $searchPlaceHolder;
         $this->deleteFilter = $deleteFilter;
+        $this->dateRangeFilter = $dateRangeFilter;
         $this->addRoute = $addRoute;
     }
 

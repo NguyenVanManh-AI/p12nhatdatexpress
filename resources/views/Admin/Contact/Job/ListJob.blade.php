@@ -128,8 +128,6 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <form id="formtrash" action="{{route('admin.contact.job.trashlist')}}" method="POST">
-                                @csrf
                                 @foreach ( $list as $item )
                                     <tr>
                                         <td class="active">
@@ -162,18 +160,17 @@
                                             <div class="row flex-column justify-content-center pl-3">
 
                                                 @if($check_role == 1  ||key_exists(2, $check_role))
-                                                    <div class="text-left mb-2">
-                                                        <i class="icon-setup fas fa-cog mr-2"></i>
+                                                    <div class="text-left mb-2 ml-2">
+                                                        <span class="icon-small-size mr-1 text-dark">
+                                                            <i class="icon-setup fas fa-cog"></i>
+                                                        </span>
                                                         <a href="javascript:{}" data-job_name ="{{$item->param_name}}"  data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}" class="text-primary edit_block">Chỉnh sửa</a>
                                                     </div>
                                                 @endif
-                                                @if($check_role == 1  ||key_exists(5, $check_role))
-                                                    <div class="text-left mb-2">
-                                                        <i class="icon-setup fas fa-times mr-2"></i>
-                                                        <a href="{{route('admin.contact.job.delete', [$item->id, \Crypt::encryptString($item->created_by)])}}" class="delete" style="color:#ff0000;cursor: pointer;">Xóa</a>
-                                                    </div>
-                                                @endif
-
+                                                <x-admin.delete-button
+                                                    :check-role="$check_role"
+                                                    url="{{ route('admin.contact.job.delete-multiple', ['ids' => $item->id]) }}"
+                                                />
                                             </div>
                                         </td>
                                     </tr>
@@ -183,75 +180,13 @@
                         </table>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between my-4">
-                        <div class="d-flex align-items-center">
-                            <div class="d-flex">
-                                <img src="image/manipulation.png" alt="" id="btnTop">
-                                <div class="btn-group ml-1">
-                                    <!-- data-flip="false" -->
-                                    <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                            data-toggle="dropdown" aria-expanded="true" data-flip="false"
-                                            aria-haspopup="true">
-                                        Thao tác
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        @if($check_role == 1  ||key_exists(5, $check_role))
-                                            <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                                <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                                   style="color: white !important;font-size: 15px"></i>Thùng rác
-                                                <input type="hidden" name="action" value="trash">
-                                            </a>
-                                        @else
-                                            <p class="dropdown-item m-0 disabled">
-                                                Bạn không có quyền
-                                            </p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            </form>
-                            <div class="d-flex align-items-center justify-content-between mx-4">
-                                <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                                <form action="{{route('admin.block.list')}}" method="GET">
-                                    <label class="select-custom2">
-                                        <select id="paginateNumber" name="items" onchange="this.form.submit()">
-                                            <option
-                                                @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                                10
-                                            </option>
-                                            <option
-                                                @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                                20
-                                            </option>
-                                            <option
-                                                @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                                30
-                                            </option>
-                                        </select>
-                                    </label>
-                                </form>
-                            </div>
-                            @if($check_role == 1  ||key_exists(8, $check_role))
-                                <div class="d-flex flex-row align-items-center view-trash">
-                                    <i class="far fa-trash-alt mr-2"></i>
-                                    <div class="link-custom">
-
-                                        <a href="{{route('admin.contact.job.trash')}}"><span style="color: #347ab6">Xem thùng rác</span>
-                                            <span class="badge badge-pill badge-danger trashnum"
-                                                  style="font-weight: 500">{{$count_trash}}</span>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="count-item">Tổng cộng: {{$list->total()}} items</div>
-                            @if($list)
-                                {{ $list->render('Admin.Layouts.Pagination') }}
-                            @endif
-                        </div>
-                    </div>
+                    <x-admin.table-footer
+                        :check-role="$check_role"
+                        :lists="$list"
+                        :count-trash="$count_trash"
+                        view-trash-url="{{ route('admin.contact.job.trash') }}"
+                        delete-url="{{ route('admin.contact.job.delete-multiple') }}"
+                    />
                 </div>
             </div>
         </div>

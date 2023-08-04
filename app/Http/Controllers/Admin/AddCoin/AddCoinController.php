@@ -165,65 +165,32 @@ class AddCoinController extends Controller
         return view('Admin.AddCoin.TrashAddCoin', compact('list_buy', 'count_trash'));
     }
 
-    public function delete_coin($id)
+    public function deleteMultiple(Request $request)
     {
-        $deposit = UserDeposit::findOrFail($id);
-        $deposit->delete();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        // Helper::create_admin_log(64, ['id' => $id, 'is_deleted' => 1]);
-        Toastr::success('Chuyển vào thùng rác thành công');
+        UserDeposit::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
+
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    public function untrash_coin($id)
+    public function restoreMultiple(Request $request)
     {
-        $deposit = UserDeposit::onlyIsDeleted()->findOrFail($id);
-        $deposit->restore();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        // Helper::create_admin_log(65, ['id' => $id, 'is_deleted' => 0]);
-        Toastr::success('Khôi phục thành công');
+        UserDeposit::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
+
+        Toastr::success('Khôi phục thành công');
         return back();
-
-    }
-
-    public function trash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $item) {
-            $deposit = UserDeposit::find($item);
-            if (!$deposit) continue;
-            $deposit->delete();
-            // Helper::create_admin_log(64, ['id' => $item, 'is_deleted' => 1]);
-        }
-
-        Toastr::success(' Xóa thành công');
-        return back();
-
-    }
-
-    public function untrash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $item) {
-            $deposit = UserDeposit::onlyIsDeleted()
-                ->find($item);
-            if (!$deposit) continue;
-
-            $deposit->restore();
-            // Helper::create_admin_log(65, ['id' => $item, 'is_deleted' => 0]);
-        }
-
-        Toastr::success('Khôi phục thành công');
-        return back();
-
     }
 
     public function forceDeleteMultiple(Request $request)
@@ -234,7 +201,6 @@ class AddCoinController extends Controller
             ->find($ids)
             ->each(function($item) {
                 $item->forceDelete();
-                // should create log force delete
             });
 
         Toastr::success('Xóa thành công');

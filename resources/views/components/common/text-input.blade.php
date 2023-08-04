@@ -1,13 +1,18 @@
-<div class="form-group {{ $attributes['class'] }}">
+<div class="form-group {{ $attributes['class'] }} {{ $hasCount ? 'js-has-count__area' : '' }}">
   @if(isset($slot_label) && $slot_label)
     {{ $slot_label }}
   @elseif($label)
-    <label class="{{ $labelClass }}">
-      {{ $label }}
-      @if($required)
-        <span class="text-danger">*</span>
+    <div class="{{ $hasCount ? 'flex-between' : '' }}">
+      <label class="{{ $labelClass }}">
+        {{ $label }}
+        @if($required)
+          <span class="text-danger">*</span>
+        @endif
+      </label>
+      @if($hasCount)
+        <span>Số ký tự: <b class="js-has-count__length">0</b></span>
       @endif
-    </label>
+    </div>
   @endif
 
   <div class="c-input-field">
@@ -26,6 +31,7 @@
         </div>
       @endif
       <input
+        class="{{ $hoverDate ? 'js-date-placeholder' : '' }} {{ $hasCount ? 'js-has-count__input' : '' }}"
         type="{{ $type }}"
         {{ $name != null ? "name=$name" : '' }}
         {{ $id != null ? "id=$id" : '' }}

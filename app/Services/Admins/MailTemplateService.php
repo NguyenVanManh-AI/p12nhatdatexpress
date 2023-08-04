@@ -3,49 +3,31 @@
 namespace App\Services\Admins;
 
 use App\Models\AdminMailTemplate;
+use Illuminate\Support\Facades\Auth;
 
 class MailTemplateService
 {
     /**
      * get mail template list
-     * @param array $queries = []
+     * @param $request
      *
      * @return $templates
      */
-    public function index(array $queries = [])
+    public function index($request, $trashed = null)
     {
-        $itemsPerPage = data_get($queries, 'items') ?: 10;
-        $page = data_get($queries, 'page') ?: 1;
-
-        $listScope = data_get($queries, 'request_list_scope');
-        $roleId = data_get($queries, 'admin_rol_id');
-        $adminId = data_get($queries, 'admin_id');
+        $itemsPerPage = $request->items ?: 10;
+        $page = $request->page ?: 1;
 
         $filters = [
-            'keyword' => data_get($queries, 'keyword'),
-            'trashed' => data_get($queries, 'trashed'),
+            'keyword' => $request->keyword,
         ];
 
-        $templates = AdminMailTemplate::select('admin_mail_template.*')
-            ->when($listScope, function ($query, $listScope) use ($roleId, $adminId) {
-                switch ($listScope) {
-                    case 2:
-                        return $query->join('admin', 'admin_mail_template.created_by', '=', 'admin.id')
-                            ->where('admin.rol_id', $roleId);
-                        break;
-                    case 3:
-                        return $query->where('admin_mail_template.created_by', $adminId);
-                        break;
-                    default:
-                        return $query;
-                        break;
-                }
-            })
-            ->system()
-            ->whereNotNull('admin_mail_template.template_action')
+        $permissionQueries = $request;
+
+        $templates = $this->getPermissionQuery($permissionQueries, $trashed)
             ->filter($filters)
-            ->orderBy('admin_mail_template.show_order', 'DESC')
-            ->orderBy('admin_mail_template.id', 'DESC')
+            ->latest('admin_mail_template.show_order')
+            ->latest('admin_mail_template.id')
             ->skip(($page - 1) * $itemsPerPage)
             ->paginate($itemsPerPage);
 
@@ -53,54 +35,56 @@ class MailTemplateService
     }
 
     /**
-     * get mail template trash
-     * @param array $queries = []
+     * Common actions
      *
-     * @return $templates
+     * @param $request
+     * @param $action
+     * @return bool
      */
-    public function getTrash(array $queries = [])
+    public function action($request, $action): bool
     {
-        $itemsPerPage = data_get($queries, 'items') ?: 10;
-        $page = data_get($queries, 'page') ?: 1;
+        [$actionRequest, $ids, $trashed] = getActionsParams($request, $action);
 
-        $listScope = data_get($queries, 'request_list_scope');
-        $roleId = data_get($queries, 'admin_rol_id');
-        $adminId = data_get($queries, 'admin_id');
+        $results = $this->getPermissionQuery($actionRequest, $trashed)
+            ->find($ids)
+            ->each(function($item) use ($action) {
+                adminCommonAction($item, $action);
+            });
 
-        $templates = AdminMailTemplate::select('admin_mail_template.*')
-            ->when($listScope, function ($query, $listScope) use ($roleId, $adminId) {
-                switch ($listScope) {
-                    case 2:
-                        return $query->join('admin', 'admin_mail_template.created_by', '=', 'admin.id')
-                            ->where('admin.rol_id', $roleId);
-                        break;
-                    case 3:
-                        return $query->where('admin_mail_template.created_by', $adminId);
-                        break;
-                    default:
-                        return $query;
-                        break;
-                }
-            })
-            ->system()
-            ->whereNotNull('admin_mail_template.template_action')
-            ->orderBy('admin_mail_template.show_order', 'DESC')
-            ->orderBy('admin_mail_template.id', 'DESC')
-            ->skip(($page - 1) * $itemsPerPage)
-            ->paginate($itemsPerPage);
-
-        return $templates;
+        return count($results) ? true : false;
     }
 
     /**
      * get mail template query from permission
-     * 
+     *
+     * @param $request
+     * @param $trashed = null
      * @return $query
      */
-    public function getPermissionQuery()
+    public function getPermissionQuery($request, $trashed = null)
     {
-        // should check by permission
-        $query = AdminMailTemplate::query();
+        if (!Auth::guard('admin')->user()) return;
+        $listScope = $request->request_list_scope;
+
+        $roleId = Auth::guard('admin')->user()->rol_id;
+        $adminId = Auth::guard('admin')->user()->id;
+
+        $query = AdminMailTemplate::select('admin_mail_template.*')
+            ->system()
+            ->whereNotNull('admin_mail_template.template_action');
+
+        $params = [
+            'request_list_scope' => $listScope,
+            'role_id' => $roleId,
+            'admin_id' => $adminId,
+            'trashed' => $trashed
+        ];
+
+        adminScopeQuery(
+            $query,
+            $params,
+            AdminMailTemplate::class,
+        );
 
         return $query;
     }

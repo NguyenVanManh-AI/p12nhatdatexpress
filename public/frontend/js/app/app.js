@@ -5,12 +5,31 @@ $.ajaxSetup({
     }
 });
 
-// $(document).on({
-//     ajaxStart: function(){
-//     },
-//     ajaxStop: function(){
-//     },
-// });
+$(document).on({
+    ajaxStart: function(){
+    },
+    ajaxStop: function() {
+        if ( typeof loadingImage == 'function' ) {
+            // lazyload image
+            loadingImage()
+        }
+        
+        // init select2 // should change
+        if ($('.select2').length) {
+            $('.select2').each(function() {
+                let _this = $(this)
+                _this.select2({
+                    theme: _this.data('select2-theme') == 'bootstrap4' ? 'bootstrap4' : 'default', // default or bootstrap4
+                    maximumSelectionLength: _this.data('select2-max-length'),
+                    allowClear: true,
+                    placeholder: _this.data('placeholder') || '-- Tất cả --',
+                    language: 'vi',
+                    dropdownParent: _this.data('select2-parent') ? $(_this.data('select2-parent')) : null
+                })
+            })
+        }
+    },
+});
 
 const showError = error => {
     if (error && error.responseJSON && error.responseJSON.errors) {

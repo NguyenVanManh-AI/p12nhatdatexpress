@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Home\Focus;
 
-use App\Models\News;
-use Illuminate\Support\Facades\DB;
+use App\Services\FocusService;
+use Illuminate\Http\Request;
 use Illuminate\View\Component;
 
 class FocusDay extends Component
@@ -15,15 +15,18 @@ class FocusDay extends Component
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->list = News::select('news.*', 'group.id as group_id', 'group.group_name', 'group.group_url')
-            ->whereDate(DB::raw('from_unixtime(news.created_at)'), today())
-            ->showed()
-            ->orderBy('news.num_view', 'desc')
-            ->leftJoin('group', 'group.id', '=', 'news.group_id')
-//            ->take(5)
-            ->get();
+        $focusService = new FocusService;
+
+        $queries = $request->all();
+        // $queries['limit'] = config('constants.focus-news.focus_day.limit', 5);
+        $queries['get_all'] = true;
+        $queries['sort_num_view'] = true;
+        $queries['start_date'] = now()->format('Y-m-d 00:00:01');
+        $queries['end_date'] = now()->format('Y-m-d 23:59:59');
+
+        $this->list = $focusService->getListFromQuery($queries);
         $this->top_1 = $this->list->shift();
     }
 

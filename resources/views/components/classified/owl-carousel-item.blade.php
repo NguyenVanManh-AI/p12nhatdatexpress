@@ -3,7 +3,7 @@
     <div class="image-ratio-box relative">
       <a
         class="absolute-full"
-        href="{{ $item->group ? route('home.classified.detail', [$item->group->getLastParentGroup(), $item->classified_url]) : 'javascript:void(0);' }}"
+        href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}"
       >
         <img class="object-cover" src="{{ $item->getThumbnailUrl() }}" alt="">
       </a>
@@ -19,8 +19,8 @@
     <div class="title mb-1">
       <h3 class="mb-0">
         <a
-          class="link item-title text-ellipsis ellipsis-3 text-break fs-16"
-          href="{{ $item->group ? route('home.classified.detail',[$item->group->getLastParentGroup(), $item->classified_url]) : 'javascript:void(0);' }}"
+          class="link item-title text-ellipsis ellipsis-3 text-break fs-16 lh-12"
+          href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}"
         >
           {{ $item->classified_name }}
         </a>
@@ -28,7 +28,7 @@
     </div>
     <div class="mb-1 text-dark bold">
       <span class="flex-start prepend-image-icon-address">
-        {{ data_get($item->location, 'district.district_name') . ', ' . data_get($item->location, 'province.province_name') }}
+        {{ $item->getFullAddress(['province', 'district']) }}
       </span>
     </div>
     <div class="mb-1 text-dark bold">
@@ -36,7 +36,7 @@
     </div>
     <div class="flex-between text-dark bold" style="height: 30px">
       <span class="flex-start prepend-image-icon-area">
-        {{ $item->classified_area . ' ' . data_get($item->unit_area, 'unit_name') }}
+        {{ $item->getAreaLabel() }}
       </span>
       <x-common.phone-number :phone="$item->contact_phone" />
     </div>

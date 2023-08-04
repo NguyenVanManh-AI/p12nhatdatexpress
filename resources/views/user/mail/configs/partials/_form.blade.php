@@ -4,7 +4,7 @@
       <h4 class="color-white">Cấu hình mail gửi</h4>
     </div>
     <div class="content border-0">
-      <form action="{{ $routeLink }}" class="js-current-config-form" method="post">
+      <form action="{{ $routeLink }}" class="js-current-config-form" method="POST">
         @csrf
         <div class="main-form bg-white">
           <div class="row">
@@ -103,13 +103,13 @@
                     Thoát
                   </span>
                 </button>
-                <a href="javascript:void(0);" class="btn btn-normal mb-3" data-toggle="modal" data-target="#user-mail-test">
+                <button type="button" class="btn btn-normal mb-3 js-btn-open-test-modal" data-toggle="modal" data-target="#user-mail-test">
                   <img class="icon-squad-2" src="{{ asset('user/images/icon/send-icon.png') }}" alt="">
                   <span class="pl-4 pr-5">
                     Gửi thử
                   </span>
-                </a>
-                <button type="submit" class="btn btn-normal mb-3">
+                </button>
+                <button type="button" class="btn btn-normal js-btn-save-config-mail mb-3" disabled>
                   <img class="icon-squad-2" src="{{ asset('user/images/icon/save-icon.png') }}" alt="">
                   <span class="pl-4 pr-5">
                     Lưu
@@ -133,7 +133,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="user-mail-test" tabindex="-1" role="dialog">
+  <div class="modal fade" id="user-mail-test" tabindex="-1" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
       <div class="modal-content">
         <div class="modal-header flex-center bg-sub-main">
@@ -170,6 +170,8 @@
 
 @push('scripts_children')
   <script type="text/javascript">
+    let canSaveMailConfig = false;
+
     (() => {
       $('.user-mail-config-page .js-default-form').on('click', function() {
         $('[data-default]').each(function() {
@@ -180,7 +182,8 @@
 
       const sendMailTest = () => {
         let formData = new FormData($('.js-current-config-form')[0]),
-            userMail = $('#user-mail-test [name="user_mail"]').val();
+            userMail = $('#user-mail-test [name="user_mail"]').val(),
+            $configForm = $('.js-current-config-form');
 
         formData.append('user_mail', userMail)
         $('.c-overlay-loading.send-mailtest-loading').addClass('loading')
@@ -191,31 +194,35 @@
           method: 'POST',
           contentType: false,
           processData: false,
-          dataType: 'json',
+          dataType: 'JSON',
           data: formData,
           success: res => {
             $('.c-overlay-loading.send-mailtest-loading').removeClass('loading')
             $('.js-send-test').prop('disabled', false)
 
-            if (res && res.message)
-              res.success ? toastr.success(res.message) : toastr.error(res.message)
+            showMessage(res)
 
+            canSaveMailConfig = res && res.success
+
+            toggleDisabledForm($configForm)
             $("#user-mail-test").modal('hide');
           },
           error: error => {
             $('.c-overlay-loading.send-mailtest-loading').removeClass('loading')
             $('.js-send-test').prop('disabled', false)
+            showError(error)
 
-            if (error && error.responseJSON && error.responseJSON.errors) {
-                const errors = Object.values(error.responseJSON.errors)
-                if (errors[0] && errors[0][0])
-                toastr.error(errors[0][0])
-            } else if (error && error.responseJSON && error.responseJSON.message) {
-                toastr.error(error.responseJSON.message)
-            }
+            canSaveMailConfig = false
+            toggleDisabledForm($configForm)
           },
         })
       }
+
+      $('.js-clear-form').on('click', function() {
+        let $configForm = $(this).parents('.js-current-config-form')
+        canSaveMailConfig = false
+        toggleDisabledForm($configForm)
+      })
 
       $('#user-mail-test .js-send-test').on('click', function () {
         sendMailTest()
@@ -225,6 +232,25 @@
         e.preventDefault();
         sendMailTest()
       })
+
+      $('.js-current-config-form .js-btn-save-config-mail').on('click', function (e) {
+        if (!canSaveMailConfig) return
+
+        canSaveMailConfig = false
+        let $configForm = $(this).parents('.js-current-config-form')
+        toggleDisabledForm($configForm)
+        $configForm.trigger('submit')
+      })
+
+      const toggleDisabledForm = $configForm => {
+        let inputs = $configForm.find('input');
+        for (let i = 0; i < inputs.length; i++) {
+          $(inputs[i]).prop('disabled', canSaveMailConfig);
+        }
+
+        $configForm.find('.js-btn-save-config-mail').prop('disabled', !canSaveMailConfig)
+        $configForm.find('.js-btn-open-test-modal').prop('disabled', canSaveMailConfig)
+      }
     })()
   </script>
 @endpush

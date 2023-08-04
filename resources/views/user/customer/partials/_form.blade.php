@@ -118,6 +118,7 @@
     <x-common.file-box-input
       class="customer-file-input"
       name="avatar"
+      image-value="{{ null }}"
       base64-file
       preview-inline
     />

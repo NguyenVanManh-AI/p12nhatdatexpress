@@ -27,7 +27,6 @@ use App\Models\User\UserPostComment;
 use App\Models\User\UserRatingComment;
 use App\Models\User\UserRatingLike;
 use App\Models\User\UserTransaction;
-use App\Models\User\UserVoucher;
 use App\Traits\Models\AdminHistoryTrait;
 use App\Traits\Models\UserHelper;
 use Carbon\Carbon;
@@ -365,6 +364,7 @@ class User extends Authenticatable
     public function vouchers(): HasMany
     {
         return $this->hasMany(UserVoucher::class);
+        // return $this->hasMany(UserVoucher::class);
     }
 
     public function logContents(): HasMany
@@ -443,7 +443,7 @@ class User extends Authenticatable
             return $this->detail->getExpertAvatar();
         }
 
-        return $this->user_type_id == 3
+        return $this->isEnterprise()
             ? asset('/frontend/images/Avatar.png')
             : asset('/frontend/images/personal-logo.png');
     }
@@ -504,11 +504,36 @@ class User extends Authenticatable
             : 'Chờ xác thực';
     }
 
+    public function getInfoNotice()
+    {
+        if ($this->is_deleted) {
+            if ($this->isDeleted()) {
+                return 'Tài khoản đã bị xóa.';
+            } else {
+                $deletedTime = Carbon::createFromTimestamp($this->delete_time);
+
+                $remainingTime = $deletedTime->diffForHumans(now()->addDay(UserEnum::DELETED_DAYS * -1), [
+                    'parts' => 2,
+                    'syntax' => CarbonInterface::DIFF_ABSOLUTE,
+                ]);
+
+                return 'Tài khoản đang chờ xóa - Còn ' . $remainingTime;
+            }
+        }
+
+        if ($this->isForbidden()) return 'Tài của của bạn đã bị cấm, liên hệ admin để hỗ trợ';
+        if ($this->isBlocked()) return 'Tài của của bạn đã bị chặn 7 ngày, liên hệ admin để hỗ trợ';
+        if ($this->isSpammed()) return 'Tài của của bạn đã bị chặn spam, liên hệ admin để hỗ trợ';
+
+        return '';
+    }
+
     public function isActive()
     {
         if ($this->delete_time || $this->is_deleted) return false;
         if ($this->isForbidden()) return false;
         if ($this->isBlocked()) return false;
+        if ($this->isSpammed()) return false;
 
         return $this->is_confirmed
             ? true
@@ -568,6 +593,24 @@ class User extends Authenticatable
         return $this->is_deleted && $this->delete_time > now()->addDays(UserEnum::DELETED_DAYS * -1)->timestamp
             ? true
             : false;
+    }
+
+    public function getFullAddress($fields = [])
+    {
+        $address = $ward = $district = $province = null;
+
+        if (!$fields || in_array('address', $fields))
+            $address = data_get($this->location, 'address');
+        if (!$fields || in_array('ward', $fields))
+            $ward = data_get($this->location, 'ward.ward_name');
+        if (!$fields || in_array('district', $fields))
+            $district = data_get($this->location, 'district.district_name');
+        if (!$fields || in_array('province', $fields))
+            $province = data_get($this->location, 'province.province_name');
+
+        $fullAddressArr = array_filter([$address, $ward, $district, $province]);
+
+        return join(', ', $fullAddressArr);
     }
 
     /**

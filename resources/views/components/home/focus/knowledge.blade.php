@@ -1,6 +1,6 @@
 <div class="section knowledge w-100" id="knowledge">
     <div class="section-title">
-        <h2 class="title">{{$group->group_name}}</h2>
+        <h2 class="title">{{ data_get($group, 'group_name') }}</h2>
         {{-- <h2 class="title">Bất động sản</h2> --}}
         <div class="tab">
             @foreach($children_group as $g)

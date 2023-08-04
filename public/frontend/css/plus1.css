@@ -74,112 +74,10 @@ span.text-basic.violet {
     color: #9c31df;
 }
 
-.customer-management-content .filter.block-dashed {
-    margin: 30px 0;
-    padding: 30px 30px 14px;
-    position: relative;
-    border: 1px dashed #c2c5d6;
-}
-
-.customer-management-content table select#abc {
-    background-color: #034076;
-    color: #fff;
-    border: none;
-}
-
-.customer-management-content a.setting-item {
-    display: block;
-}
-
-.customer-managements .customer-management-content .table td,
-.table th {
-    border: 1px solid #cccccc;
-}
-
-.customer-management-content .table td .setting-item i {
-    color: #4b4d4f;
-    margin-right: 10px;
-    width: 14px;
-}
-
-.customer-management-content .address-information .item .info a {
-    color: #dc3545;
-}
-
-.customer-management-content .address-information .item .info a.black {
-    color: #454545;
-}
-
-.customer-management-content p.job {
-    color: darkgreen;
-}
-
-.customer-management-content a.registration-link {
-    color: #06abdd;
-}
-
-.customer-management-content a.fakebook {
-    color: #0f2ab3;
-}
-
-.customer-management-content a.telesale {
-    color: #d39304;
-}
-
-.customer-management-content table th {
-    background-color: #034076;
-    color: #fff;
-    line-height: 1;
-    font-weight: 400;
-    text-align: center;
-}
-
-.customer-management-content .address-information {
-    text-align: left;
-}
-
-.customer-management-content .address-information .item {
-    display: flex;
-    line-height: 2rem;
-}
-
-.customer-management-content .address-information .item .icon {
-    width: 4% !important;
-}
-
-a.user-name.d-block {
-    font-size: 20px;
-    color: #2d2d83;
-    font-weight: 700;
-}
-
-.customer-management-content button.btn.bg-blue-light.w-100:hover {
-    background-color: #0a4352;
-    color: #fff;
-}
-
-.customer-management-content .avatar .edit-avatar input[type="file"] {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
-    font-size: 0;
-    z-index: 1;
-}
 
 .modal-body .upload-item .wrap-out {
     margin-bottom: 20px;
     margin-top: 20px;
-}
-
-.customer-management-content .table .user-info .avatar .edit-avatar {
-    width: 20px;
-    height: 20px;
-    font-size: 10px;
-    line-height: 20px;
 }
 
 .modal-content textarea#w5review {
@@ -214,71 +112,6 @@ h4#exampleModalLabel {
     width: 20%;
     margin-bottom: 15px;
     margin-top: 15px;
-}
-
-.customer-management-content .user-info .avatar {
-    position: relative;
-    display: inline-block;
-}
-
-.customer-management-content .table .user-info .avatar img {
-    width: 60px;
-    height: 60px;
-    border-width: 3px;
-    border-radius: 50%;
-}
-
-.customer-management-content .title-more-customers {
-    text-align: right;
-}
-
-.customer-management-content .user-info .avatar .edit-avatar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 50%;
-    text-align: center;
-    background-color: #e9ebf2;
-    border: 1px solid #d7d7d7;
-    color: #70747f;
-    cursor: pointer;
-}
-
-.customer-management-content .table td,
-.table th {
-    padding: 0.75rem;
-    border-top: 1px solid #dee2e6;
-    vertical-align: middle;
-    position: relative;
-}
-
-.customer-management-content .block-dashed .form-filter p {
-    padding-bottom: 0rem !important;
-}
-
-.customer-management-content button.btn.bg-blue-light.w-100 {
-    background-color: #00bff3;
-    color: #fff;
-}
-
-.customer-management-content h3.title {
-    background-color: #e9ecf5;
-    display: inline-block;
-    font-size: 18px;
-    padding: 0 20px;
-    font-weight: 500;
-    line-height: 1;
-    margin-bottom: 0;
-    text-transform: uppercase;
-    color: #000;
-    position: absolute;
-    top: -9px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
 }
 
 .newsletter {
@@ -2379,9 +2212,6 @@ input.form-insert-code {
 /*reponsive info-account-dont*/
 
 @media only screen and (max-width: 1365.99px) {
-    .customer-management-content .address-information .item .icon {
-        width: 6% !important;
-    }
     th.setting {
         width: 125px;
     }
@@ -2523,9 +2353,6 @@ input.form-insert-code {
 }
 
 @media only screen and (max-width: 1280px) {
-    .customer-management-content .address-information .item .icon {
-        width: 8% !important;
-    }
     .step-up-mechanism span.way {
         width: 10%;
     }
@@ -2764,13 +2591,6 @@ input.form-insert-code {
     .mail-configuration .configuration .content .btn-form {
         text-align: center;
     }
-    .customer-management-content .filter.block-dashed {
-        padding: 30px 8px 14px;
-    }
-    .customer-management-content .block-dashed .form-filter p {
-        padding-bottom: 0rem !important;
-        font-size: 15px;
-    }
     .list-house .name-country ul li {
         font-size: 12px !important;
     }
@@ -2997,10 +2817,6 @@ input.form-insert-code {
     h4#exampleModalLabel {
         font-size: 18px;
         padding-top: 20px;
-    }
-    .customer-management-content h3.title {
-        font-size: 15px;
-        padding: 0 0px !important;
     }
     .basic {
         width: 100%;
@@ -3311,10 +3127,6 @@ input.form-insert-code {
     }
     .item-foot .phone.number-phone {
         padding-left: 0px;
-    }
-    .customer-management-content h3.title {
-        font-size: 13px;
-        padding: 0 0px !important;
     }
     input.form-insert-code {
         width: 80%;

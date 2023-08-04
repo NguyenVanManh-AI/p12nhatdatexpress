@@ -73,22 +73,9 @@
         <div class="input-reponsive-search ">
          <input class="form-control required" type="number" name="phone" placeholder="Nhập số điện thoại" value="{{ app('request')->input('phone') }}">
        </div>
-
      </div>
-
-     <script type="text/javascript">
-      $('#from_date_box').click(function(){
-        $('#from_date_text').hide();
-      })
-      $('#to_date_box').click(function(){
-        $('#to_date_text').hide();
-      })
-
-    </script>
   </div>
 </div>
-
-
 </div>
 <div class="row m-0">
   <div class="col-12 col-sm-12 col-md-3 col-lg-3 box_input px-0 mb-2">
@@ -103,8 +90,6 @@
 </div>
 <div class="search-reponsive  mtdow10  col-12 col-sm-12 col-md-9 col-lg-9 pl-0">
   <div class="row m-0">
-
-
     <div id="to_date_box" class="search-reponsive input-reponsive-search col-12 col-sm-12 col-md-4 col-lg-4 pl-3 pr-2">
       <button class=" search-button btn btn-primary w-100" style="height: 37px;"><i class="fa fa-search mr-2 ml-0" aria-hidden="true"></i>Tìm kiếm</button>
     </div>
@@ -134,8 +119,6 @@
     <div class="row">
       <div class="col-12">
         <div class="table-responsive">
-          <form action="{{route('admin.comment.trashlist-comment-user-post')}}" id="formtrash" method="post">
-            @csrf
             <table class="table table-bordered text-center table-hover table-custom " id="table" style="min-width: 1050px">
               <thead>
                 <tr>
@@ -213,22 +196,27 @@
                         <i class="fa fa-eye mr-2"></i>
                         <a href="https://nhadatexpress.vn/user-post/{{$item->post_code}}" class="text-primary ">Xem</a>
                       </div>
-                      @if($check_role == 1  ||key_exists(7, $check_role))
-                      <div class="ml10 mb-2" >
-                        <i class="fas fa-times mr12" ></i>
-                        <a  class="setting-item delete text-danger action_delete cusor-point" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Xóa</a>
-                      </div>
-                      @endif
+                     
+                      
+                      <x-admin.delete-button
+                        :check-role="$check_role"
+                        url="{{ route('admin.comment.user-posts.delete-multiple', ['ids' => $item->id]) }}"
+                      />
+
                       @if($check_role == 1  ||key_exists(2, $check_role))
                       @if($item->is_forbidden ==0 && $item->is_locked==0)
                      
                       <div class="ml10 mb-2 cusor-point">
-                        <i class="fas fa-times mr12 "></i>
+                        <span class="icon-small-size mr-1 text-dark">
+                          <i class="fas fa-times"></i>
+                        </span>
                         <a  class="text-danger forbidden" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Cấm </a>
                       </div>
                       
                       <div class="ml10 mb-2 cusor-point">
-                        <i class="fas fa-times mr12 "></i>
+                        <span class="icon-small-size mr-1 text-dark">
+                          <i class="fas fa-times"></i>
+                        </span>
                         <a  class="text-danger locked" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Chặn </a>
                       </div>
                       
@@ -250,7 +238,9 @@
                       @if($item->is_locked == 0)
                       @if($check_role == 1  ||key_exists(2, $check_role))
                       <div class="ml10 mb-2 cusor-point">
-                        <i class="fas fa-times mr12 "></i>
+                        <span class="icon-small-size mr-1 text-dark">
+                          <i class="fas fa-times"></i>
+                        </span>
                         <a  class="text-danger locked" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Chặn </a>
                       </div>
                       
@@ -276,7 +266,9 @@
                     @if($item->is_forbidden == 0)
                     @if($check_role == 1  ||key_exists(2, $check_role))
                     <div class="ml10 mb-2 cusor-point">
-                      <i class="fas fa-times mr12 "></i>
+                      <span class="icon-small-size mr-1 text-dark">
+                        <i class="fas fa-times"></i>
+                      </span>
                       <a  class="text-danger forbidden" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Cấm </a>
                     </div>
                     
@@ -300,7 +292,9 @@
                     @if($item->is_forbidden == 1)
                       @if($check_role == 1  ||key_exists(2, $check_role))
                       <div class="ml10 mb-2 cusor-point">
-                        <i class="fas fa-times mr12 "></i>
+                        <span class="icon-small-size mr-1 text-dark">
+                          <i class="fas fa-times"></i>
+                        </span>
                         <a  class=" un-forbidden text-primary" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}">Mở cấm</a>
                       </div>
                       
@@ -319,84 +313,17 @@
 
               </tbody>
             </table>
-          </form>
         </div>
-        <div class="table-bottom d-flex align-items-center justify-content-between pb-5" style="margin-bottom: 100px !important">
-          <div class=" d-flex box-panage align-items-center">
-            <div class=" d-flex mb-2">
-              <img src="image/manipulation.png" alt="" id="btnTop">
-              <div class="btn-group ml-1">
-                <button type="button" class="btn dropdown-toggle dropdown-custom" data-toggle="dropdown" aria-expanded="false" data-flip="false" aria-haspopup="true">
-                  Thao tác
-                </button>
-                <div class="dropdown-menu ">
-                  @if($check_role == 1  ||key_exists(2, $check_role))
-
-                 <a class="dropdown-item un-forbidden-list" type="button" href="javascript:{}">
-                   <i class="fa fa-undo bg-primary p-1 mr-2 rounded"
-                   style="color: white !important;font-size: 15px;width: 23px"></i>Mở cấm tài khoản
-                   <input type="hidden" name="action" value="trash">
-                 </a>
-                 <a class="dropdown-item forbidden-list" type="button" href="javascript:{}">
-                   <i class="fa fa-times bg-danger p-1 mr-2 rounded"
-                   style="color: white !important;font-size: 16px;width: 23px"></i>Cấm tài khoản
-                   <input type="hidden" name="action" value="trash">
-                 </a>
-                 <a class="dropdown-item locked-list" type="button" href="javascript:{}">
-                   <i class="fa fa-times bg-danger p-1 mr-2 rounded"
-                   style="color: white !important;font-size: 16px;width: 23px"></i>Chặn tài khoản
-                   <input type="hidden" name="action" value="trash">
-                 </a>
-                 <a class="dropdown-item un-locked-list" type="button" href="javascript:{}">
-                  <i class="fa fa-undo bg-primary p-1 mr-2 rounded"
-                  style="color: white !important;font-size: 16px;width: 23px"></i>Mở Chặn tài khoản
-                  <input type="hidden" name="action" value="trash">
-                </a>
-                 @endif
-                 @if($check_role == 1 || key_exists(5, $check_role))
-                 <a class="dropdown-item moveToTrash " type="button" href="javascript:{}" >
-                  <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded" style="color: white !important;font-size: 15px"></i>Thùng rác
-                </a>
-                @endif
-                @if(is_array($check_role) && !key_exists(2, $check_role) && !key_exists(5, $check_role))
-                <p class="dropdown-item m-0 disabled">
-                  Bạn không có quyền
-                </p>
-                @endif
-              </div>
-            </div>
-          </label>
-        </div>
-        <div class="d-flex align-items-center justify-content-between mx-4 mb-2">
-          <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-          <label class="select-custom2">
-            <select id="paginateNumber" name="items" onchange="submitPaginate(event)">
-              <option @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">10</option>
-              <option @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">20</option>
-              <option @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">30</option>
-            </select>
-          </label>
-        </div>
-        @if($check_role == 1 || key_exists(8, $check_role))
-        <div class="d-flex flex-row align-items-center view-trash" style="margin-top: -5px">
-          <i class="far fa-trash-alt mr-2" style="margin-top: -5px"></i>
-          <div class="link-custom" >
-            <a href="{{route('admin.comment.trash-comment-user-post')}}"><span  style="color: #347ab6">Xem thùng rác</span>
-              <span class="badge badge-pill badge-danger trashnum" style="font-weight: 500;">{{$trash_num}}</span>
-            </a>
-          </div>
-        </div>
-        @endif
-      </div>
-      <div class="d-flex align-items-center">
-        <div class="count-item">Tổng cộng: @empty($list) {{0}} @else {{$list->total()}} @endempty items</div>
-        @if($list)
-        {{ $list->render('Admin.Layouts.Pagination') }}
-        @endif
-      </div>
+        
+        <x-admin.table-footer
+          :check-role="$check_role"
+          :lists="$list"
+          :count-trash="$trash_num"
+          view-trash-url="{{ route('admin.comment.trash-comment-user-post') }}"
+          delete-url="{{ route('admin.comment.user-posts.delete-multiple') }}"
+        />
     </div>
   </div>
-</div>
 </div>
 </section>
 <!-- /.content -->
@@ -482,43 +409,6 @@
     });
   });
 
-  $('.delete').click(function () {
-    var id = $(this).data('id');
-    var created_by = $(this).data('created_by');
-    Swal.fire({
-      title: 'Xác nhận xóa',
-      text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      cancelButtonText: 'Quay lại',
-      confirmButtonText: 'Đồng ý'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.location.href = "/admin/comment/user-post/delete/" + id + "/" + created_by;
-      }
-    });
-  });
-  //----------------------------------------------thao tác list
-  $('.moveToTrash').click(function () {
-    var id = $(this).data('id');
-    Swal.fire({
-      title: 'Xác nhận xóa',
-      text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      cancelButtonText: 'Quay lại',
-      confirmButtonText: 'Đồng ý'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $('#formtrash').submit();
-      }
-    });
-  });
-
   $('.forbidden-list').click(function () {
     $('#formtrash').attr('action', "/admin/comment/user-post/forbidden-comment")
     var id = $(this).data('id');
@@ -600,14 +490,6 @@
   }
   function hideTextDateEnd(){
     $('#txtDateEnd').hide();
-  }
-
-  function submitPaginate(event){
-    const uri = window.location.toString();
-    const exist = uri.indexOf('?')
-    const existItems = uri.indexOf('?items')
-    const re = /([&\?]items=\d*$|items=\d&|[?&]items=\d(?=#))/
-    exist > 0 && existItems < 0 ? window.location.href = uri.replace(re, '') + '&items=' + $('#paginateNumber').val() : window.location.href = uri.replace(re, '') + '?items=' + $('#paginateNumber').val()
   }
   setMinMaxDate('#handleDateFrom', '#handleDateTo')
   function setMinMaxDate(inputElementStart, inputElementEnd){

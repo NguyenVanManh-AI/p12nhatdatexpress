@@ -78,11 +78,13 @@
           align="center" cellpadding="0" cellspacing="0">
           <tr>
             <td>
-              <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0"
+              <table width="100%" border="0" cellpadding="0" cellspacing="0"
                 style="padding:2rem;min-height:400px;background:#fff; border-radius:3px;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
                 <tr>
-                  <td>
-                    {!! $message !!}
+                  <td style="vertical-align:unset;">
+                    <div style="width:700px;max-width:95%;margin:0 auto;">
+                      {!! $message !!}
+                    </div>
                   </td>
                 </tr>
               </table>

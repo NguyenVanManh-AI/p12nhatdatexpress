@@ -2,10 +2,10 @@
 
 namespace App\View\Components\Home\Focus;
 
-use App\Helpers\Helper;
-use App\Models\News;
+use App\Models\Group;
+use App\Services\FocusService;
 use App\Traits\Filterable;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\View\Component;
 
 class Fengshui extends Component
@@ -36,22 +36,17 @@ class Fengshui extends Component
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->group = DB::table('group')
-            ->where('id', 52)
-            ->first();
+        $this->group = Group::find(52); // phong thuy
 
-        $this->list = News::with('group')
-            ->where('group_id', $this->group->id)
-            ->showed()
-            ->orderBy('is_highlight', 'desc')
-            ->orderBy('created_at', 'desc');
+        $focusService = new FocusService;
+        $queries = $request->all();
+        $queries['limit'] = config('constants.focus-news.news.property', 20);
+        $queries['group_id'] = 52;
 
-        $params = Helper::array_remove_null(request()->all());
-        $this->list = $this->scopeFilter($this->list, $params);
+        $this->list = $focusService->getListFromQuery($queries);
 
-        $this->list = $this->list->take(5)->get();
         $this->top_1 = $this->list->shift();
     }
 

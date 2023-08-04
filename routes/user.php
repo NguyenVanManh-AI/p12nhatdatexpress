@@ -220,6 +220,23 @@ use App\Http\Controllers\User\SocialController;
         #Cộng đồng
         Route::get('cong-dong', [SocialController::class, 'index'])->name('social');
 
+        Route::group(['prefix' => 'conversations', 'as' => 'conversations.'], function() {
+            Route::get('/', [ConversationsController::class, 'index']);
+            Route::get('/get-unread-messages', [ConversationsController::class, 'getUnreadMessages']);
+            Route::get('/close-conversation', [ConversationsController::class, 'closeConversation']);
+            Route::post('/send-basic-chat', [ConversationsController::class, 'sendBasicChat'])->name('sendBasic-chat');
+            Route::post('/new-conversation', [ConversationsController::class, 'newConversation']);
+            Route::post('/send-conversation-message', [ConversationsController::class, 'sendConversationMessage']);
+            Route::post('/open-conversation', [ConversationsController::class, 'openConversation']);
+            Route::post('/messages/{message}/remove', [ConversationsController::class, 'removeMessage']);
+            Route::get('/{token}', [ConversationsController::class, 'getConversation']);
+            Route::get('/{token}/get-messages', [ConversationsController::class, 'getMessages']);
+            Route::get('/{token}/get-last-message', [ConversationsController::class, 'getLastMessage']);
+            Route::post('/{token}/send-message', [ConversationsController::class, 'sendMessage']);
+            Route::post('/{token}/rating', [ConversationsController::class, 'rating']);
+            // Route::post('/{token}/add-attach', [ConversationsController::class, 'addAttach']);
+            Route::post('/{token}/read-conversation', [ConversationsController::class, 'readConversation']);
+        });
     });
 
     Route::get('gioi-thieu/{user_code}', [UserController::class, 'user_ref_link'])->name('user-ref-link');

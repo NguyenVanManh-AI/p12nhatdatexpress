@@ -79,7 +79,7 @@
                 <tr>
                     <th><input type="checkbox" class="select-all checkbox" name="select-all"></th>
                     <th>STT</th>
-                    <th>Tên thành viên</th>
+                    <th class="w-400px">Tên thành viên</th>
                     <th>Ngày tham gia</th>
                     <th class="">Tài khoản
 {{--                        <a href="#" class="nav-link" data-toggle="dropdown"></a>--}}
@@ -117,7 +117,9 @@
                         <td>  <input type="checkbox" class="select-item checkbox" name="select_item[]" value="{{$item->id}}"/>
                         <td>{{ ($user->currentpage()-1) * $user->perpage() + $key + 1 }}</td>
                         <td>
-                            @include('Admin.User.partials._user-info', ['business' => false])
+                            @include('Admin.User.partials._user-info', [
+                                'user' => $item,
+                            ])
                         </td>
                         <td>
                             {{date('d/m/Y',$item->created_at)}}

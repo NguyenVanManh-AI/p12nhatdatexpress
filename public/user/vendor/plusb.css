@@ -3196,11 +3196,6 @@ a.btn.post {
     z-index: 12;
     color: #0072BC;
 }
-.focus-left,
-.focus-left .thumbnail,
-.focus-left .thumbnail img {
-	height: 100%;
-}
 .img-slide .slick-slide {
 	margin-right: 5px !important;
 }

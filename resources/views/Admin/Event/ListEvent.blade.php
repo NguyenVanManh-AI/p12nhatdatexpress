@@ -14,25 +14,11 @@
                 <i class="fa fa-th-list mr-1"></i>Danh sách
             </a>
         </li>
-        {{-- @if($check_role == 1  ||key_exists(5, $check_role))
-            <li class="phay ml-2">
-                /
-            </li>
-            <li class="recye px-2 ml-1">
-                <a href="{{route('admin.event.add')}}">
-                    <i class=" mr-1"></i>Thêm
-                </a>
-            </li>
-        @endif --}}
     </ol>
 </div>
 
-<!-- Main content -->
 <section class="content hiden-scroll mt-3">
     <div class="container-fluid">
-
-        <!-- Filter -->
-
         <div class="filter block-dashed">
 
             <h3 class="title">Bộ lọc</h3>
@@ -116,12 +102,6 @@
 
         </div>
 
-        <!-- / (Filter) -->
-
-        <!-- Main row -->
-         {{-- <div>
-        <a href="{{route('admin.event.add')}}" class="btn btn-success">Thêm sự kiện</a>
-        </div>    --}}
         <div class="table-contents">
 
             <table class="table">
@@ -143,8 +123,6 @@
                 </thead>
 
                 <tbody>
-                <form action="{{route('admin.event.action')}}" id="formAction" method="post">
-                    @csrf
                     @forelse($list as $item)
                         <tr>
                             <td>
@@ -188,25 +166,14 @@
                                 <p class="date">{{date('d/m/Y', $item->start_date)}}</p>
                             </td>
                             <td>
-{{--                                <a href="{{route('admin.event.toogle-highlight', $item->id)}}" class="setting-item outstanding highlight mb-2" ><i class="fas fa-star {{$item->is_highlight ? 'text-yellow' : ''}}"></i> {{$item->is_highlight ? 'Bỏ' : 'Làm'}} nổi bật</a>--}}
-
-{{--                                @if($check_role == 1  ||key_exists(2, $check_role))--}}
-{{--                                    @if($item->is_highlight == 0 || $item->highlight_end < time())--}}
-{{--                                    <a href="javascript:{}" class="setting-item outstanding is_hight_light mb-2" data-id="{{$item->id}}"><i class="fas fa-star "></i> Làm nổi bật</a>--}}
-{{--                                    @else--}}
-{{--                                    <a href="{{route('admin.event.unhigh_light',$item->id)}}" class="setting-item outstanding un_hight_light mb-2" data-id="{{$item->id}}"><i class="fas fa-star text-yellow"></i> Bỏ nổi bật</a>--}}
-{{--                                    @endif--}}
-{{--                                @endif--}}
-
-
                                 @if($check_role == 1  ||key_exists(2, $check_role))
                                 <a href="{{route('admin.event.edit', [$item->id, \Crypt::encryptString($item->created_by)])}}])}}" class="setting-item edit mb-2"><i class="fas fa-cog"></i> Chỉnh sửa</a>
                                 @endif
 
-                                @if($check_role == 1  ||key_exists(5, $check_role))
-                                <a href="#" style="margin-left: 2px" class="setting-item delete text-red mb-2" data-id="{{$item->id}}" data-created="{{\Crypt::encryptString($item->created_by)}}"><i class="fas fa-times"></i> Xóa</a>
-                                @endif
-
+                                <x-admin.delete-button
+                                    :check-role="$check_role"
+                                    url="{{ route('admin.event.delete-multiple', ['ids' => $item->id]) }}"
+                                />
 
                                 @if($item->user)
                                 <a href="#" class="setting-item create" data-toggle="modal" data-target="#modalCreateNotify"
@@ -222,69 +189,19 @@
                             <td colspan="7">Chưa có dữ liệu</td>
                         </tr>
                     @endforelse
-                </form>
                 </tbody>
             </table>
-
         </div>
 
-        <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-            <div class="text-left d-flex align-items-center">
-                <div class="manipulation d-flex mr-4">
-                    <img src="image/manipulation.png" alt="" id="btnTop">
-                    <div class="btn-group ml-1">
-                        <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                data-toggle="dropdown"
-                                aria-expanded="false" data-flip="false" aria-haspopup="true">
-                            Thao tác
-                        </button>
-                        <div class="dropdown-menu">
-                            @if($check_role == 1  ||key_exists(6, $check_role))
-                                <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                    <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                       style="color: white !important;font-size: 15px"></i>Thùng rác
-                                    <input type="hidden" name="action" value="trash">
-                                </a>
-                            @else
-                                <p class="dropdown-item m-0 disabled">
-                                    Bạn không có quyền
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mx-4">
-                    <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                    <form action="{{route('admin.project.list')}}" method="GET">
-                        <label class="select-custom2">
-                            <select id="paginateNumber" name="items" onchange="submitPaginate(event, this)">
-                                <option @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">10</option>
-                                <option @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">20</option>
-                                <option @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">30</option>
-                            </select>
-                        </label>
-                    </form>
-                </div>
-                <div class="view-trash">
-                    <a href="{{route('admin.event.trash')}}"><i class="far fa-trash-alt"></i> Xem thùng
-                        rác</a>
-                    <span class="count-trash">{{$count_trash}}</span>
-                </div>
-            </div>
-            <div class="d-flex align-items-center" >
-                <div class="count-item" >Tổng cộng: @empty($list) {{0}} @else {{$list->total()}} @endempty items</div>
-                <div class="count-item count-item-reponsive" style="display: none">@empty($list) {{0}} @else {{$list->total()}} @endempty items</div>
-                @if($list)
-                    {{ $list->render('Admin.Layouts.Pagination') }}
-                @endif
-            </div>
-        </div>
-
-    <!-- /Main row -->
-
-    </div><!-- /.container-fluid -->
+        <x-admin.table-footer
+            :check-role="$check_role"
+            :lists="$list"
+            :count-trash="$count_trash"
+            view-trash-url="{{ route('admin.event.trash') }}"
+            delete-url="{{ route('admin.event.delete-multiple') }}"
+        />
+    </div>
 </section>
-<!-- /.content -->
 @endsection
 
 @section('Script')
@@ -295,31 +212,6 @@
     }
     function hideTextDateEnd(){
         $('#txtDateEnd').hide();
-    }
-    function submitPaginate(event){
-        const uri = window.location.toString();
-        const exist = uri.indexOf('?')
-        const existItems = uri.indexOf('?items')
-        const re = /([&\?]items=\d*$|items=\d&|[?&]items=\d(?=#))/
-        exist > 0 && existItems < 0 ? window.location.href = uri.replace(re, '') + '&items=' + $('#paginateNumber').val() : window.location.href = uri.replace(re, '') + '?items=' + $('#paginateNumber').val()
-    }
-    function deleteItem(id, created)
-    {
-        console.log(id)
-        Swal.fire({
-            title: 'Xác nhận xóa',
-            text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href= `{{route('admin.event.delete', ['',''])}}/${id}/${created}`;
-            }
-        })
     }
     function changeStatus(id, status)
     {
@@ -351,27 +243,6 @@
             deleteItem($(this).data('id'), $(this).data('created'))
         })
 
-        // move to trash
-        $('.dropdown-item.moveToTrash').click(function () {
-            const selectedArray = getSelected();
-            if(selectedArray) {
-                Swal.fire({
-                    title: 'Xác nhận xóa',
-                    text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    cancelButtonText: 'Quay lại',
-                    confirmButtonText: 'Đồng ý'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        if (selectedArray)
-                            $('#formAction').attr('action', $('#formAction').attr('action') + '?action=trash').submit();
-                    }
-                });
-            }
-        })
         @if(request()->query('province_id') && request()->query('district_id'))
             get_district('#province', '{{route('param.get_district')}}', '#district', {{$_GET['province_id']}}, {{$_GET['district_id']}})
         @endif

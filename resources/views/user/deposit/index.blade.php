@@ -90,7 +90,7 @@
             </div>
         </div>
         <div class="note-accounts-history">
-            <div class="step-up-mechanism p-2">
+            <div class="step-up-mechanism p-2 m-0">
                 {!! $guide !!}
             </div>
         </div>
@@ -224,7 +224,7 @@
                                 </div>
                             </div>
                             <input name="deposit_amount" id="input-deposit-amount" hidden>
-                            <input name="deposit_voucher" id="input-depoosit-voucher" hidden>
+                            <input name="deposit_voucher" id="input-depoosit-voucher" value="{{ $voucher_code }}" hidden>
                             <input name="deposit_code" value="{{$transaction_code}}" hidden>
                             <input name="payment_method" value="1" hidden>
                         </div>

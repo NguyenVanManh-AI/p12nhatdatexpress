@@ -124,8 +124,7 @@ class HomeController extends Controller
             if ($request->hasFile('popup_image')) {
                 $data['popup_image'] = HelperImage::updateImage('system/img/home-config', $request->file('popup_image'), $home_config->popup_image);
             }
-            HomeConfig::where('id', $home_config->id)->update($data);
-
+            $home_config->update($data);
             # Note log
             // Helper::create_admin_log(2, $data);
 

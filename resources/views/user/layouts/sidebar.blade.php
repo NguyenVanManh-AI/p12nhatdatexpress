@@ -94,7 +94,7 @@
                     </a>
                 </div>
             </div>
-            @if(auth('user')->user()->user_type_id == 3)
+            @if(auth('user')->user()->isEnterprise())
                 <div class="item-account {{ Route::currentRouteName() == 'user.events.index' ? 'is-active' : '' }}">
                     <div class="item-account-parent">
                         <a class="link-a" href="{{route('user.events.index')}}">
@@ -231,7 +231,7 @@
                    </ul>
                </div>
             </div>
-            @if(auth()->guard('user')->user()->user_type_id == 2 || auth()->guard('user')->user()->user_type_id == 3)
+            @if(auth()->guard('user')->user()->user_type_id == 2 || auth()->guard('user')->user()->isEnterprise())
                 <div class="item-account {{ Route::currentRouteName() == 'user.reference' ? 'is-active' : '' }}">
                     <div class="item-account-parent">
                         <a class="link-a" href="{{route('user.reference')}}">

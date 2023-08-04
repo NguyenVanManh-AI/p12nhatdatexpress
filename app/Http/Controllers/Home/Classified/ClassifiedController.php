@@ -45,7 +45,7 @@ class ClassifiedController extends Controller
         $this->provinceService = new ProvinceService;
     }
 
-    public function classified_list($group_url, $group_child = null, Request $request)
+    public function classified_list(Request $request, $group_url, $group_child = null)
     {
         $group = $this->groupService->getGroupFromUrl($group_url, $group_child);
 
@@ -192,7 +192,7 @@ class ClassifiedController extends Controller
                     'watched_classified' => getWatchedClassifieds(),
                 ])->render();
             }
-        } else {
+        } elseif ($request->page == 1) {
             $html .= view('components.home.classified.add-classified-button')->render();
         }
 
@@ -652,7 +652,7 @@ class ClassifiedController extends Controller
                 'user_id' => $userId,
                 'options' => [
                     'registration' => [
-                        'url' => $classified->group ? route('home.classified.detail', [$classified->group->getLastParentGroup(), $classified->classified_url]) : null,
+                        'url' => $classified->getShowUrl(),
                         'name' => $classified->classified_name,
                     ]
                 ]
@@ -701,7 +701,7 @@ class ClassifiedController extends Controller
         ], 200);
     }
 
-    public function provinceClassified($provinceUrl, Request $request)
+    public function provinceClassified(Request $request, $provinceUrl)
     {
         $province = $this->provinceService->getProvinceFromUrl($provinceUrl);
 

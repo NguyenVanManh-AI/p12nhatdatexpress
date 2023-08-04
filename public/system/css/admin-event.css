@@ -378,9 +378,6 @@ input[type="date"]:valid::before {
 .box_input > div > select{
   width: 100px;outline: none;background: #efeeee
 }
-.support-vay{
-  margin-top: 28px;display: flex
-}
 .select-box{
   height: 100px;
 }

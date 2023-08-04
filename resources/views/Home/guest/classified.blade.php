@@ -279,22 +279,3 @@
 
     initMap('classified-page__map', '.classified-page [name="latitude"]', '.classified-page [name="longtitude"]', initLocation);
 @endpush
-
-{{-- @section('Script')
-    <script src="{{asset('user/js/classified.js')}}"></script>
-
-    <script type="text/javascript">
-        const callbackMarkerToAddress = async (result) => {
-            if (!result) return
-            __isClickMarker = true
-            $('.classified-page [name="address"]').val(result.address).trigger('change')
-
-            await getProvinceFromName(result.province_name, $('.classified-page [name="province"]'))
-            await sleep(350)
-            await getDistrictFromName(result.district_name, $('.classified-page [name="district"]'))
-            await sleep(350)
-
-            __isClickMarker = false
-        }
-    </script>
-@endsection --}}

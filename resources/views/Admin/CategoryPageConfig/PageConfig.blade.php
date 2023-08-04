@@ -1,10 +1,9 @@
 
 @extends("Admin.Layouts.Master")
-@section('Title', 'Cấu hình trang chuyên mục | Trang chuyên mục')
-@section('Content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-highlighttextarea/3.1.3/jquery.highlighttextarea.css" integrity="sha512-NuDJ8dpZvjVnfu6k3aRIqw+qfdidDZnnvFMHnVP4n3ZIokJmawPnmuSJBQWFff4xwjWA5N/8OtQEzs6cifDLMw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<body>
 
+@section('Title', 'Cấu hình trang chuyên mục | Trang chuyên mục')
+
+@section('Content')
   <div class="card-header border-bottom mt-3" style="border-bottom: 0px !important">
     <h5 class="m-0 text-center font-weight-bold" >CẤU HÌNH TRANG CHUYÊN MỤC</h5>
   </div>
@@ -42,7 +41,7 @@
                                       <img src="{{asset('system/image/upload-file.png')}}" alt="">
                                       <span class="desc d-block">Kéo & Thả ảnh tại đây!</span>
                                       <span class="btn btn-upload">Tải ảnh lên</span>
-                                      <input name="image_banner" type="file" onchange="loadFile(event,'preview_banner','#image_banner_new','#image_banner_old')">
+                                      <input name="image_banner" type="file" accept="image/*" onchange="loadFile(event,'preview_banner','#image_banner_new','#image_banner_old')">
                                   </div>
                               </div>
                           </div>
@@ -75,7 +74,7 @@
                                       <img src="{{asset('system/image/upload-file.png')}}" alt="">
                                       <span class="desc d-block">Kéo & Thả ảnh tại đây!</span>
                                       <span class="btn btn-upload">Tải ảnh lên</span>
-                                      <input name="image_banner_mobile" type="file" onchange="loadFile(event,'preview_banner_mobile','#image_banner_mobile_new','#image_banner_mobile_old')">
+                                      <input name="image_banner_mobile" type="file" accept="image/*"  onchange="loadFile(event,'preview_banner_mobile','#image_banner_mobile_new','#image_banner_mobile_old')">
                                   </div>
                               </div>
                           </div>
@@ -85,24 +84,26 @@
               <div class="form-row mt-1">
                   <div class="form-group col-md-6">
                       <div id="image-first-desktop" class="contain-photo">
-                          <div class="box-image " id="image_banner_old">
-                              <img style="width: 100%" src="./images/category1.png" alt="">
+                            <div class="box-image " id="image_banner_old" style="display: none">
+                                <img class="object-contain h-200px" src="" alt="">
 {{--                              <span class="close"><i class="fas fa-times"></i></span>--}}
-                          </div>
+                            </div>
+
                           <div class="box-image " style="display: none" id="image_banner_new">
-                            <img  id="preview_banner" style="width: 100%">
+                            <img  id="preview_banner" class="object-contain h-200px">
                             <span class="close" data-id="#image_banner_new"><i class="fas fa-times"></i></span>
                           </div>
                       </div>
                   </div>
                   <div class="form-group col-md-6">
                       <div id="image-first-mobile" class="contain-photo">
-                          <div class="box-image " id="image_banner_mobile_old">
-                              <img style="width: 100%" src="./images/category1.png" alt="">
+                            <div class="box-image " id="image_banner_mobile_old" style="display: none">
+                                <img class="object-contain h-200px" src="" alt="">
                               {{--                              <span class="close"><i class="fas fa-times"></i></span>--}}
-                          </div>
+                            </div>
+
                           <div class="box-image " style="display: none" id="image_banner_mobile_new">
-                              <img id="preview_banner_mobile" style="width: 100%">
+                              <img id="preview_banner_mobile" class="object-contain h-200px">
                               <span class="close" data-id="#image_banner_mobile_new"><i class="fas fa-times"></i></span>
                           </div>
                       </div>
@@ -165,18 +166,16 @@
             @endif
           </div>
         </div>
+
+        @if($check_role == 1 || key_exists(2, $check_role))
         <div class="text-center">
           <button type="submit" class="btn btn-outline-success" onclick="appenHtml()">Lưu</button>
         </div>
+        @endif
       </form>
     </div>
   </div>
-
-
-
 </ul>
-
-</body>
 @endsection
 @section('Style')
 <style>
@@ -274,7 +273,7 @@
        // alert(old_image)
         $('#preview_banner').attr('src',null);
         $('#image_banner_new').hide();
-        if(old_image == null){
+        if(!old_image){
             $('#image_banner_old').hide();
         }
         else{
@@ -288,7 +287,7 @@
         // alert(old_image)
         $('#preview_banner_mobile').attr('src',null);
         $('#image_banner_mobile_new').hide();
-        if(old_image == null){
+        if(!old_image){
             $('#image_banner_mobile_old').hide();
         }
         else{
@@ -313,8 +312,4 @@
         $($(this).data('id')).hide();
     });
 </script>
-
-
-
-
 @endsection

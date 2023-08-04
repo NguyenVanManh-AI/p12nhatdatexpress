@@ -13,14 +13,14 @@
                 </div>
                 <div class="content">
                     <h3 class="title">
-                        <a class="bold {{ $loop->index == 0 ? 'link-red-flat' : 'link' }}" href="{{ route('trang-ca-nhan.dong-thoi-gian', $user->user_code) }}">
+                        <a class="bold fs-16 {{ $loop->index == 0 ? 'link-red-flat' : 'link' }}" href="{{ route('trang-ca-nhan.dong-thoi-gian', $user->user_code) }}">
                             {{ $user->getFullName() }}
                         </a>
                     </h3>
-                    <span class="location text-light-cyan">
+                    <span class="location text-light-cyan fs-14">
                         {{ data_get($user->location, 'province.province_name') }}
                     </span>
-                    <a class="text-success" href="{{ route('trang-ca-nhan.dong-thoi-gian', $user->user_code) }}" class="color-green">Xem trang doanh nghiệp</a>
+                    <a class="text-success fs-14" href="{{ route('trang-ca-nhan.dong-thoi-gian', $user->user_code) }}" class="color-green">Xem trang doanh nghiệp</a>
                 </div>
             </div>
             @endforeach

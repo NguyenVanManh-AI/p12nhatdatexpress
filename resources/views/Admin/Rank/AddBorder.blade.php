@@ -3,8 +3,6 @@
 @section('Title', 'Thêm viền thủ công | Quản lý cấp bậc')
 @section('Content')
 <link rel="stylesheet" type="text/css" href="{{ asset("system/css/admin-project.css")}}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/select2/3.4.8/select2.css'>
 <body>
   <div class="card-header border-bottom mt-1" style="border-bottom: 0px !important">
     <h4 class="m-0 text-center font-weight-bold" >THÊM VIỀN THỦ CÔNG</h4>

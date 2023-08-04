@@ -27,41 +27,9 @@ main.main {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
-.focus {
-    padding-top: 7px;
-    padding-bottom: 25px;
-}
-
-.focus .focus-left {
-    position: relative;
-}
-
 .thumbnail {
     position: relative;
 }
-
-.thumbnail .poppup-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.focus .focus-left .thumbnail img {
-    width: 100%;
-    display: block;
-    object-fit: cover;
-}
-
-.focus .focus-left .content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.65);
-    padding: 10px;
-}
-
 .content .title a {
     display: -webkit-box;
     overflow: hidden;
@@ -90,82 +58,6 @@ main.main {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     color: #454545;
-}
-
-.focus .content .title {
-    line-height: 16px;
-    margin-bottom: 5px;
-    padding-top: 0;
-}
-
-.focus .focus-left .content .title a {
-    font-size: 1.125rem;
-    color: #fff;
-    font-weight: 500;
-    -webkit-line-clamp: 1;
-}
-
-.focus .focus-left .content .desc {
-    color: #fff;
-    -webkit-line-clamp: 2;
-}
-
-.focus-right {
-    max-height: 384px;
-    overflow-y: auto;
-}
-
-.focus-item {
-    display: flex;
-    margin-bottom: 17px;
-}
-
-.focus-item:last-child {
-    margin-bottom: 0;
-}
-
-.focus-item .thumbnail {
-    flex: 0 0 122px;
-    max-width: 122px;
-}
-
-.focus-item .content {
-    flex: 1;
-    padding-left: 15px;
-    padding-right: 30px;
-}
-
-.focus-item .content .title a {
-    font-size: 1rem;
-    color: #0050b3;
-    -webkit-line-clamp: 1;
-    position: relative;
-    padding-left: 15px;
-    font-weight: 400;
-}
-
-.focus-item .content .title a::before {
-    content: '\f0da';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-}
-
-.focus-item .content .desc {
-    color: #272727;
-    -webkit-line-clamp: 2;
-}
-
-.focus-item .content .post-time {
-    color: #656565;
-    font-size: 0.9375rem;
-}
-
-.focus-left .btn-play i {
-    font-size: 95px;
 }
 
 .btn-play i {
@@ -363,14 +255,6 @@ main.main {
     font-size: 1.0625rem;
 }
 
-.widget-news .news-item .content .post-time {
-    position: absolute;
-    bottom: -10px;
-    right: 0;
-    line-height: 16px;
-    font-size: 0.875rem;
-}
-
 .widget-currency table {
     width: 100%;
     border: none;
@@ -450,11 +334,6 @@ main.main {
 
 .page-news-focus .section-title::before {
     width: 100%;
-}
-
-.bg-gray {
-    background-color: #dbdbdb !important;
-    color: #000 !important;
 }
 
 .property-item .desc {
@@ -733,34 +612,6 @@ figcaption {
 .box-meta {
     font-size: 0.875rem;
     color: #7f7f7f;
-}
-
-.box-function {
-    padding: 10px 25px;
-    background-color: #f9f9f9;
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-}
-
-.box-function span a,
-.box-function span {
-    margin-right: 20px;
-    display: flex;
-    align-items: center;
-    color: #909090;
-    text-transform: uppercase;
-    font-size: 1rem;
-}
-
-.box-function span.active {
-    color: #3774c6;
-}
-
-.box-function span i {
-    font-size: 20px;
-    margin-right: 5px;
-    cursor: pointer;
 }
 
 .box-desc {
@@ -1263,51 +1114,6 @@ figcaption {
     height: 21px;
     margin-right: 5px;
     overflow: hidden;
-}
-
-.info-contact .show-more {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    margin-top: 15px;
-}
-
-.info-contact .show-more a {
-    text-decoration: underline;
-    color: #00aeef;
-}
-
-.info-contact .list-social {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.info-contact .list-social .item-social {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px 10px 0;
-}
-
-.info-contact .list-social .item-social a {
-    color: #fff;
-    font-size: 24px;
-}
-
-.info-contact .list-social .social-fb {
-    background-color: #314b7e;
-}
-
-.info-contact .list-social .social-yt {
-    background-color: #e52c27;
-}
-
-.info-contact .list-social .social-tw {
-    background-color: #339dc4;
 }
 
 .profile-content .info-warning {

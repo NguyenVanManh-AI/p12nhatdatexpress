@@ -7,6 +7,7 @@
   --dark-color: #36393f;
   --gray-color: #b3b5b8;
   --gray: #808080;
+  --gray-300: #dee2e6;
   --dark-gray: #A9A9A9;
   --readonly-gray: #e9ecef;
   --darken-gray: #919191;
@@ -41,4 +42,7 @@
   --fixed-header-height: 45px;
   --fixed-header-mobile-height: 60px;
   --header-mobile-padding: 10px;
+
+  /* common */
+  --default-line-height: 1.5;
 }

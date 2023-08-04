@@ -16,11 +16,10 @@
             border: 1px solid #ccc;
             border-radius: 0;
         }
-
     </style>
 @endsection
-@section('Content')
 
+@section('Content')
 <h4 class="text-center font-weight-bold mt-5 mb-4">SEO TRANG CHỦ</h4>
 
 <form action="{{route('admin.seo.edit',[$home->id])}}" method="post" enctype="multipart/form-data">
@@ -41,10 +40,16 @@
     <div class="col-md-12 col-lg-6">
         <label  for="">Đường dẫn</label>
         <input class="form-group form-control" type="text" value= "{{$home->home_url}}"  name="home_url" placeholder="Đường dẫn">
-        <div class="">
-            <button type="submit" style="margin-top: 2px" class="btn bg-success"><i class="fas fa-plus-circle"></i> Cập nhật</button>
+
+        @if($check_role == 1 || key_exists(2, $check_role))
+        <div>
+            <button type="submit" class="btn bg-success mt-2">
+                <i class="fas fa-plus-circle"></i>
+                Cập nhật
+            </button>
         </div>
+        @endif
     </div>
-</div> 
+</div>
 </form>
 @endsection

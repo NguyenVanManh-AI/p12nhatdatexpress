@@ -221,43 +221,32 @@ class GuideController extends Controller
 
     }
 
-    public function trash_list(Request $request)
+    public function deleteMultiple(Request $request)
     {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $id) {
-            $guide = UserGuide::find($id);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-            if (!$guide) continue;
+        UserGuide::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
 
-            $guide->delete();
-            // Helper::create_admin_log(83, ['is_deleted' => 1]);
-        }
-
-        Toastr::success(' Xóa thành công');
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    public function untrash_list(Request $request)
+    public function restoreMultiple(Request $request)
     {
-        // dd($request->check);
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $id) {
-            $guide = UserGuide::onlyIsDeleted()->find($id);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-            if (!$guide) continue;
+        UserGuide::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
 
-            $guide->restore();
-            // Helper::create_admin_log(84, ['is_deleted' => 0]);
-        }
-        Toastr::success('Khôi phục thành công');
+        Toastr::success('Khôi phục thành công');
         return back();
-
     }
 
     public function forceDeleteMultiple(Request $request)

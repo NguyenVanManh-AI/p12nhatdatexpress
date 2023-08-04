@@ -1,5 +1,19 @@
 @extends('Admin.Layouts.Master')
+
+@section('Title', 'Thùng rác - Danh sách nạp | Nạp Express coin')
+
 @section('Content')
+
+<div class="row m-0 px-3 pt-3">
+  <ol class="breadcrumb mt-1">
+    <li class="recye px-2 pt-1  check">
+      <a href="{{route('admin.coin.list')}}">
+        <i class="fa fa-th-list mr-1"></i>Danh sách
+      </a>
+    </li>
+  </ol>
+</div> 
+<h4 class="text-center font-weight-bold mb-3 mt-2 text-uppercase">Quản lý thùng rác danh sách nạp</h4>
 
 <section class="content">
 
@@ -95,17 +109,16 @@
 
 
                     <td>
-                        @if($check_role == 1  ||key_exists(6, $check_role))
-                        
-                        <a href="javascript:{}" class="setting-item delete text-primary" data-created_by="{{Crypt::encryptString($item->confirm_by)}}" data-id="{{$item->id}}" ><i class="fas fa-undo-alt"></i> Khôi phục</a>
-                        @endif
-
-                        <x-admin.force-delete-button
-                            :check-role="$check_role"
-                            id="{{ $item->id }}"
-                            url="{{ route('admin.coin.force-delete-multiple') }}"
-                        />
-                    
+                        <div class="flex-column">
+                            <x-admin.restore-button
+                              :check-role="$check_role"
+                              url="{{ route('admin.coin.restore-multiple', ['ids' => $item->id]) }}"
+                            />
+                            <x-admin.force-delete-button
+                              :check-role="$check_role"
+                              url="{{ route('admin.coin.force-delete-multiple', ['ids' => $item->id]) }}"
+                            />
+                        </div>
                     </td>
 
                 </tr>
@@ -117,85 +130,12 @@
 
         </div>
 
-        <form action="" class="force-delete-item-form d-none" method="POST">
-            @csrf
-            <input type="hidden" name="ids">
-        </form>
-
-         {{-- phan trang --}}
-
-         <div class="d-flex align-items-center justify-content-between my-4">
-            <div class="d-flex align-items-center">
-                <div class="d-flex">
-                    <img src="image/manipulation.png" alt="" id="btnTop">
-                    <div class="btn-group ml-1">
-                        <!-- data-flip="false" -->
-                        <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                data-toggle="dropdown" aria-expanded="true" data-flip="false"
-                                aria-haspopup="true">
-                            Thao tác
-                        </button>
-                        <div class="dropdown-menu">
-                            
-                              @if($check_role == 1  ||key_exists(6, $check_role))
-                            <a class="dropdown-item unToTrash" type="button" href="javascript:{}">
-                                <i class="fas fa-undo-alt bg-primary     p-1 mr-2 rounded"
-                                   style="color: white !important;font-size: 15px"></i>Khôi phục
-                                   {{-- <input type="hidden" name="action" value="restore"> --}}
-                            </a>
-                               
-                             
-                            @else
-                            <p class="dropdown-item m-0 disabled">
-                                Bạn không có quyền
-                            </p>
-                            @endif
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mx-4">
-                    <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                    <form action="{{route('admin.coin.trash')}}" method="GET">
-                        <label class="select-custom2">
-                            <select id="paginateNumber" name="items" onchange="this.form.submit()">
-                                <option
-                                    @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">
-                                    10
-                                </option>
-                                <option
-                                    @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">
-                                    20
-                                </option>
-                                <option
-                                    @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">
-                                    30
-                                </option>
-                            </select>
-                        </label>
-                    </form>
-                </div>
-                <div>
-                    @if($check_role == 1  ||key_exists(4, $check_role))
-                    <a href="{{route('admin.coin.list')}}" class="btn btn-primary">
-                        Quay lại
-                    </a>
-                    @endif
-                </div>
-               
-            </div>
-            <div class="d-flex align-items-center">
-                <div class="count-item">Tổng cộng: {{$list_buy->total()}} items</div>
-                <div>
-                    @if($list_buy)
-             {{ $list_buy->render('Admin.Layouts.Pagination') }}
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- /Main row -->
-
+        <x-admin.table-footer
+            :check-role="$check_role"
+            :lists="$list_buy"
+            force-delete-url="{{ route('admin.coin.force-delete-multiple') }}"
+            restore-url="{{ route('admin.coin.restore-multiple') }}"
+        />
     </div><!-- /.container-fluid -->
 
 </section>
@@ -208,46 +148,7 @@
 
 </style>
 @endsection
+
 @section('Script')
 <script src="{{asset('system/js/table.js')}}"></script>
-
-<script>
-    $('.delete').click(function () {
-        var id = $(this).data('id');
-        var created_by = $(this).data('created_by');
-        Swal.fire({
-            title: 'Xác nhận khôi phục',
-            text: "Nhấn đồng ý thì sẽ tiến hành khôi phục!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "/admin/coin/untrash-coin/" + id+"/"+created_by;
-            }
-        });
-    });
-    $('.unToTrash').click(function () {
-        Swal.fire({
-            title: 'Xác nhận khôi phục',
-            text: "Nhấn đồng ý thì sẽ tiến hành khôi phục !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Quay lại',
-            confirmButtonText: 'Đồng ý'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#formaction').val('restore');
-                // alert($('#formaction').val('restore'));
-                $('#formtrash').submit();
-
-            }
-        });
-    });
-</script>
 @endsection

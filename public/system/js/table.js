@@ -35,7 +35,6 @@ $(function () {
     //check selected items
     inputSelectItem.click(function () {
         var checked = this.checked;
-        // console.log(checked);
         checkSelected();
     });
 
@@ -44,13 +43,11 @@ $(function () {
         var all = $("input.select-all")[0];
         var total = $("input.select-item").length;
         var len = $("input.select-item:checked:checked").length;
-        // console.log("total:"+total);
-        // console.log("len:"+len);
-        all.checked = len===total;
+        all.checked = len === total;
     }
 });
 //get selected info
-function getSelected(){
+function getSelected() {
     var items = [];
     $("input.select-item:checked:checked").each(function (index, item) {
         // items[index] = item.value;
@@ -61,7 +58,6 @@ function getSelected(){
         toastr.error('Không có mục nào được chọn !!!');
     } else {
         var values = items.join(',');
-        // console.log(values);
         var html = $("<div></div>");
         html.html("selected:" + values);
         html.appendTo("body");
@@ -75,11 +71,11 @@ jQuery(document).ready(function ($) {
             $(this).is(':checked') ? $(this).parent().parent().addClass('active') : $(this).parent().parent().removeClass('active')
         })
         $("input.select-all.checkbox").change(function () {
-            $(this).is(':checked') ? $(this).parent().parent().parent().siblings().find('tr').map((k,v) => $(v).addClass('active'))
-                : $(this).parent().parent().parent().siblings().find('tr').map((k,v) => $(v).removeClass('active'))
+            $(this).is(':checked') ? $(this).parent().parent().parent().siblings().find('tr').map((k, v) => $(v).addClass('active'))
+                : $(this).parent().parent().parent().siblings().find('tr').map((k, v) => $(v).removeClass('active'))
         })
         $("table input:text").change(function () {
-            $(this).parent().siblings().find('input.select-item').prop('checked',true)
+            $(this).parent().siblings().find('input.select-item').prop('checked', true)
             $(this).parent().parent().addClass('active')
         })
         // handle checkbox in table toggle
@@ -89,8 +85,159 @@ jQuery(document).ready(function ($) {
         })
         $("table input:checkbox.checkboxItem").change(function () {
             const tr = $(this).parent().parent().parent().parent();
-            tr.find('input.select-item').prop('checked',true)
+            tr.find('input.select-item').prop('checked', true)
             tr.addClass('active')
+        })
+
+        function restoreItem() {
+            if (!getSelected()) return
+            Swal.fire({
+                title: 'Xác nhận khôi phục!',
+                text: `Sau khi khôi phục sẽ được chuyển sang danh sách`,
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Quay lại',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitMultipleActionForm('restore')
+                }
+            })
+        }
+
+        function deleteItem() {
+            if (!getSelected()) return
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Quay lại',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.isConfirmed)
+                    submitMultipleActionForm('delete')
+            })
+        }
+
+        function forceDeleteItem() {
+            if (!getSelected()) return
+            Swal.fire({
+                title: 'Xác nhận xóa hẳn',
+                text: "Sau khi xóa sẽ không thể khôi phục",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Quay lại',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.isConfirmed)
+                    submitMultipleActionForm('duplicate')
+            })
+        }
+
+        function duplicateItem() {
+            if (!getSelected()) return
+            Swal.fire({
+                title: 'Xác nhận nhân bản!',
+                text: "Sau khi nhân bản sẽ có thêm 1 bản ghi tương tự!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Quay lại',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.isConfirmed)
+                    submitMultipleActionForm('duplicate')
+            })
+        }
+
+        function updateItem() {
+            if (!getSelected()) return
+            Swal.fire({
+                title: 'Xác nhận cập nhật',
+                text: `Cập nhật thông tin`,
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Quay lại',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.isConfirmed)
+                    submitMultipleActionForm('duplicate')
+            })
+        }
+
+        const submitMultipleActionForm = (action, updateActions) => {
+            let $table = $('.js-table__has-multiple-action'),
+                $form = $('.js-table__action-form'),
+                url = $form.attr(`data-${action}-url`);
+
+            if (!url || !$form || !$form.length) return
+
+            const selectedArray = getSelected();
+            let ids = [];
+
+            selectedArray.forEach(element => {
+                const selectedId = $(element).val()
+
+                if (selectedId) {
+                    ids.push(selectedId)
+                    if (updateActions && updateActions.length && typeof updateActions == 'object') {
+                        updateActions.forEach(updateAction => {
+                            switch (updateAction) {
+                                case 'order':
+                                    const orderIndex = $table.find(`[name="show_order[${selectedId}]"]`).val()
+                                    if (orderIndex != null)
+                                        $form.append(`
+                                            <input type="hidden" name="show_order[${selectedId}]" value="${orderIndex}" />
+                                        `)
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
+                    }
+                }
+            })
+
+            $form.attr('action', url)
+            $form.find('input[name="ids"]').val(ids)
+            $form.trigger('submit')
+        }
+
+        $(document).ready(function () {
+            $('.js-delete-multiple').on('click', function (e) {
+                e.preventDefault()
+                deleteItem()
+            })
+
+            $('.js-force-delete-multiple').on('click', function (e) {
+                e.preventDefault()
+                forceDeleteItem()
+            })
+
+            $('.js-restore-multiple').on('click', function (e) {
+                e.preventDefault()
+                restoreItem()
+            })
+
+            $('.js-duplicate-multiple').on('click', function (e) {
+                e.preventDefault()
+                duplicateItem()
+            })
+
+            $('.js-update-show-order').on('click', function (e) {
+                e.preventDefault()
+                updateItem(['order'])
+            })
         })
     })
 })

@@ -1,5 +1,7 @@
 @extends('Admin.Layouts.Master')
 
+@section('Title', 'Thiết lập | Tiêu điểm')
+
 @section('Content')
     <section class="content">
         <div class="container-fluid">

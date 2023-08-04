@@ -1,88 +1,45 @@
-<div class="card express-new-item" >
-    <div class="express-new-item__image-box relative">
-        <a href="{{$property->video_url}}" class="express-new-item__image absolute-full html5lightbox-{{$property->id}}" data-id="{{$property->id}}" data-titlestyle="right" data-description="<h3 class='title-box'>Tiêu đề: {{$property->news_title}}</h3>
-            <span class='box-meta'>
-                <span class='box-view'>{{$property->num_view}} lượt xem </span>
-                <span class='box-time'>• {{date('d/m/Y', $property->created_at)}}</span>
-            </span>
-            <div class='box-function'>
-                <span class='@auth('user') box-like @endauth @if(isset($property->like_type) && $property->like_type == 1) active @endif' data-id='{{$property->id}}'><i class='fas fa-thumbs-up'></i> <span id='num_like-{{$property->id}}'>{{$property->num_like}}</span></span>
-                <span class='@auth('user') box-dislike @endauth @if(isset($property->like_type) && $property->like_type == 0) active @endif' data-id='{{$property->id}}'><i class='fas fa-thumbs-down'></i> <span id='num_dislike-{{$property->id}}'>{{$property->num_dislike}}</span></span>
-                <span class='box-share'><a href='https://www.facebook.com/sharer/sharer.php?u={{route('home.focus.detail', [$group->group_url, $property->news_url])}}' target='_blank'><i class='fas fa-share'></i> chia sẻ</a></span>
-                <span class='posts-more dropdown'>
-                    <i class='fas fa-ellipsis-h' data-toggle='dropdown' aria-expanded='false'></i>
-                    <div class='dropdown-menu dropdown-menu-right'>
-                        <a href='#' class='dropdown-item'>
-                            Báo cáo
-                        </a>
-                    </div>
-                </span>
+@if (isset($group) && $group->id == 49 && $property->video_url)
+  <div class="col-lg-4 col-sm-6">
+    <div class="focus-list__item border c-mr-1 mb-3">
+      <div class="px-2 pt-2">
+        <div class="image-ratio-box relative">
+          <a href="javascript:void(0);" class="express-new-item__image absolute-full js-focus__open-html5lightbox"
+            data-id="{{ $property->id }}"
+          >
+            <img class="lazy object-cover" data-src="{{ $property->getImageUrl() }}" alt="">
+            <div class="absolute-full flex-center">
+              <span class="express-new-item__btn-play hover-shadow-darker flex-center square-size-50 rounded-circle bg-white fs-25">
+                <i class="fas fa-play"></i>
+              </span>
             </div>
-            <div class='box-desc'>
-                {{$property->news_content}}
-            </div>
-            <div class='box-author'>
-            <span>{{data_get($property->adminCreatedBy, 'admin_fullname')}}</span>
-            </div>">    
-            <img class="object-cover" src="{{ asset($property->image_url) }}" alt="">
-        </a>
-        <a href="{{$property->video_url}}" class="express-new-item__play-button poppup-video html5lightbox-{{$property->id}}" data-id="{{$property->id}}" data-titlestyle="right" data-description="<h3 class='title-box'>Tiêu đề: {{$property->news_title}}</h3>
-            <span class='box-meta'>
-                <span class='box-view'>{{$property->num_view}} lượt xem </span>
-                <span class='box-time'>• {{date('d/m/Y', $property->created_at)}}</span>
-            </span>
-            <div class='box-function'>
-                <span class='@auth('user') box-like @endauth @if(isset($property->like_type) && $property->like_type == 1) active @endif' data-id='{{$property->id}}'><i class='fas fa-thumbs-up'></i> <span id='num_like-{{$property->id}}'>{{$property->num_like}}</span></span>
-                <span class='@auth('user') box-dislike @endauth @if(isset($property->like_type) && $property->like_type == 0) active @endif' data-id='{{$property->id}}'><i class='fas fa-thumbs-down'></i> <span id='num_dislike-{{$property->id}}'>{{$property->num_dislike}}</span></span>
-                <span class='box-share'><a href='https://www.facebook.com/sharer/sharer.php?u={{route('home.focus.detail', [$group->group_url, $property->news_url])}}' target='_blank'><i class='fas fa-share'></i> chia sẻ</a></span>
-                <span class='posts-more dropdown'>
-                    <i class='fas fa-ellipsis-h' data-toggle='dropdown' aria-expanded='false'></i>
-                    <div class='dropdown-menu dropdown-menu-right'>
-                        <a href='#' class='dropdown-item'>
-                            Báo cáo
-                        </a>
-                    </div>
-                </span>
-            </div>
-            <div class='box-desc'>
-                {{$property->news_content}}
-            </div>
-            <div class='box-author'>
-            <span>{{data_get($property->adminCreatedBy, 'admin_fullname')}}</span>
-            </div>">        
-        <div class="btn-play"><i class="fas fa-play-circle" style="font-size: 50px"></i></div>     
-        </a>
-    </div>
-    <div class="card-body">
-        <h4 class="title text-ellipsis ellipsis-2 text-break fs-14">
-        <a href="{{$property->video_url}}" class="html5lightbox-{{$property->id}}" data-id="{{$property->id}}" data-titlestyle="right" data-description="<h3 class='title-box'>Tiêu đề: {{$property->news_title}}</h3>
-            <span class='box-meta'>
-                <span class='box-view'>{{$property->num_view}} lượt xem </span>
-                <span class='box-time'>• {{date('d/m/Y', $property->created_at)}}</span>
-            </span>
-            <div class='box-function'>
-                <span class='@auth('user') box-like @endauth @if(isset($property->like_type) && $property->like_type == 1) active @endif' data-id='{{$property->id}}'><i class='fas fa-thumbs-up'></i> <span id='num_like-{{$property->id}}'>{{$property->num_like}}</span></span>
-                <span class='@auth('user') box-dislike @endauth @if(isset($property->like_type) && $property->like_type == 0) active @endif' data-id='{{$property->id}}'><i class='fas fa-thumbs-down'></i> <span id='num_dislike-{{$property->id}}'>{{$property->num_dislike}}</span></span>
-                <span class='box-share'><a href='https://www.facebook.com/sharer/sharer.php?u={{route('home.focus.detail', [$group->group_url, $property->news_url])}}' target='_blank'><i class='fas fa-share'></i> chia sẻ</a></span>
-                <span class='posts-more dropdown'>
-                    <i class='fas fa-ellipsis-h' data-toggle='dropdown' aria-expanded='false'></i>
-                    <div class='dropdown-menu dropdown-menu-right'>
-                        <a href='#' class='dropdown-item'>
-                            Báo cáo
-                        </a>
-                    </div>
-                </span>
-            </div>
-            <div class='box-desc'>
-                {{$property->news_content}}
-            </div>
-            <div class='box-author'>
-            <span>{{data_get($property->adminCreatedBy, 'admin_fullname')}}</span>
-            </div>">
-                {{ $property->news_title }}
-            </a>
-        </h4>
-        {{-- <span class="post-time"><i class="far fa-clock"></i> {{get_time($property->created_at)}} </span> --}}
-        {{-- <div class="desc">{{$property->news_description}}</div> --}}
+          </a>
+          <div class="text-white-shadow position-absolute bottom-0 end-0 px-2 py-1 fs-14">
+            <i class="far fa-clock"></i> {{ getHumanTimeWithPeriod($property->created_at) }}
+          </div>
+        </div>
+
+        <div class="item-body px-2 pb-2">
+          <a href="javascript:void(0);"
+            class="link focus-list__item-title text-ellipsis ellipsis-2 js-focus__open-html5lightbox"
+            data-id="{{ $property->id }}"
+          >
+            {{ $property->news_title }}
+          </a>
+        </div>
+      </div>
     </div>
   </div>
+@else
+  <div class="col-lg-4 col-sm-6">
+    <x-home.focus.item :item="$property" class="mb-3">
+      <x-slot name="detail">
+        <div class="item-body px-2 pb-2">
+          <a class="link focus-list__item-title text-ellipsis ellipsis-2"
+            href="{{ data_get($property->group, 'group_url') ? route('home.focus.detail', [data_get($property->group, 'group_url'), $property->news_url]) : 'javascript:void(0);' }}">
+            {{ $property->news_title }}
+          </a>
+        </div>
+      </x-slot>
+    </x-home.focus.item>
+  </div>
+@endif

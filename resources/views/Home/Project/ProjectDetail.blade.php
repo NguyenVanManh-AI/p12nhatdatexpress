@@ -422,6 +422,7 @@
                                 </div>
                                 
                                 {{-- should change to other global class insteal of detail-inner classified-detail-table-inner --}}
+                                @if(count($utilities))
                                 <div class="detail-inner classified-detail-table-inner project-page__utilities mb-4">
                                     <div class="detail-title">Hệ thống tiện ích</div>
 
@@ -439,14 +440,10 @@
                                                 <p class="mb-0 fs-12">{{ $utility->utility_name }}</p>
                                             </div>
                                         @empty
-                                            <div class="col-12">
-                                                <p class="p-2 mb-0 text-center">
-                                                    Không có tiện ích
-                                                </p>
-                                            </div>
                                         @endforelse
                                     </div>
                                 </div>
+                                @endif
 
                                 <x-home.project.calc-loan :project="$project"/>
 

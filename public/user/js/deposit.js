@@ -6,7 +6,7 @@ $(document).ready(function() {
             return;
         }
         $.ajax({
-            url: 'ajax-valid-voucher',
+            url: '/thanh-vien/ajax-valid-voucher',
             type: "GET",
             dataType: "json",
             data: {'voucherType':1,'voucherCode': voucherCode},

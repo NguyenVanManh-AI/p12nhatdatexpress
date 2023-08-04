@@ -11,9 +11,10 @@ Route::name('admin.event.')->prefix('event')->group(function(){
     Route::get('/trash', [EventController::class, 'trash'])->name('trash')->middleware('admin.check:18,4');
     Route::get('/edit/{id}/{created_at}', [EventController::class, 'edit'])->name('edit')->middleware('admin.check:18,2');
     Route::post('/update/{id}/{created_at}', [EventController::class, 'update'])->name('update')->middleware('admin.check:18,2');
-    Route::get('/delete/{id}/{created_at}', [EventController::class, 'delete'])->name('delete')->middleware('admin.check:18,5');
-    Route::get('/restore/{id}/{created_at}', [EventController::class, 'restore'])->name('restore')->middleware('admin.check:18,6');
+    Route::post('/delete-multiple', [EventController::class, 'deleteMultiple'])->name('delete-multiple')->middleware('admin.check:18,5');
+    Route::post('/restore-multiple', [EventController::class, 'restoreMultiple'])->name('restore-multiple')->middleware('admin.check:18,6');
     Route::post('/force-delete-multiple', [EventController::class, 'forceDeleteMultiple'])->name('force-delete-multiple')->middleware('admin.check:18,7');
+
     Route::get('/change-status/{id}/{status}', [EventController::class, 'change_status'])->name('change-status')->middleware('admin.check:18,2');
 //    Route::get('/toggle-highlight/{id}', [EventController::class, 'toggle_highlight'])->name('toogle-highlight')->middleware('admin.check:18,2');
     Route::post('/action', [EventController::class, 'action'])->name('action')->middleware('admin.check:18,2');
@@ -21,8 +22,6 @@ Route::name('admin.event.')->prefix('event')->group(function(){
     Route::post('/add', [EventController::class, 'post'])->middleware('admin.check:18,1');
 //    Route::get('/hight-light/{id}/{value}',[EventController::class,'high_light'])->name('high_light')->middleware('admin.check:18,2');
 //    Route::get('/hight-light/{id}',[EventController::class,'unhightlight'])->name('unhigh_light')->middleware('admin.check:18,2');
-
-
 
     Route::name('report.')->prefix('report')->group(function(){
         Route::get('/', [EventReportController::class, 'list'])->name('list')->middleware('admin.check:19,4');

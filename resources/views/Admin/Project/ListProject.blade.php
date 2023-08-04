@@ -158,8 +158,6 @@
 
                             </thead>
                             <tbody>
-                            <form id="formtrash" action="{{route('admin.project.trashlist')}}" method="POST">
-                                @csrf
                                 @foreach ($list_project as $item )
                                     <tr>
                                         <td class="active">
@@ -219,96 +217,62 @@
                                         <td class="" style="overflow-x: hidden;max-width: 100px">
                                             <span>{{ data_get($item->admin, 'admin_fullname') }}</span>
                                         </td>
-                                        <td>
-                                            <a href="{{route('home.project.project-detail', $item->project_url)}}" target="__blank"  class="setting-item view mb-2"><i class="fas fa-file-alt"></i> Xem</a>
+                                        <td class="text-left">
                                             @if($check_role == 1  ||key_exists(2, $check_role))
-                                            <a href="{{route('admin.project.edit', [$item->id, \Crypt::encryptString($item->created_by)])}}" class="setting-item edit mb-2"><i class="fas fa-cog"></i> Chỉnh sửa</a>
+                                                <div class="mb-2 ml-2">
+                                                    <span class="icon-small-size mr-1 text-dark">
+                                                        <i class="fas fa-cog"></i>
+                                                    </span>
+                                                    <a href="{{route('home.project.project-detail', $item->project_url)}}" class="text-primary">Chỉnh sửa</a>
+                                                </div>
                                             @endif
 
-                                            @if($check_role == 1  ||key_exists(5, $check_role))
-                                            <a href="javascript:{}" class="setting-item text-red mb-2 delete" data-id="{{$item->id}}" data-created_by="{{\Crypt::encryptString($item->created_by)}}"><i class="fas fa-times"></i> Xóa</a>
-                                            @endif
+                                            <x-admin.delete-button
+                                                :check-role="$check_role"
+                                                url="{{ route('admin.project.delete-multiple', ['ids' => $item->id]) }}"
+                                            />
 
                                             @if($check_role == 1  ||key_exists(4, $check_role))
-                                            <div class="position-relative">
+                                            <div class="position-relative mb-2 ml-2">
                                                 <a href="#" class="setting-item comment mb-2" data-id="{{$item->id}}" onclick="getCommentProject(event,'{{route('project.comment.new', $item->id)}}'); window.selectedComment = this;">
-                                                    <i class="fas fa-comment-dots"></i> Bình luận
-                                                @if($item->total_new_comments_count > 0)
-                                                    <span class="count">{{$item->total_new_comments_count}}</span>
-                                                @endif
+                                                    <span class="icon-small-size mr-1 text-dark">
+                                                        <i class="fas fa-comment-dots"></i>
+                                                    </span>
+                                                    Bình luận
+                                                    @if($item->total_new_comments_count > 0)
+                                                        <span class="count">{{$item->total_new_comments_count}}</span>
+                                                    @endif
                                                 </a>
                                             </div>
                                             @endif
 
                                             @if($check_role == 1  ||key_exists(4, $check_role))
-                                            <div class="position-relative">
-                                                <a href="{{route('admin.project.list-report')}}?project_id={{$item->id}}" class="setting-item notify" ><i class="fas fa-info-circle"></i> Xem báo cáo
+                                            <div class="position-relative mb-2 ml-2">
+                                                <a href="{{route('admin.project.list-report')}}?project_id={{$item->id}}" class="setting-item notify" >
+                                                    <span class="icon-small-size mr-1 text-dark">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </span>
+                                                    Xem báo cáo
                                                     @if($item->report_pending_count > 0)
                                                         <span class="count">{{$item->report_pending_count}}</span>
                                                     @endif
                                                 </a>
                                             </div>
                                             @endif
-
                                         </td>
                                     </tr>
                                 @endforeach
-                            </form>
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="table-bottom d-flex align-items-center justify-content-between mb-4  pb-5">
-                        <div class="text-left d-flex align-items-center">
-                            <div class="manipulation d-flex mr-4">
-                                <img src="{{asset('system/image/manipulation.png')}}" alt="" id="btnTop">
-                                <div class="btn-group ml-1">
-                                    <button type="button" class="btn dropdown-toggle dropdown-custom"
-                                            data-toggle="dropdown"
-                                            aria-expanded="false" data-flip="false" aria-haspopup="true">
-                                        Thao tác
-                                    </button>
-                                    <div class="dropdown-menu">
-                                         @if($check_role == 1  ||key_exists(8, $check_role))
-                                        <a class="dropdown-item moveToTrash" type="button" href="javascript:{}">
-                                            <i class="fas fa-trash-alt bg-red p-1 mr-2 rounded"
-                                               style="color: white !important;font-size: 15px"></i>Thùng rác
-                                            <input type="hidden" name="action" value="trash">
-                                        </a>
-                                         @else
-                                        <p class="dropdown-item m-0 disabled">
-                                            Bạn không có quyền
-                                        </p>
-                                         @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between mx-4">
-                                <div class="d-flex mr-2 align-items-center">Hiển thị</div>
-                                <form action="{{route('admin.project.list')}}" method="GET">
-                                    <label class="select-custom2">
-                                        <select id="paginateNumber" name="items" onchange="submitPaginate(event, this)">
-                                            <option @if(isset($_GET['items']) && $_GET['items'] == 10) {{ 'selected' }} @endif value="10">10</option>
-                                            <option @if(isset($_GET['items']) && $_GET['items'] == 20) {{ 'selected' }} @endif  value="20">20</option>
-                                            <option @if(isset($_GET['items']) && $_GET['items'] == 30) {{ 'selected' }} @endif  value="30">30</option>
-                                        </select>
-                                    </label>
-                                </form>
-                            </div>
-                            <div class="view-trash">
-                                <a href="{{route('admin.project.trash')}}"><i class="far fa-trash-alt"></i> Xem thùng
-                                    rác</a>
-                                <span class="count-trash">{{$count_trash}}</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center" >
-                            <div class="count-item" >Tổng cộng: @empty($list_project) {{0}} @else {{$list_project->total()}} @endempty items</div>
-                            <div class="count-item count-item-reponsive" style="display: none">@empty($list_project) {{0}} @else {{$list_project->total()}} @endempty items</div>
-                            @if($list_project)
-                                {{ $list_project->render('Admin.Layouts.Pagination') }}
-                            @endif
-                        </div>
-                    </div>
+                    <x-admin.table-footer
+                        :check-role="$check_role"
+                        :lists="$list_project"
+                        :count-trash="$count_trash"
+                        view-trash-url="{{ route('admin.project.trash') }}"
+                        delete-url="{{ route('admin.project.delete-multiple') }}"
+                    />
                 </div>
             </div>
         </div>
@@ -378,47 +342,6 @@
             $('#txtDateEnd').hide();
         }
 
-
-        $('.delete').click(function () {
-            var id = $(this).data('id');
-            var created_by = $(this).data('created_by');
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{route('admin.project.trash_item',['',''])}}" + '/' +id + '/' + created_by;
-                }
-            });
-        });
-        $('.moveToTrash').click(function () {
-            const selectedArray = getSelected();
-            if (!selectedArray) return;
-
-            var id = $(this).data('id');
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('#formtrash').submit();
-
-                }
-            });
-        });
         // view modal
         $("#viewModal").on('hide.bs.modal', function(){
             $('#content-project').empty()

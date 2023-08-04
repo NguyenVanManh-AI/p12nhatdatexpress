@@ -37,7 +37,7 @@ class ProjectService
         $paradigmUrl = data_get($queries, 'paradigm');
         if ($districtId && $paradigmUrl) {
             $paradigm = (new GroupService())->getGroupFromUrl($paradigmUrl);
-            $district = District::where('is_show', 1)->find($districtId);
+            $district = District::showed()->find($districtId);
             if ($paradigm && $district) {
                 $this->featuredKeyWordService->createOrUpdate($paradigm);
                 $this->featuredKeyWordService->createOrUpdate($district);
@@ -101,13 +101,22 @@ class ProjectService
         if ($keyword)
             Helper::check_keyword($keyword, 1);
 
-        $districtLocation = getDistrictLocation();
 
         if (data_get($filters, 'load_individual')) {
-            $districtLocation = data_get($filters, 'accept_near') ? getDistrictLocation(true) : null;
+            $provinceLocation = request()->accept_near
+                ? getSessionLocation('province', true)
+                : null;
         } else {
-            $districtLocation = getDistrictLocation();
+            $provinceLocation = getSessionLocation('province');
         }
+
+        // $districtLocation = getDistrictLocation();
+
+        // if (data_get($filters, 'load_individual')) {
+        //     $districtLocation = data_get($filters, 'accept_near') ? getDistrictLocation(true) : null;
+        // } else {
+        //     $districtLocation = getDistrictLocation();
+        // }
 
         // should check maybe accept location not search selected province & district ?
         // if ($districtLocation) {
@@ -116,7 +125,7 @@ class ProjectService
         // }
 
         $query = $query->when($keyword, function ($query, $keyword) {
-                // maybe keyword includes search description, location .. 
+                // maybe keyword includes search description, location ..
                 $query->where('project.project_name', 'LIKE', '%' . $keyword . '%');
             })
             ->when(data_get($filters, 'search_title'), function ($query, $searchTitle) {
@@ -128,9 +137,9 @@ class ProjectService
             ->when(data_get($filters, 'district_id'), function ($query, $districtId) {
                 $query->where('project_location.district_id', $districtId);
             })
-            ->when($districtLocation, function ($query, $districtLocation) {
-                return $query->where('project_location.district_id', $districtLocation);
-            })
+            // ->when($districtLocation, function ($query, $districtLocation) {
+            //     return $query->where('project_location.district_id', $districtLocation);
+            // })
             ->when(data_get($filters, 'progress_id'), function ($query, $progress) {
                 $query->where('project.project_progress', $progress);
             })
@@ -142,6 +151,9 @@ class ProjectService
             })
             ->when(data_get($filters, 'bank_sponsor'), function ($query) {
                 $query->where('project.bank_sponsor', 1);
+            })
+            ->when($provinceLocation, function ($query) {
+                return $this->selectNear($query);
             });
 
         $listUtilityMap = [
@@ -314,5 +326,47 @@ class ProjectService
                 'confirm_status' => 0,
                 'report_time' => time(),
             ]);
+    }
+
+     /**
+     * query search near
+     * @param $query
+     * @param boolean $sort = false
+     * @param int|string $radius = 15 default 15km
+     *
+     * @return $query
+     */
+    public function selectNear($query, $sort = false, $radius = 15)
+    {
+        $provinceLocation = getSessionLocation('province', true);
+        $location = getSessionLocation('latLng', true);
+        $lat = data_get($location, 'lat');
+        $lng = data_get($location, 'lng');
+
+        if ($lat === null || $lng === null) return $query;
+
+        if ($lat < -90 || $lat > 90) $lat = 90;
+        if ($lng < -180 || $lng > 180) $lng = 180;
+
+        $radius = (int) $radius * 1000; // convert km to meters
+
+        return $query->whereRaw("(
+                ST_Distance_Sphere(
+                    point(project_location.map_longtitude, project_location.map_latitude),
+                    point(?, ?)
+                )
+            ) < ?", [$lng, $lat, $radius])
+            // check only in province
+            ->when($provinceLocation, function ($query, $provinceLocation) {
+                return $query->where('project_location.province_id', $provinceLocation);
+            })
+            ->when($sort, function ($query) use ($lng, $lat) {
+                return $query->selectRaw('
+                        Round(ST_Distance_Sphere(Point(project_location.map_longtitude, project_location.map_latitude),
+                        Point(' . $lng . ',' . $lat . '))/1000, 1)
+                        as distance'
+                    )
+                    ->oldest('distance');
+            });
     }
 }

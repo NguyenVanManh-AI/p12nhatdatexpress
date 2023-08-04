@@ -73,7 +73,7 @@ class Event extends Model
     }
 
     public function bussiness_detail(){
-        return $this->belongsTo(User\UserDetail::class, 'user_id', 'id');
+        return $this->belongsTo(User\UserDetail::class, 'user_id', 'user_id');
     }
 
     public function admin(){
@@ -84,7 +84,7 @@ class Event extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
     public function user_detail(){
-        return $this->belongsTo(User\UserDetail::class, 'user_id', 'id');
+        return $this->belongsTo(User\UserDetail::class, 'user_id', 'user_id');
     }
 
     public function location() : HasOne

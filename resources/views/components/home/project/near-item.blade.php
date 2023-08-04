@@ -1,6 +1,6 @@
 <div class="near-item mb-3">
   <a href="{{ route('home.project.project-detail', $item->project_url) }}"
-    class="name text-ellipsis ellipsis-2 text-break fs-14">
+    class="name text-ellipsis ellipsis-2 text-break fs-14 lh-1">
     {{ $item->project_name }}
   </a>
   <div class="content d-flex">

@@ -295,3 +295,64 @@
     transform: translateX(-50%);
     width: max-content;
 }
+
+/* start override select2 */
+:not(.select2-auto) > .select2-container {
+    width: 100% !important;
+}
+/* select2 text too long */
+li.select2-selection__choice {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+ul.select2-selection__rendered {
+    padding-right: 12px !important;
+}
+/* select2 error border */
+.bg-gray ~ .select2-container .select2-selection--single, .bg-gray ~ .select2-container .select2-selection--multiple {
+    background-color: #dbdbdb;
+}
+.is-invalid ~ .select2-container .select2-selection--single, .is-invalid ~ .select2-container .select2-selection--multiple {
+    border-color: var(--danger);
+    padding-right: 3.25rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(1.575em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)
+}
+.is-invalid ~ .select2-container .select2-selection--single .select2-selection__rendered, .is-invalid ~ .select2-container .select2-selection--multiple .select2-selection__rendered {
+    padding-right: 0;
+}
+.input-group-append .select2-container .select2-selection--single, .input-group-append .select2-container .select2-selection--multiple {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #e9ecef;
+}
+
+.form-control, .custom-select {
+    height: calc(2.5rem + 2px);
+}
+.select2-container--default .select2-selection--single {
+    height: calc(2.5rem + 2px);
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 2rem;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(2rem + 1px);
+}
+/* end override select2 */
+/* override tinyMce textarea error border */
+.is-invalid ~ .tox-tinymce {
+    border-color: var(--danger);
+}
+.selectize-input {
+    min-height: calc(2.5rem + 2px);
+}
+.selectize-control.multi .selectize-input.has-items {
+    padding: 6px !important;
+    padding-top: 7px !important;
+}

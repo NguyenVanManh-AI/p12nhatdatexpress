@@ -536,9 +536,6 @@ function autoload(element, url, data, appendElement, autoloadElement = '.auto_lo
                         $(element).attr("data-start", parseInt(num_cur) + parseInt(output.num));
                         $(appendElement).append(output.html);
                         is_loading = 0;
-
-                        // lazy image should move to global when finish
-                        loadingImage()
                     } else {
                         $(autoloadElement).remove();
                     }

@@ -6,7 +6,7 @@
         @csrf
         <div class="row">
             <div class="col-md-6 col-update">
-                <label>{{$user_info->user_type_id == 3?'Tên công ty': 'Họ tên'}}
+                <label>{{ auth('user')->user()->isEnterprise() ? 'Tên công ty' : 'Họ tên'}}
                     <span class="text-danger">*</span>
                 </label>
                 <input type="text" name="fullname" class="form-control" value="{{old('fullname')??$user_info->fullname}}">
@@ -24,7 +24,7 @@
                             <span class="text-danger">*</span>
                         </label>
                     </div>
-                    @if(auth('user')->user()->user_type_id == 1)
+                    @if(!auth('user')->user()->isEnterprise())
                     <div>
                         <div class="form-check text-right">
                             <input class="form-check-input" type="checkbox" name="phone_securiry" value="1" {{ old('phone_securiry', $user_info->phone_securiry) ? 'checked' : '' }}>
@@ -52,7 +52,7 @@
                 {{show_validate_error($errors, 'email')}}
             </div>
             <div class="col-md-6 col-update">
-                <label>{{ $user_info->user_type_id == 3 ? 'Mã số thuế': 'Số CMND/CCCD' }}
+                <label>{{ auth('user')->user()->isEnterprise() ? 'Mã số thuế': 'Số CMND/CCCD' }}
                     <span class="text-danger">*</span>
                 </label>
                 <input type="text" name="tax_number" class="form-control" {{ $user_info->tax_number ? 'disabled readonly' : '' }} value="{{ old('tax_number', $user_info->tax_number) }}">

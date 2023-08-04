@@ -337,23 +337,6 @@
             const re = /([&\?]items=\d*$|items=\d&|[?&]items=\d(?=#))/
             exist > 0 && existItems < 0 ? window.location.href = uri.replace(re, '') + '&items=' + $('#paginateNumber').val() : window.location.href = uri.replace(re, '') + '?items=' + $('#paginateNumber').val()
         }
-        function deleteItem(id, created)
-        {
-            Swal.fire({
-                title: 'Xác nhận xóa',
-                text: "Sau khi xóa sẽ chuyển vào thùng rác!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Quay lại',
-                confirmButtonText: 'Đồng ý'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href= `{{route('admin.event.delete', ['',''])}}/${id}/${created}`;
-                }
-            })
-        }
         function changeStatus(id, status)
         {
             Swal.fire({

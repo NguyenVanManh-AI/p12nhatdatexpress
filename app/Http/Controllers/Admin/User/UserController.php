@@ -203,7 +203,7 @@ class UserController extends Controller
 
         if ($request->action_method == 'restore') {
             foreach ($request->select_item as $item) {
-                $ $user = User::find($item);
+                $user = User::find($item);
                 if (!$user) continue;
 
                 $this->userService->restoreUser($user);

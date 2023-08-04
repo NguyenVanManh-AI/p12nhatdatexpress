@@ -21,12 +21,9 @@ class Near extends Component
     {
         $this->group = $group;
 
-        $classified = Classified::leftJoin('classified_location','classified_location.classified_id','=','classified.id')
+        $classified = Classified::select('classified.*')
+            ->leftJoin('classified_location','classified_location.classified_id','=','classified.id')
             ->with('unit_area:id,unit_name', 'location.province:id,province_name,province_type', 'location.district:id,district_name,district_type', 'unit_price')
-            ->select('classified.id', 'classified_name', 'classified_url', 'image_perspective', 'num_view', 'classified_price',
-                'price_unit_id', 'area_unit_id',
-                'classified_area',
-                'group_parent.group_url as group_parent_url', 'group_parent_parent.group_url as group_parent_parent_url')
             ->leftJoin('group','group.id','=','classified.group_id')
             ->leftJoin('group as group_parent','group_parent.id','=','group.parent_id')
             ->leftJoin('group as group_parent_parent','group_parent_parent.id','=','group_parent.parent_id')
@@ -34,7 +31,7 @@ class Near extends Component
             ->where(function ($query) {
                 $query->where('group_parent_parent.id','=',$this->group)
                     ->orWhere('group_parent.id','=',$this->group);
-                });
+            });
 
         $classified = (new ClassifiedService())->selectNear($classified, true);
 

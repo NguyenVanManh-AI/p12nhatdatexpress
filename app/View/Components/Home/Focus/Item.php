@@ -13,10 +13,12 @@ class Item extends Component
      *
      * @return void
      */
-    public function __construct($item)
-    {
+    public function __construct(
+        $item
+    ) {
         $this->item = $item;
     }
+
     /**
      * Get the view / contents that represent the component.
      *

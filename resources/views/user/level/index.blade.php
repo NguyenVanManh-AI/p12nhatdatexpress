@@ -1,9 +1,9 @@
 @extends('user.layouts.master')
 @section('title', 'Quản lý cấp bậc')
 @section('content')
-  <x-user.breadcrumb
+  {{-- <x-user.breadcrumb
     active-label="Quản lý cấp bậc"
-  />
+  /> --}}
 
   <div class="user-level-page">
     <div class="container bg-unset">

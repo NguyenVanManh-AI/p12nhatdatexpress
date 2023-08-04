@@ -158,10 +158,10 @@
                   <div class="form-group">
                     <x-common.text-input
                       name="date"
-                      input-class="js-date-placeholder"
                       :type="old('date') ? 'date' : 'text'"
                       value="{{ request()->date }}"
                       placeholder="Thời gian"
+                      hover-date
                     />
                   </div>
                 </div>
@@ -236,7 +236,7 @@
                     </div>
                     @if($conversation->getFirstMessage())
                       <div class="flex-between">
-                        <span class="text-light-cyan">
+                        <span class="{{ $conversation->getChatTextClass() }}">
                           {{ $conversation->getChatActionLabel() }}
                         </span>
                         <span class="text-muted">

@@ -283,7 +283,7 @@
     margin-bottom: 85px;
 }
 .user-level-page .user-level__box .user-level__carousel .user-level__item {
-    transform: scale(.7);
+    transform: scale(.8);
 }
 .user-level-page .user-level__box .user-level__carousel .owl-item.center .user-level__item {
     transform: scale(1);

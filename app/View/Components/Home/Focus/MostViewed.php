@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Home\Focus;
 
-use App\Models\News;
-use Illuminate\Support\Facades\DB;
+use App\Services\FocusService;
+use Illuminate\Http\Request;
 use Illuminate\View\Component;
 
 class MostViewed extends Component
@@ -14,14 +14,15 @@ class MostViewed extends Component
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->list = News::select('news.*', 'group.id as group_id', 'group.group_name', 'group.group_url')
-            ->showed()
-            ->orderBy('news.num_view', 'desc')
-            ->leftJoin('group', 'group.id', '=', 'news.group_id')
-            ->take(5)
-            ->get();
+        $focusService = new FocusService;
+
+        $queries = $request->all();
+        $queries['limit'] = config('constants.focus-news.most_viewed.limit', 5);
+        $queries['sort_num_view'] = true;
+
+        $this->list = $focusService->getListFromQuery($queries);
     }
 
     /**

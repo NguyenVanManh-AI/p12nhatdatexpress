@@ -1,6 +1,14 @@
 @extends('Admin.Layouts.Master')
+
 @section('Title', 'Cấu hình trang chủ')
+
 @section('Content')
+    <x-admin.breadcrumb active-label="Cấu hình trang chủ" :parents="[
+        [
+            'label' => 'Admin',
+            'route' => 'admin.thongke',
+        ],
+    ]" />
     <section class="content">
         <div class="container-fluid">
             <!-- Main row -->

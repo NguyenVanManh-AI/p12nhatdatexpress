@@ -103,21 +103,31 @@ class KeywordUseController extends Controller
         return back();
     }
 
-    public function destroy(FeaturedKeyword $keyword)
+    public function deleteMultiple(Request $request)
     {
-        $keyword->delete();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Xóa thành công.');
+        FeaturedKeyword::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
+
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    public function restore($id)
+    public function restoreMultiple(Request $request)
     {
-        $keyword = FeaturedKeyword::onlyTrashed()
-            ->findOrFail($id);
-        $keyword->restore();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Khôi phục thành công.');
+        FeaturedKeyword::withTrashed()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
+
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 

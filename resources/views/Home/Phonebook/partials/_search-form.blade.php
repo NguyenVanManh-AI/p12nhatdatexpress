@@ -24,7 +24,7 @@
       name="rate"
       placeholder="Đánh giá"
       :items="range(1, 5)"
-      item-text="sao"
+      sub-text="sao"
       items-current-value="{{ request()->rate }}"
       :show-error="false"
     />

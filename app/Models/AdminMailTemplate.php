@@ -7,6 +7,7 @@ use App\Traits\Models\SoftTrashed;
 use App\Traits\Models\TimestampTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AdminMailTemplate extends Model
 {
@@ -34,6 +35,12 @@ class AdminMailTemplate extends Model
         'is_system'
     ];
 
+    // relationships
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(Admin::class, 'created_by')->withIsDeleted();
+    }
+
     /**
      * Scopes
      */
@@ -45,16 +52,9 @@ class AdminMailTemplate extends Model
     public function scopeFilter($query, array $filters)
     {
         $keyword = data_get($filters, 'keyword');
-        $trashed = data_get($filters, 'trashed');
 
         $query->when($keyword != null, function ($query) use ($keyword) {
             $query->where($this->getTable() . '.template_title', 'LIKE', '%' . $keyword . '%');
-        })->when($trashed != null, function ($query) use ($trashed) {
-            if ($trashed === 'with') {
-                $query->withIsDeleted();
-            } elseif ($trashed === 'only') {
-                $query->onlyIsDeleted();
-            }
         });
     }
 }

@@ -19,6 +19,7 @@ class Admin extends Authenticatable
     use SoftTrashed;
 
     protected $table = 'admin';
+    public $timestamps = false;
 
     protected $fillable = [
         'admin_username',

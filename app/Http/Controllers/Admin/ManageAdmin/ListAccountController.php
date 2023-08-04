@@ -83,16 +83,6 @@ class ListAccountController extends Controller
         return view('Admin/ManageAdmin/TrashAccount', compact('trash_account'));
     }
 
-    public function deleteaccount($id)
-    {
-        $admin = Admin::findOrFail($id);
-
-        $admin->delete();
-        // Helper::create_admin_log(22,$admin);
-
-        return back()->with('status', 'Chuyển vào thùng rác thành công');
-    }
-
     public function addaccount()
     {
 
@@ -298,57 +288,32 @@ class ListAccountController extends Controller
         return redirect(route('admin.manage.accounts'));
     }
 
-    public function trash_item($id)
+    public function deleteMultiple(Request $request)
     {
-        $admin = Admin::findOrFail($id);
-        $admin->delete();
-        // Helper::create_admin_log(22,$admin);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Xóa thành công');
+        Admin::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
+
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    public function untrash_item($id)
+    public function restoreMultiple(Request $request)
     {
-        $admin = Admin::onlyIsDeleted()->findOrFail($id);
-        $admin->restore();
-        // Helper::create_admin_log(23,$admin);
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Khôi phục thành công');
-        return back();
-    }
+        Admin::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
 
-    public function trash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $id) {
-            $admin = Admin::find($id);
-            if (!$admin) continue;
-            $admin->delete();
-            // Helper::create_admin_log(22,$admin);
-        }
+                $item->restore();
+            });
 
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
-    public function untrash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $id) {
-            $admin = Admin::onlyIsDeleted()->find($id);
-            if (!$admin) continue;
-            $admin->restore();
-            // Helper::create_admin_log(22,$admin);
-        }
-
-        Toastr::success('Khôi phục thành công');
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 
@@ -360,7 +325,6 @@ class ListAccountController extends Controller
             ->find($ids)
             ->each(function($item) {
                 $item->forceDelete();
-                // should create log force delete
             });
 
         Toastr::success('Xóa thành công');

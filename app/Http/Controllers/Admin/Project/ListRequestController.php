@@ -149,67 +149,31 @@ class ListRequestController extends Controller
         return back();
     }
 
-    public function trash_item($id)
+    public function deleteMultiple(Request $request)
     {
-        $projectRequest = ProjectRequest::findOrFail($id);
-        $projectRequest->delete();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Xóa thành công');
+        ProjectRequest::query()
+            ->find($ids)
+            ->each(function($item) {
+                $item->delete();
+            });
+
+        Toastr::success('Xóa thành công');
         return back();
     }
 
-    public function untrash_item($id)
+    public function restoreMultiple(Request $request)
     {
-        $projectRequest = ProjectRequest::onlyIsDeleted()->findOrFail($id);
-        $projectRequest->restore();
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        Toastr::success('Khôi phục thành công');
-        return back();
-    }
+        ProjectRequest::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                $item->restore();
+            });
 
-    public function trash_list(Request $request)
-    {
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-
-        foreach ($request->select_item as $item) {
-            $projectRequest = ProjectRequest::find($item);
-            if (!$projectRequest) continue;
-
-            $projectRequest->delete();
-
-            // Helper::create_admin_log(52,[
-            //     'is_deleted' => 1,
-            //     'confirmed_by'=>Auth::guard('admin')->user()->id
-            // ]);
-        }
-
-        Toastr::success('Xóa thành công');
-        return back();
-    }
-
-    public function untrash_list(Request $request)
-    {
-        // dd($request->check);
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        foreach ($request->select_item as $item) {
-            $projectRequest = ProjectRequest::onlyIsDeleted()->find($item);
-            if (!$projectRequest) continue;
-
-            $projectRequest->restore();
-
-            // Helper::create_admin_log(54,[
-            //     'is_deleted' => 0,
-            //     'confirmed_by'=>Auth::guard('admin')->user()->id
-            // ]);
-        }
-
-        Toastr::success('Khôi phục thành công');
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 

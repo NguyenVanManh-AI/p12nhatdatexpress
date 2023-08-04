@@ -155,80 +155,53 @@ class ClassifiedGroupController extends Controller
         Toastr::success("Cập nhật thành công");
         return redirect(route('admin.groupclassified.list'));
     }
-    public function trash_item($id){
-        $item = Group::findOrFail($id);
 
-        if($item->parent_id == 2 || $item->parent_id ==10 || $item->parent_id ==18){
-            $child = Group::where(['parent_id'=>$item->id])->get();
-            if($child->count()>0){
-                Toastr::error("Vui lòng xóa danh mục con trước");
-                return back();
-            }
-        }
-        $item->delete();
-        // Helper::create_admin_log(34,[
-        //     'is_deleted'=>1,
-        // ]);
-        Toastr::success("Chuyển vào thùng rác thành công");
-        return back();
-    }
-    public function untrash_item($id){
-        $item = Group::onlyIsDeleted()
-            ->findOrFail($id);
-
-        $parent = $item->parent()->withIsDeleted()->first();
-
-        // should check all ancestor not only parent
-        if ($parent->is_deleted) {
-            Toastr::error("Vui lòng khôi phục danh mục cha trước !");
-            return back();
-        }
-
-        $item->restore();
-
-        // Helper::create_admin_log(35,[
-        //     'is_deleted'=>0,
-        // ]);
-        Toastr::success("Khôi phục danh mục thành công");
-        return back();
-    }
-
-    //xóa nhiều danh mục
-    public function trash_list(Request $request)
+    public function deleteMultiple(Request $request)
     {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
 
-        if ($request->select_item == null) {
-            Toastr::warning("Vui lòng chọn");
-            return back();
-        }
-        // kiểm tra điều kiện trước khi xóa hàng loạt
-        foreach ($request->select_item as $value) {
-            //kiểm tra có phải là phần tử cha hay không
-            // nếu có sẽ kiểm tra phần tử con
+        Group::query()
+            ->find($ids)
+            ->each(function($item) {
+                //kiểm tra có phải là phần tử cha hay không
+                // nếu có sẽ kiểm tra phần tử con
+                // if (isset($request->parent)  && array_key_exists($value, $request->parent)) {
+                //     $children = Group::where('parent_id', $value)->get();
+                //     // có phần tử sẽ kiểm tra con có nằm trong danh sách xóa không ?
+                //     if ($children->count() > 0) {
+                //         foreach($children as $child){
+                //             if(!in_array($child->id,$request->select_item)){
+                //                 Toastr::error("Vui lòng chọn cả phần tử con của danh mục muốn xóa !");
+                //                 return back();
+                //             }
+                //         }
+                //     }
+                // }
+                $item->delete();
+            });
 
-            if (isset($request->parent)  && array_key_exists($value, $request->parent)) {
-                $children = Group::where('parent_id', $value)->get();
-                // có phần tử sẽ kiểm tra con có nằm trong danh sách xóa không ?
-                if ($children->count() > 0) {
-                    foreach($children as $child){
-                        if(!in_array($child->id,$request->select_item)){
-                            Toastr::error("Vui lòng chọn cả phần tử con của danh mục muốn xóa !");
-                            return back();
-                        }
-                    }
-                }
-            }
-            foreach ($request->select_item as $item) {
-                $group = Group::find($item);
+        Toastr::success('Xóa thành công');
+        return back();
+    }
 
-                if (!$group) continue;
-                $group->delete();
-                // Helper::create_admin_log(34,[
-                //     'is_deleted'=>1,
-                // ]);
-            }
-        }
-        Toastr::success('Thành công');
+    public function restoreMultiple(Request $request)
+    {
+        $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+
+        Group::onlyIsDeleted()
+            ->find($ids)
+            ->each(function($item) {
+                // $parent = $item->parent()->withIsDeleted()->first();
+                // // should check all ancestor not only parent
+                // if ($parent->is_deleted) {
+                //     Toastr::error("Vui lòng khôi phục danh mục cha trước !");
+                //     return back();
+                // }
+
+                $item->restore();
+            });
+
+        Toastr::success('Khôi phục thành công');
         return back();
     }
 

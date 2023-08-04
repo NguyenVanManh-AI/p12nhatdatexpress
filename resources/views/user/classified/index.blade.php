@@ -17,18 +17,32 @@
                 <form action="{{route('user.list-classified')}}" method="get">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="row">
+                            <div class="row group-load-paradigm">
                                 <div class="col-md-3">
-                                    <label>Chuyên mục</label>
-                                    <select name="parent" class="cs-select form-select form-control " data-placeholder="Chọn chuyên mục">
-                                        {{show_select_option($parent, 'id', 'group_name', 'parent', request()->parent)}}
-                                    </select>
+                                    <x-common.select2-input
+                                        label="Chuyên mục"
+                                        input-class="category-load-paradigm"
+                                        name="parent"
+                                        :items="$parent"
+                                        item-text="group_name"
+                                        placeholder="Chọn chuyên mục"
+                                        items-current-value="{{ request()->parent }}"
+                                        data-selected="{{ request()->parent }}"
+                                        with-child="{{ false }}"
+                                    />
                                 </div>
                                 <div class="col-md-3">
-                                    <label>Mô hình</label>
-                                    <select name="paradigm" class="cs-select form-select form-control" data-placeholder="Chọn mô hình">
-                                        {{show_select_option($paradigm, 'id', 'group_name', 'paradigm',request()->paradigm)}}
-                                    </select>
+                                    <x-common.select2-input
+                                        label="Mô hình"
+                                        input-class="paradigm-category"
+                                        name="paradigm"
+                                        :items="$paradigm"
+                                        item-text="group_name"
+                                        placeholder="Chọn mô hình"
+                                        items-current-value="{{ request()->paradigm }}"
+                                        data-selected="{{ request()->paradigm }}"
+                                        with-child="{{ false }}"
+                                    />
                                 </div>
                                 <div class="col-md-2">
                                     <label>Loại tin</label>
@@ -125,7 +139,7 @@
                                     @if($item->isHighLight())
                                         <img src="{{ asset('user/images/icon/new.gif') }}" class="small-hot-icon mr-1" alt="">
                                     @endif
-                                    <a href="{{ $item->group && $item->classified_url && $item->isShow() ? route('home.classified.detail',[$item->group->getLastParentGroup(), $item->classified_url]) : 'javascript:void(0);' }}" class="{{ $item->isVip() || $item->isHighLight() ? 'link-red-flat' : '' }}">
+                                    <a href="{{ $item->getShowUrl() ?: 'javascript:void(0);' }}" class="{{ $item->isVip() || $item->isHighLight() ? 'link-red-flat' : '' }}">
                                         {{  strlen($item->classified_name) > 40 ? substr($item->classified_name, 0, 39) . '...' : $item->classified_name  }}
                                     </a>
                                 </div>

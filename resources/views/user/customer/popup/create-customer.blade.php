@@ -1,7 +1,7 @@
 <!-- modal them khách hang -->
 <div class="modal fade" id="create-customer" role="dialog">
 {{-- tabindex="-1" add for allow esc close --}}
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header flex-center bg-sub-main">
                 <h4 class="modal-title text-white fs-18">CẬP NHẬT DANH SÁCH KHÁCH HÀNG</h4>

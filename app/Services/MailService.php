@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Models\AdminMailTemplate;
 use App\Models\UserMailTemplate;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 
 class MailService
 {
@@ -108,6 +111,29 @@ class MailService
         }
 
         return $content;
+    }
+
+    /**
+     * Send test mail
+     */
+    public function sendMailTest(
+        $mailHost,
+        $mailPort,
+        $mailEncrypt,
+        $mailUser,
+        $mailPassword,
+        $email,
+        $mailTitle,
+        $mailMessage
+    ) {
+        $transport = new Swift_SmtpTransport($mailHost, $mailPort, $mailEncrypt);
+        $transport->setUsername($mailUser)->setPassword($mailPassword);
+        $message = new Swift_Message($mailTitle);
+        $message->setFrom($mailUser)
+            ->setTo($email)
+            ->setBody(view('mail.mail-template', ['title' => $mailTitle, 'message' => $mailMessage])->render(), 'text/html');
+        $mailer = new Swift_Mailer($transport);
+        $mailer->send($message);
     }
 }
 

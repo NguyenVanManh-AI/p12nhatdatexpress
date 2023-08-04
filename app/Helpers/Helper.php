@@ -95,7 +95,7 @@ class Helper
             5 => 'Thứ sáu',
             6 => 'Thứ bảy',
         ];
-        $dayOfTheWeek = Carbon::parse($strtotime)->dayOfWeek;
+        $dayOfTheWeek = Carbon::parse((int) $strtotime)->dayOfWeek;
         return $weekday = $weekMap[$dayOfTheWeek];
     }
 

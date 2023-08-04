@@ -11,10 +11,11 @@ Route::name('admin.banner.')->prefix('banner')->group(function(){
     Route::post('/store', [BannerController::class, 'store'])->name('store')->middleware('admin.check:81,1');
     Route::get('/edit/{banner}/{created_by}', [BannerController::class, 'edit'])->name('edit')->middleware('admin.check:81,2');
     Route::post('/update/{id}/{created_by}', [BannerController::class, 'update'])->name('update')->middleware('admin.check:81,2');
-    Route::get('/delete/{id}/{created_at}', [BannerController::class, 'delete'])->name('delete')->middleware('admin.check:81,5');
-    Route::get('/restore/{id}/{created_at}', [BannerController::class, 'restore'])->name('restore')->middleware('admin.check:81,6');
+
+    Route::post('/delete-multiple', [BannerController::class, 'deleteMultiple'])->name('delete-multiple')->middleware('admin.check:81,5');
+    Route::post('/restore-multiple', [BannerController::class, 'restoreMultiple'])->name('restore-multiple')->middleware('admin.check:81,6');
     Route::post('/force-delete-multiple', [BannerController::class, 'forceDeleteMultiple'])->name('force-delete-multiple')->middleware('admin.check:81,7');
-    Route::post('/action', [BannerController::class, 'action'])->name('action')->middleware('admin.check:81,2');
+
     Route::get('/ajax-get-group/{id_banner_group}', [BannerController::class, 'get_group'])->name('get_group')->middleware('admin.check:81,2');
 
     Route::name('locate.')->prefix('locate')->group(function(){

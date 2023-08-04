@@ -83,7 +83,7 @@ body {
 .library, .account-information-content, .invoice-personal-content, .transaction-history, .customer-managements, .content-account-business, .account-link, .table-scroll,
 .user-introduction, .table-pagination, .tutorial-content
 .mailbox, .manage-socical {
-    padding: 15px !important;
+    padding: 15px;
 }
 
 body footer {
@@ -95,7 +95,7 @@ body footer {
 }
 @media screen and (min-width: 1651px) {
     html, body {
-        font-size: 16px;
+        font-size: 14px;
     }
 }
 @media screen and (min-width: 768px) {

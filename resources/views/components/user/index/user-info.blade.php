@@ -124,7 +124,8 @@
     <div class="title-introduce-account-done">
         <h5>Xóa tài khoản</h5>
     </div>
-    <div class="content-introduce-account-done">
+    <div class="content-introduce-account-done position-relative">
+        <div class="absolute-full account__delete-background"></div>
         @if($user_info->is_deleted == 0)
             <div class="delete-account">
                 <div class="content-delete-account">
@@ -135,7 +136,7 @@
 
             <form action="{{ route('user.deleteAccount') }}" method="POST">
                 @csrf
-                <button type="button" class="btn btn-danger submit-accept-alert w-100" data-action="xóa tài khoản">
+                <button type="button" class="btn btn-danger submit-accept-alert w-100 account__delete-button" data-action="xóa tài khoản">
                     Xóa tài khoản
                 </button>
             </form>
@@ -148,7 +149,7 @@
             @if(auth('user')->user()->canRestore())
                 <form action="{{ route('user.restoreAccount') }}" method="POST">
                     @csrf
-                    <button type="button" class="btn btn-success submit-accept-alert w-100" data-action="khôi phục tài khoản">
+                    <button type="button" class="btn btn-success submit-accept-alert w-100 account__delete-button" data-action="khôi phục tài khoản">
                         Khôi phục tài khoản
                     </button>
                 </form>

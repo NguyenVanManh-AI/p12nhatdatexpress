@@ -18,6 +18,8 @@ use App\Models\User;
 use App\Jobs\SendUserEmail;
 use App\Models\User\UserDeposit;
 use App\Helpers\Helper;
+use App\Models\AdminMailConfig;
+use App\Models\SystemConfig;
 use App\Services\MailService;
 
 class DepositController extends Controller
@@ -98,15 +100,18 @@ class DepositController extends Controller
         else {
             Toastr::error($depositStatus['message']);
         }
-        return redirect()->back();
 
+        return back();
     }
+
     public function sendActiveDeposit(User $user,$one_time_confirm_token)
     {
-        $mailConfig = DB::table('admin_mail_config')->where('is_deleted', 0)->first();
+        $mailConfig = AdminMailConfig::first();
         if ($mailConfig) {
-            $mail_deposits = DB::table('system_config')->first()->mail_deposit;
+            $systemConfig = SystemConfig::first();
+            $mail_deposits = data_get($systemConfig, 'mail_deposit');
             $emails = explode(",", $mail_deposits);
+
             foreach($emails as $email){
                 $replaceData = [];
                 $replaceData['one_time_confirm_token'] = $one_time_confirm_token;

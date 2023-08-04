@@ -43,7 +43,7 @@ body {
     color: #f00;
     font-weight: bold;
 }
-.form-control {
+/* .form-control {
     display: block;
     width: 100%;
     height: 38px;
@@ -63,7 +63,7 @@ button, input, select, textarea {
     text-align: left;
     border-radius: 1px;
     border: 1px #ddd solid;
-}
+} */
 /* input */
 
 /* checkbox */
@@ -150,9 +150,6 @@ select{
 }
 .box_input > div > select{
     width: 100px;outline: none;background: #efeeee
-}
-.support-vay{
-    margin-top: 28px;display: flex
 }
 .select-box{
     height: 100px;
@@ -384,7 +381,7 @@ select{
 
 
 /*   ListProject */
-.form-control {
+/* .form-control {
     display: block;
     width: 100%;
     height: 38px !important;
@@ -396,8 +393,7 @@ select{
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 0;
-}
-
+} */
 
 /* select */
 .chosen-container-single .chosen-single{
@@ -899,10 +895,10 @@ input[type="date"]:valid::before {
 .rc-card-block {
     padding: 1.4rem;
 }
-.selectize-input,.selectize-input.focus{
+/* .selectize-input,.selectize-input.focus{
     border-radius: 0 !important;
     box-shadow: none !important;
-}
+} */
 
 .fz95{
     font-size: 95% !important;

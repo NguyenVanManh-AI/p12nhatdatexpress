@@ -10,7 +10,7 @@
           <div class="item-error-update">
             <span class="position-relative">
               {{ $user->getInfoStatus() }}
-              <span class="position-absolute top-0 start-100 badge badge-pill badge-danger ml-2">!</span>
+              <span class="position-absolute top-0 start-100 badge badge-pill badge-danger ml-2" data-title="{{ $user->getInfoNotice() }}">!</span>
             </span>
           </div>
         @endif

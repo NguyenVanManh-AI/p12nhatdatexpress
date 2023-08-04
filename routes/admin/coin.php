@@ -12,7 +12,13 @@ Route::prefix('coin')->group(function () {
     Route::get('/untrash-coin/{id}/{created_by?}', [AddCoinController::class,'untrash_coin'])->name('admin.coin.untrashcoin')->middleware('admin.check:22,6');
     Route::post('/trash-list', [AddCoinController::class, 'trash_list'])->name('admin.coin.trashlist')->middleware('admin.check:22,5');
     Route::post('/untrash-list', [AddCoinController::class, 'untrash_list'])->name('admin.coin.untrashlist')->middleware('admin.check:22,6');
-    Route::post('/force-delete-multiple', [AddCoinController::class, 'forceDeleteMultiple'])->name('admin.coin.force-delete-multiple')->middleware('admin.check:22,7');
+
+    Route::group(['as' => 'admin.coin.'], function () {
+        Route::post('/delete-multiple', [AddCoinController::class, 'deleteMultiple'])->name('delete-multiple')->middleware('admin.check:22,5');
+        Route::post('/restore-multiple', [AddCoinController::class, 'restoreMultiple'])->name('restore-multiple')->middleware('admin.check:22,6');
+        Route::post('/force-delete-multiple', [AddCoinController::class, 'forceDeleteMultiple'])->name('force-delete-multiple')->middleware('admin.check:22,7');
+    });
+
     Route::get('/change-status/{status}/{id}/{created_by?}', [AddCoinController::class, 'change_status'])->name('admin.coin.changestatus')->middleware('admin.check:22,2');
     Route::get('/setting', [SetupController::class, 'get_attr'])->name('admin.coin.setup')->middleware('admin.check:24,2');
     Route::post('/setting', [SetupController::class, 'post_attr'])->middleware('admin.check:24,2');

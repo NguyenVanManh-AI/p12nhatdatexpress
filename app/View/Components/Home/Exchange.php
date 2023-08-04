@@ -49,12 +49,12 @@ class Exchange extends Component
             //giá vàng bán doi
             $giavangdoijban = $giavangXml->JewelryList->Row[7]['Sell'];
             $giavangdoijban = str_replace(',', '',$giavangdoijban);
-            $giavangdoijban = number_format($giavangdoijban*10);
+            $giavangdoijban = number_format(floatval($giavangdoijban)*10);
 
             //giá vàng mua doi
             $giavangdoijmua = $giavangXml->JewelryList->Row[7]['Buy'];
             $giavangdoijmua = str_replace(',', '',$giavangdoijmua);
-            $giavangdoijmua = number_format($giavangdoijmua*10);
+            $giavangdoijmua = number_format(floatval($giavangdoijmua)*10);
 
             //giá usd mua
             $giausdmua = substr($ngoaiteXml->Exrate[19]["Buy"],0,6);
